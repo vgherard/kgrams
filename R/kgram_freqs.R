@@ -1,3 +1,14 @@
+new_kgram_freqs <- function(f, N, dictionary, .preprocess, .tokenize_sentences)
+{
+        structure(list(),
+                  N = N, 
+                  dictionary = dictionary, 
+                  .preprocess = .preprocess,
+                  .tokenize_sentences = .tokenize_sentences,
+                  cpp_obj = f,
+                  class = "kgram_freqs")
+}
+
 #' @export
 kgram_freqs <- function(object, 
                         N,
@@ -28,7 +39,8 @@ kgram_freqs.character <- function(object,
                                   .tokenize_sentences = identity,
                                   batch_size = NULL,
                                   dictionary = character(),
-                                  fixed_dictionary = FALSE
+                                  fixed_dictionary = FALSE,
+                                  ...
                                   )
 {
         len <- length(object)
@@ -41,7 +53,6 @@ kgram_freqs.character <- function(object,
                 process(object[start:end])
                 start <- end + 1
         }
-                
         
         new_kgram_freqs(f, N, dictionary, .preprocess, .tokenize_sentences)
 }
@@ -53,7 +64,8 @@ kgram_freqs.connection <- function(object,
                                    .tokenize_sentences = identity,
                                    batch_size = NULL,
                                    dictionary = character(),
-                                   fixed_dictionary = FALSE
+                                   fixed_dictionary = FALSE,
+                                   ...
                                    )
 {
         

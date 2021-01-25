@@ -5,8 +5,6 @@
 # roxygen namespace tags. Modify with care!
 ## usethis namespace: start
 #' @useDynLib kgrams, .registration = TRUE
-# @importFrom Rcpp sourceCpp
 #' @import methods Rcpp
-#' @importFrom Rcpp sourceCpp
 ## usethis namespace: end
 NULL
