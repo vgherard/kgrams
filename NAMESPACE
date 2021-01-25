@@ -2,10 +2,11 @@
 
 S3method(kgram_freqs,character)
 S3method(kgram_freqs,connection)
-export(kgramFreqs)
+S3method(kgrams_dictionary,kgram_freqs)
+S3method(length,kgrams_dictionary)
 export(kgram_freqs)
+export(kgrams_dictionary)
 export(query)
 import(Rcpp)
 import(methods)
-importFrom(Rcpp,sourceCpp)
 useDynLib(kgrams, .registration = TRUE)
