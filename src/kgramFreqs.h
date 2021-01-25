@@ -33,7 +33,7 @@ class kgramFreqs {
                         ind_to_word_[index] = word;
                 }
                 
-                Dictionary (const std::unordered_set<std::string> & dict) 
+                Dictionary (const std::vector<std::string> & dict) 
                 : V_(0) {
                         Dictionary();
                         for (std::string word : dict) {
@@ -61,14 +61,14 @@ class kgramFreqs {
         };
         
         size_t N_; // Order of N-grams
-        Dictionary dict_;
         std::vector<FrequencyTable> freqs_;
+        Dictionary dict_;
 public:
         // Constructors
         kgramFreqs(size_t N)
                 : N_(N), freqs_(N + 1) {}
-        kgramFreqs(size_t N, const std::unordered_set<std::string> & dict)
-                : N_(N), dict_(dict), freqs_(N + 1) {}
+        kgramFreqs(size_t N, const std::vector<std::string> & dict)
+                : N_(N), freqs_(N + 1), dict_(dict) {}
         
         // Store k-gram counts from sentences
         void process_sentences (const std::vector<std::string> &,
@@ -83,7 +83,7 @@ public:
 
         FrequencyTable & operator[] (size_t k) { return freqs_[k]; }
         const FrequencyTable & operator[] (size_t k) const { return freqs_[k]; }
-        size_t query (std::string) const;
+        double query (std::string) const;
 
 }; // kgramFreqs
 
