@@ -29,13 +29,43 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// preprocess
+Rcpp::CharacterVector preprocess(Rcpp::CharacterVector input, std::string erase, bool lower_case);
+RcppExport SEXP _kgrams_preprocess(SEXP inputSEXP, SEXP eraseSEXP, SEXP lower_caseSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type input(inputSEXP);
+    Rcpp::traits::input_parameter< std::string >::type erase(eraseSEXP);
+    Rcpp::traits::input_parameter< bool >::type lower_case(lower_caseSEXP);
+    rcpp_result_gen = Rcpp::wrap(preprocess(input, erase, lower_case));
+    return rcpp_result_gen;
+END_RCPP
+}
+// tokenize_sentences
+Rcpp::CharacterVector tokenize_sentences(Rcpp::CharacterVector input, std::string EOS, bool append_EOS_tokens);
+RcppExport SEXP _kgrams_tokenize_sentences(SEXP inputSEXP, SEXP EOSSEXP, SEXP append_EOS_tokensSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type input(inputSEXP);
+    Rcpp::traits::input_parameter< std::string >::type EOS(EOSSEXP);
+    Rcpp::traits::input_parameter< bool >::type append_EOS_tokens(append_EOS_tokensSEXP);
+    rcpp_result_gen = Rcpp::wrap(tokenize_sentences(input, EOS, append_EOS_tokens));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 RcppExport SEXP _rcpp_module_boot_kgramFreqs();
+RcppExport SEXP _rcpp_module_boot_probability();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_kgrams_find_cpp", (DL_FUNC) &_kgrams_find_cpp, 2},
     {"_kgrams_length_kgrams_dictionary", (DL_FUNC) &_kgrams_length_kgrams_dictionary, 1},
+    {"_kgrams_preprocess", (DL_FUNC) &_kgrams_preprocess, 3},
+    {"_kgrams_tokenize_sentences", (DL_FUNC) &_kgrams_tokenize_sentences, 3},
     {"_rcpp_module_boot_kgramFreqs", (DL_FUNC) &_rcpp_module_boot_kgramFreqs, 0},
+    {"_rcpp_module_boot_probability", (DL_FUNC) &_rcpp_module_boot_probability, 0},
     {NULL, NULL, 0}
 };
 
