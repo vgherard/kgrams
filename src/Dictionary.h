@@ -16,7 +16,8 @@ public:
                 ind_to_word_[BOS_IND] = BOS_TOK;
                 word_to_ind_[EOS_TOK] = EOS_IND;
                 ind_to_word_[EOS_IND] = EOS_TOK;
-                word_to_ind_[UNK_IND] = UNK_TOK;
+                
+                ind_to_word_[UNK_IND] = UNK_TOK;
         }
         
         void insert (std::string word) {
@@ -48,7 +49,7 @@ public:
                 return UNK_IND;
         }
         
-        size_t length () const { return V_; }
+        size_t length () const { return ind_to_word_.size() - 3; }
         
 }; // class Dictionary
 
