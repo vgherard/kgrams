@@ -43,15 +43,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // tokenize_sentences
-Rcpp::CharacterVector tokenize_sentences(Rcpp::CharacterVector input, std::string EOS, bool append_EOS_tokens);
-RcppExport SEXP _kgrams_tokenize_sentences(SEXP inputSEXP, SEXP EOSSEXP, SEXP append_EOS_tokensSEXP) {
+std::vector<std::string> tokenize_sentences(std::vector<std::string> input, std::string EOS, bool keep_first);
+RcppExport SEXP _kgrams_tokenize_sentences(SEXP inputSEXP, SEXP EOSSEXP, SEXP keep_firstSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type input(inputSEXP);
+    Rcpp::traits::input_parameter< std::vector<std::string> >::type input(inputSEXP);
     Rcpp::traits::input_parameter< std::string >::type EOS(EOSSEXP);
-    Rcpp::traits::input_parameter< bool >::type append_EOS_tokens(append_EOS_tokensSEXP);
-    rcpp_result_gen = Rcpp::wrap(tokenize_sentences(input, EOS, append_EOS_tokens));
+    Rcpp::traits::input_parameter< bool >::type keep_first(keep_firstSEXP);
+    rcpp_result_gen = Rcpp::wrap(tokenize_sentences(input, EOS, keep_first));
     return rcpp_result_gen;
 END_RCPP
 }
