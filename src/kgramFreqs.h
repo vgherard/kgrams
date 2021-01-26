@@ -41,9 +41,8 @@ public:
                 { return dict_.contains_word(word); }
         
         Dictionary * dictionary() { return &dict_; };
-        // FrequencyTable & operator[] (size_t k) { return freqs_[k]; }
-        // const FrequencyTable & operator[] (size_t k) const { return freqs_[k]; }
-
+        
+        std::pair<size_t, std::string> kgram_code (std::string) const;
 }; // kgramFreqs
 
 #endif
