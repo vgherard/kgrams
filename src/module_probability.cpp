@@ -1,43 +1,94 @@
 #include <Rcpp.h>
 #include "kgramFreqs.h"
+#include "Smoothers.h"
 using namespace Rcpp;
 
-std::string backoff (std::string context) {
-        size_t pos = context.find_first_not_of(" ");
-        pos = context.find_first_of(" ", pos);
-        if (pos == std::string::npos) 
-                return "";
-        return context.substr(pos);
-}
-
 RCPP_EXPOSED_CLASS(kgramFreqs);
-Rcpp::NumericVector probability_sbo(kgramFreqs & f,
-                                    Rcpp::CharacterVector word,
-                                    std::string context,
-                                    double lambda)
+
+template<class Smoother>
+NumericVector probability(CharacterVector word, 
+                          std::string context, 
+                          Smoother smoother) 
 {
         size_t len = word.length();
-        Rcpp::NumericVector res(len);
-
-        std::string tmp_word, tmp_context, tmp_kgram;
-        double kgram_count, penalization;
+        NumericVector res(len);
+        
+        std::string tmp_word; double tmp_res;
         for (size_t i = 0; i < len; ++i) {
-                penalization = 1.;
-                tmp_word = word[i];
-                tmp_context = context;
-                tmp_kgram = tmp_context + " " + word[i];
-                while ((kgram_count = f.query(tmp_kgram)) == 0) {
-                        tmp_context = backoff(tmp_context);
-                        tmp_kgram = tmp_context + " " + tmp_word;
-                        penalization *= lambda;
-                }
-                res[i] = penalization * kgram_count / f.query(tmp_context);
+                res[i] = smoother(as<std::string>(word[i]), context);
+                if (res[i] == -1) 
+                        res[i] = NA_REAL;
         }
-
+        
         return res;
 }
 
+
+NumericVector probability_sbo(kgramFreqs & f,
+                              CharacterVector word,
+                              std::string context,
+                              double lambda)
+{
+        SBOSmoother smoother(f, lambda);
+        return probability<SBOSmoother>(word, context, smoother);
+};
+
+NumericVector probability_addk(kgramFreqs & f,
+                               CharacterVector word,
+                               std::string context,
+                               double k)
+{
+        AddkSmoother smoother(f, k);
+        return probability<AddkSmoother>(word, context, smoother);
+}
+
+NumericVector probability_ml(kgramFreqs & f,
+                             CharacterVector word,
+                             std::string context)
+{
+        MLSmoother smoother(f);
+        return probability<MLSmoother>(word, context, smoother);
+}
+
+template<class Sampler>
+CharacterVector sample_sentences(size_t n, size_t max_length, Sampler sampler) {
+        CharacterVector res(n);
+        for (size_t i = 0; i < n; ++i)
+                res[i] = sampler.sample_sentence(max_length);
+        return res;
+}
+        
+CharacterVector sample_sentences_sbo(kgramFreqs & f,
+                                     size_t n, 
+                                     size_t max_length, 
+                                     double lambda)
+{
+        Sampler<SBOSmoother> sampler(SBOSmoother(f, lambda));
+        return sample_sentences<Sampler<SBOSmoother> >(n, max_length, sampler);
+}
+
+CharacterVector sample_sentences_addk(kgramFreqs & f,
+                                      size_t n, 
+                                      size_t max_length,
+                                      double k)
+{
+        Sampler<AddkSmoother> sampler(AddkSmoother(f, k));
+        return sample_sentences<Sampler<AddkSmoother> >(n, max_length, sampler);
+}
+
+CharacterVector sample_sentences_ml(kgramFreqs & f,
+                                    size_t n,
+                                    size_t max_length)
+{
+        Sampler<MLSmoother> sampler((MLSmoother(f)));
+        return sample_sentences<Sampler<MLSmoother> >(n, max_length, sampler);
+}
+
 RCPP_MODULE(probability) {
-        function("probability_sbo", &probability_sbo)
-        ;
+        function("probability_sbo", &probability_sbo);
+        function("probability_addk", &probability_addk);
+        function("probability_ml", &probability_ml);
+        function("sample_sentences_sbo", &sample_sentences_sbo);
+        function("sample_sentences_addk", &sample_sentences_addk);
+        function("sample_sentences_ml", &sample_sentences_ml);
 }
