@@ -1,35 +1,45 @@
+#include <Rcpp.h>
 #include <vector>
 #include <string>
-#include <Rcpp.h>
+#include <regex>
 
-void tokenize_sentences(std::string line, 
-                        Rcpp::CharacterVector& res, 
-                        std::string EOS,
-                        std::string SOS)
-{
-         
-        size_t start = 0, end; char eos_tok;
-        while((end = line.find_first_of(EOS, start)) != std::string::npos) {
-                eos_tok = line[end];
-                res.push_back(line.substr(start, end - start) + " " + eos_tok);
-                start = line.find_first_not_of(SOS, end);
+void tokenize_sentences(std::string & line, 
+                        std::vector<std::string> & res,
+                        const std::regex& _EOS, 
+                        bool keep_first){
+        auto itstart = std::sregex_iterator(line.begin(), line.end(), _EOS);
+        auto itend = std::sregex_iterator();
+        
+        size_t start = 0, end;
+        std::string tmp;
+        for (std::sregex_iterator it = itstart; it != itend; ++it) {
+                std::smatch m = *it;
+                end = m.position();
+                res.push_back(
+                        keep_first ? 
+                        line.substr(start, end - start) + " " + line[end] :
+                        line.substr(start, end - start)
+                );
+                start = end + m.length();
         }
+        
         if (start != std::string::npos)
-                res.push_back(line.substr(start, end - start));
+                res.push_back(line.substr(start));
 }
 
 //' Sentence tokenizer
 //'
 //' Extract sentences from a batch of text lines.
 //'
+//' @export
+//'
 //' @author Valerio Gherardi
 //' @md
 //'
 //' @param input a character vector.
-//' @param EOS a length one character vector listing all (single character)
-//' end-of-sentence tokens.
-//' @param append_EOS_tokens \code{TRUE} or \code{FALSE}. Should EOS tokens be
-//' appended at the end of the returned sentences?
+//' @param EOS a regular expression matching an End-Of-Sentence delimiter.
+//' @param keep_first TRUE or FALSE? Should the first character of the matches
+//' be appended to the returned sentences (with a space)?
 //' @return a character vector, each entry of which corresponds to a single
 //' sentence.
 //' @details
@@ -40,34 +50,29 @@ void tokenize_sentences(std::string line,
 //' \emph{or white space} (so that entries like \code{"Hi there!!!"} or 
 //' \code{"Hello . . ."} are both recognized as a single sentence).
 //' 
-//' If \code{append_EOS_tokens} is \code{TRUE}, the corresponding punctuation
-//' is appended (separated by a space) at the end of the returned sentences.
-//' This can be useful if one wants to consider punctuation characters as 
-//' separate tokens in a dictionary. Notice that it is still possible to have
-//' unterminated sentences: for instance, the string \code{"Hi! Anybody here"}
-//' would be tokenized as \code{c("Hi !", "Anybody here")} with the default
-//' parameters.
+//' If \code{keep_first} is \code{FALSE}, the delimiters are stripped off from 
+//' the returned sequences, which means that all delimiters are treated 
+//' symmetrically.
 //' 
 //' In the absence of any \code{EOS} delimiter, \code{tokenize_sentences()} 
 //' returns the input as is, since parts of text corresponding to different 
 //' entries of the \code{input} vector are understood as parts of separate 
 //' sentences.
-//' 
 //' @examples
-//' tokenize_sentences("Hi there! This is an example.")
-//' tokenize_sentences("Hi there! This is an example.", append_EOS_tokens = F)
-//' @export
+//' tokenize_sentences("Hi there! I'm using `sbo`.")
 // [[Rcpp::export]]
-Rcpp::CharacterVector tokenize_sentences(Rcpp::CharacterVector input,
-                                         std::string EOS = ".?!:;",
-                                         bool append_EOS_tokens = true)
+std::vector<std::string> tokenize_sentences(std::vector<std::string> input,
+                                            std::string EOS = "[.?!:;]+",
+                                            bool keep_first = false)
 {
-        std::string SOS = " " + EOS;
-        if(EOS == "") 
-                return input;
-        Rcpp::CharacterVector res;
-        for (Rcpp::String line : input) {
-                tokenize_sentences(line, res, EOS, SOS);
+        if (EOS == "") return input;
+        std::vector<std::string> res;
+        std::regex _EOS(EOS);
+        std::string tmp;
+        for(Rcpp::String str : input) {
+                tmp = str;
+                tokenize_sentences(tmp, res, _EOS, keep_first);
         }
+                
         return res;
 }

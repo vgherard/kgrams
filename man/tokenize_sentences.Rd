@@ -4,16 +4,15 @@
 \alias{tokenize_sentences}
 \title{Sentence tokenizer}
 \usage{
-tokenize_sentences(input, EOS = ".?!:;", append_EOS_tokens = TRUE)
+tokenize_sentences(input, EOS = "[.?!:;]+", keep_first = FALSE)
 }
 \arguments{
 \item{input}{a character vector.}
 
-\item{EOS}{a length one character vector listing all (single character)
-end-of-sentence tokens.}
+\item{EOS}{a regular expression matching an End-Of-Sentence delimiter.}
 
-\item{append_EOS_tokens}{\code{TRUE} or \code{FALSE}. Should EOS tokens be
-appended at the end of the returned sentences?}
+\item{keep_first}{TRUE or FALSE? Should the first character of the matches
+be appended to the returned sentences (with a space)?}
 }
 \value{
 a character vector, each entry of which corresponds to a single
@@ -30,13 +29,9 @@ first position in the input string not containing any of the EOS tokens
 \emph{or white space} (so that entries like \code{"Hi there!!!"} or
 \code{"Hello . . ."} are both recognized as a single sentence).
 
-If \code{append_EOS_tokens} is \code{TRUE}, the corresponding punctuation
-is appended (separated by a space) at the end of the returned sentences.
-This can be useful if one wants to consider punctuation characters as
-separate tokens in a dictionary. Notice that it is still possible to have
-unterminated sentences: for instance, the string \code{"Hi! Anybody here"}
-would be tokenized as \code{c("Hi !", "Anybody here")} with the default
-parameters.
+If \code{keep_first} is \code{FALSE}, the delimiters are stripped off from
+the returned sequences, which means that all delimiters are treated
+symmetrically.
 
 In the absence of any \code{EOS} delimiter, \code{tokenize_sentences()}
 returns the input as is, since parts of text corresponding to different
@@ -44,8 +39,7 @@ entries of the \code{input} vector are understood as parts of separate
 sentences.
 }
 \examples{
-tokenize_sentences("Hi there! This is an example.")
-tokenize_sentences("Hi there! This is an example.", append_EOS_tokens = F)
+tokenize_sentences("Hi there! I'm using `sbo`.")
 }
 \author{
 Valerio Gherardi
