@@ -15,6 +15,12 @@ kgrams_dictionary.kgram_freqs <- function(object) {
         return(new_kgrams_dictionary(xptr))
 }
 
+#' @export
+kgrams_dictionary.kgram_freqs <- function(object) {
+        xptr <- get_dict_xptr(attr(object, "cpp_obj"))
+        return(new_kgrams_dictionary(xptr))
+}
+
 kgrams_dictionary_default <- function() {
         temp <- new(kgramFreqs)
         xptr <- get_dict_xptr(temp)
