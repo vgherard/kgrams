@@ -4,19 +4,20 @@ sample_sentences <- function(
         n, 
         max_length,
         method = c("StupidBackoff", "Add-k", "Laplace", "ML"),
-        par
+        par,
+        t = 1.0
         ) {
         check_method(method, par)
         f <- attr(freqs, "cpp_obj")
         if (method == "StupidBackoff") {
-                res <- sample_sentences_sbo(f, n, max_length, par[["lambda"]])        
+                sample_sentences_sbo(f, n, max_length, par[["lambda"]], t)        
         } else if (method == "Add-k") {
-                res <- sample_sentences_addk(f, n, max_length, par[["k"]])
+                sample_sentences_addk(f, n, max_length, par[["k"]], t)
         } else if (method == "Laplace") {
-                res <- sample_sentences_addk(f, n, max_length, 0.1)        
+                sample_sentences_addk(f, n, max_length, 1.0, t)        
         } else if (method == "ML") {
-                res <- sample_sentences_ml(f, n, max_length)        
+                sample_sentences_ml(f, n, max_length, t)        
+        } else {
+                stop("method '", method, "' is not available")
         }
-        
-        return(res)
 }

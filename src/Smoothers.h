@@ -2,28 +2,49 @@
 #define SMOOTHERS_H
 
 #include "kgramFreqs.h"
+#include <Rmath.h>
+#include <cmath>
+#include <limits>
+
 
 template<class Smoother>
 class Sampler {
         Smoother prob_;
 public:
         Sampler (Smoother prob) : prob_(prob) {} 
-        std::string sample_word(std::string context) {
+        std::string sample_word(std::string context, double T) {
                 std::string res;
                 double best = 0, tmp;
                 std::string word;
                 for (size_t i = 1; i <= prob_.V_; ++i) {
                         word = prob_.f_.dictionary()->word(std::to_string(i));
-                        tmp = prob_(word, context) / R::rexp(1.);
+                        tmp = std::pow(prob_(word, context), 1 / T); 
+                        tmp /= R::rexp(1.);
                         if (tmp > best) {
                                 best = tmp;
                                 res = word;
                         }
                 }
+                tmp = std::pow(prob_(EOS_TOK, context), 1 / T) / R::rexp(1.);
+                if (tmp > best)
+                        res = EOS_TOK;
                 return res;
         }
         
-        std::string sample_sentence(size_t max_length) {
+        std::string sample_word_rej(std::string context) {
+                std::string res;
+                double best = 0, tmp;
+                std::string word;
+                while (true) {
+                        size_t n = R::runif(0, prob_.V_);
+                        word = prob_.f_.dictionary()->word(std::to_string(n));
+                        if (prob_(word, context) / R::runif(0, 1) > 1)
+                                return word;
+                }
+        }
+        
+        
+        std::string sample_sentence(size_t max_length, double T) {
                 std::string res = "", prefix = "";
                 for (size_t i = 1; i < prob_.f_.N(); ++i) {
                         prefix += BOS_TOK + " ";
@@ -33,7 +54,7 @@ public:
                 std::string new_word; size_t start = 0;
                 while (n_words < max_length and new_word != EOS_TOK) {
                         n_words++;
-                        new_word = sample_word(prefix);
+                        new_word = sample_word(prefix, T);
                         res += new_word + " ";
                         prefix += " " + new_word;
                         start = prefix.find_first_not_of(" ");
@@ -43,6 +64,8 @@ public:
 
                 return res;     
         }
+        
+        
 }; // template class Sampler
 
 class SBOSmoother {

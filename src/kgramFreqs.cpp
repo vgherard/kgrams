@@ -12,9 +12,14 @@ void kgramFreqs::process_sentences(const std::vector<std::string> & sentences,
                 }
                 paddings.write(padding);
                 paddings.lshift();
+                
+                // Add BOS counts
+                if (k > 0)
+                        padding.pop_back();
+                freqs_[k][padding] += sentences.size();
         }
         for (const std::string & sentence : sentences) 
-                process_sentence(sentence, paddings);
+                process_sentence(sentence, paddings, fixed_dictionary);
 }
 
 void kgramFreqs::process_sentence(const std::string & sentence,
@@ -28,7 +33,7 @@ void kgramFreqs::process_sentence(const std::string & sentence,
                 // Read next word
                 current = stream.pop_word();
                 // Substitute with ___UNK___ index if current is OOV
-                if (not dict_.contains_word(current) & not fixed_dictionary)
+                if ((not dict_.contains_word(current)) & (not fixed_dictionary))
                         dict_.insert(current);
                 
                 current = dict_.index(current); 

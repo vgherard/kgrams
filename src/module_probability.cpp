@@ -51,37 +51,43 @@ NumericVector probability_ml(kgramFreqs & f,
 }
 
 template<class Sampler>
-CharacterVector sample_sentences(size_t n, size_t max_length, Sampler sampler) {
+CharacterVector sample_sentences(size_t n, 
+                                 size_t max_length, 
+                                 Sampler smp, 
+                                 double T = 1.0) {
         CharacterVector res(n);
         for (size_t i = 0; i < n; ++i)
-                res[i] = sampler.sample_sentence(max_length);
+                res[i] = smp.sample_sentence(max_length, T);
         return res;
 }
         
 CharacterVector sample_sentences_sbo(kgramFreqs & f,
                                      size_t n, 
                                      size_t max_length, 
-                                     double lambda)
+                                     double lambda, 
+                                     double T = 1.0)
 {
-        Sampler<SBOSmoother> sampler(SBOSmoother(f, lambda));
-        return sample_sentences<Sampler<SBOSmoother> >(n, max_length, sampler);
+        Sampler<SBOSmoother> smp(SBOSmoother(f, lambda));
+        return sample_sentences<Sampler<SBOSmoother> >(n, max_length, smp, T);
 }
 
 CharacterVector sample_sentences_addk(kgramFreqs & f,
                                       size_t n, 
                                       size_t max_length,
-                                      double k)
+                                      double k,
+                                      double T = 1.0)
 {
-        Sampler<AddkSmoother> sampler(AddkSmoother(f, k));
-        return sample_sentences<Sampler<AddkSmoother> >(n, max_length, sampler);
+        Sampler<AddkSmoother> smp(AddkSmoother(f, k));
+        return sample_sentences<Sampler<AddkSmoother> >(n, max_length, smp, T);
 }
 
 CharacterVector sample_sentences_ml(kgramFreqs & f,
                                     size_t n,
-                                    size_t max_length)
+                                    size_t max_length,
+                                    double T = 1.0)
 {
-        Sampler<MLSmoother> sampler((MLSmoother(f)));
-        return sample_sentences<Sampler<MLSmoother> >(n, max_length, sampler);
+        Sampler<MLSmoother> smp((MLSmoother(f)));
+        return sample_sentences<Sampler<MLSmoother> >(n, max_length, smp, T);
 }
 
 RCPP_MODULE(probability) {

@@ -16,5 +16,5 @@ probability <- function(freqs, word, context,
                 res <- probability_ml(f, word, context)        
         }
         
-        return(prob)
+        return(res)
 }

@@ -10,8 +10,7 @@ class Dictionary {
         std::unordered_map<std::string, std::string> word_to_ind_;
         std::unordered_map<std::string, std::string> ind_to_word_;
         size_t V_;
-public:
-        Dictionary () : V_(0) {
+        void insert_special_tokens() {
                 word_to_ind_[BOS_TOK] = BOS_IND;
                 ind_to_word_[BOS_IND] = BOS_TOK;
                 word_to_ind_[EOS_TOK] = EOS_IND;
@@ -19,23 +18,19 @@ public:
                 
                 ind_to_word_[UNK_IND] = UNK_TOK;
         }
+public:
+        Dictionary () : V_(0) { insert_special_tokens(); }
+        Dictionary (const std::vector<std::string> & dict) 
+                : Dictionary() { for (std::string word : dict) insert(word); }
+        
+        bool contains_word (std::string word) const { 
+                return word_to_ind_.find(word) != word_to_ind_.end();
+        }
         
         void insert (std::string word) {
                 std::string index = std::to_string(++V_);
                 word_to_ind_[word] = index;
                 ind_to_word_[index] = word;
-        }
-        
-        Dictionary (const std::vector<std::string> & dict) 
-                : V_(0) {
-                Dictionary();
-                for (std::string word : dict) {
-                        insert(word);
-                }
-        }
-        
-        bool contains_word (std::string word) const { 
-                return word_to_ind_.find(word) != word_to_ind_.end();
         }
         
         std::string word (std::string index) const { 
