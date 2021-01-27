@@ -37,7 +37,7 @@ void kgramFreqs::process_sentence(const std::string & sentence,
                         dict_.insert(current);
                 
                 current = dict_.index(current); 
-
+                
                 // Increase k-gram counts for (k>1)-grams ending at 'current'
                 for (size_t k = 1; k <= N_; ++k) {
                         prefix = prefixes.read();
@@ -50,4 +50,27 @@ void kgramFreqs::process_sentence(const std::string & sentence,
                 prefixes.rshift();
                 prefixes.write("");
         }
+}
+
+std::pair<size_t, std::string> kgramFreqs::kgram_code (std::string kgram) const
+{
+        std::pair<size_t, std::string> res{0, ""};
+        WordStream stream(kgram);
+        std::string word, index;
+        for (; ; res.first++) {
+                word = stream.pop_word();
+                if (stream.eos()) break;
+                index = dict_.index(word);
+                res.second += index + " ";
+        }
+        if (res.first > 0) 
+                res.second.pop_back();
+        return res;
+}
+
+double kgramFreqs::query (std::string kgram) const {
+        auto p = kgram_code(kgram);
+        if (p.first > N_) return 0;
+        auto it = freqs_[p.first].find(p.second);
+        return it != freqs_[p.first].end() ? it->second : 0;
 }

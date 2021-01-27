@@ -28,6 +28,7 @@ public:
         }
         
         void insert (std::string word) {
+                if (contains_word(word)) return;
                 std::string index = std::to_string(++V_);
                 word_to_ind_[word] = index;
                 ind_to_word_[index] = word;

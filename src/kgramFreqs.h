@@ -1,22 +1,26 @@
-#if !defined(KGRAM_FREQS_H)
+#ifndef KGRAM_FREQS_H
 #define KGRAM_FREQS_H
-
-// [[Rcpp::plugins(cpp11)]]
 
 #include <string>
 #include <vector>
 #include <unordered_map>
+#include <utility>
 #include "Dictionary.h"
 #include "WordStream.h"
 #include "CircularBuffer.h"
 #include "special_tokens.h"
 
 class kgramFreqs {
+        // Aliases
         using FrequencyTable = std::unordered_map<std::string, double>;
         
+        // Private variables
         size_t N_; // Order of N-grams
         std::vector<FrequencyTable> freqs_;
         Dictionary dict_;
+        
+        // Private methods
+        std::pair<size_t, std::string> kgram_code (std::string) const;
 public:
         // Constructors
         kgramFreqs(size_t N)
@@ -41,8 +45,6 @@ public:
                 { return dict_.contains_word(word); }
         
         Dictionary * dictionary() { return &dict_; };
-        
-        std::pair<size_t, std::string> kgram_code (std::string) const;
 }; // kgramFreqs
 
 #endif

@@ -8,8 +8,18 @@ RCPP_EXPOSED_CLASS(Dictionary);
 
 Rcpp::XPtr<Dictionary> get_dict_xptr(kgramFreqs & freqs) {
         // set_delete_finalizer = false, so that R doesn't try to destroy
-        // the dictionary of kgramFreqs if the ptr is garbage collected
+        // the dictionary of kgramFreqs when the ptr is garbage collected
         return Rcpp::XPtr<Dictionary>(freqs.dictionary(), false);
+}
+
+IntegerVector query_kgram(kgramFreqs & freqs, CharacterVector kgram) 
+{
+        size_t len = kgram.length();
+        IntegerVector res(len);
+        for (size_t i = 0; i < len; ++i) {
+                res[i] = freqs.query(as<std::string>(kgram[i]));
+        }
+        return res;
 }
 
 RCPP_MODULE(kgramFreqs) {
@@ -25,6 +35,6 @@ RCPP_MODULE(kgramFreqs) {
         .const_method("query", &kgramFreqs::query)
         ;
         
-        function("get_dict_xptr", &get_dict_xptr)
-        ;
+        function("query_kgram", &query_kgram);
+        function("get_dict_xptr", &get_dict_xptr);
 }

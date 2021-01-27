@@ -21,6 +21,8 @@ public:
                   eos_(start_ >= len_),
                   end_(eos_ ? len_ : 0)
         {}
+        // Disallow initialization by rvalue reference!
+        WordStream(const std::string &&) = delete;
         bool eos () { return eos_; }
         
         std::string pop_word() {

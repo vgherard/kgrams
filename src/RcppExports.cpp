@@ -6,66 +6,50 @@
 
 using namespace Rcpp;
 
-// find_cpp
-LogicalVector find_cpp(XPtr<Dictionary> xptr, CharacterVector words);
-RcppExport SEXP _kgrams_find_cpp(SEXP xptrSEXP, SEXP wordsSEXP) {
+// EOS
+std::string EOS();
+RcppExport SEXP _kgrams_EOS() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<Dictionary> >::type xptr(xptrSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type words(wordsSEXP);
-    rcpp_result_gen = Rcpp::wrap(find_cpp(xptr, words));
+    rcpp_result_gen = Rcpp::wrap(EOS());
     return rcpp_result_gen;
 END_RCPP
 }
-// length_kgrams_dictionary
-size_t length_kgrams_dictionary(XPtr<Dictionary> xptr);
-RcppExport SEXP _kgrams_length_kgrams_dictionary(SEXP xptrSEXP) {
+// BOS
+std::string BOS();
+RcppExport SEXP _kgrams_BOS() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< XPtr<Dictionary> >::type xptr(xptrSEXP);
-    rcpp_result_gen = Rcpp::wrap(length_kgrams_dictionary(xptr));
+    rcpp_result_gen = Rcpp::wrap(BOS());
     return rcpp_result_gen;
 END_RCPP
 }
-// preprocess
-Rcpp::CharacterVector preprocess(Rcpp::CharacterVector input, std::string erase, bool lower_case);
-RcppExport SEXP _kgrams_preprocess(SEXP inputSEXP, SEXP eraseSEXP, SEXP lower_caseSEXP) {
+// UNK
+std::string UNK();
+RcppExport SEXP _kgrams_UNK() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type input(inputSEXP);
-    Rcpp::traits::input_parameter< std::string >::type erase(eraseSEXP);
-    Rcpp::traits::input_parameter< bool >::type lower_case(lower_caseSEXP);
-    rcpp_result_gen = Rcpp::wrap(preprocess(input, erase, lower_case));
-    return rcpp_result_gen;
-END_RCPP
-}
-// tokenize_sentences
-std::vector<std::string> tokenize_sentences(std::vector<std::string> input, std::string EOS, bool keep_first);
-RcppExport SEXP _kgrams_tokenize_sentences(SEXP inputSEXP, SEXP EOSSEXP, SEXP keep_firstSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::vector<std::string> >::type input(inputSEXP);
-    Rcpp::traits::input_parameter< std::string >::type EOS(EOSSEXP);
-    Rcpp::traits::input_parameter< bool >::type keep_first(keep_firstSEXP);
-    rcpp_result_gen = Rcpp::wrap(tokenize_sentences(input, EOS, keep_first));
+    rcpp_result_gen = Rcpp::wrap(UNK());
     return rcpp_result_gen;
 END_RCPP
 }
 
+RcppExport SEXP _rcpp_module_boot_Dictionary();
+RcppExport SEXP _rcpp_module_boot_Probability();
+RcppExport SEXP _rcpp_module_boot_Utilities();
 RcppExport SEXP _rcpp_module_boot_kgramFreqs();
-RcppExport SEXP _rcpp_module_boot_probability();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_kgrams_find_cpp", (DL_FUNC) &_kgrams_find_cpp, 2},
-    {"_kgrams_length_kgrams_dictionary", (DL_FUNC) &_kgrams_length_kgrams_dictionary, 1},
-    {"_kgrams_preprocess", (DL_FUNC) &_kgrams_preprocess, 3},
-    {"_kgrams_tokenize_sentences", (DL_FUNC) &_kgrams_tokenize_sentences, 3},
+    {"_kgrams_EOS", (DL_FUNC) &_kgrams_EOS, 0},
+    {"_kgrams_BOS", (DL_FUNC) &_kgrams_BOS, 0},
+    {"_kgrams_UNK", (DL_FUNC) &_kgrams_UNK, 0},
+    {"_rcpp_module_boot_Dictionary", (DL_FUNC) &_rcpp_module_boot_Dictionary, 0},
+    {"_rcpp_module_boot_Probability", (DL_FUNC) &_rcpp_module_boot_Probability, 0},
+    {"_rcpp_module_boot_Utilities", (DL_FUNC) &_rcpp_module_boot_Utilities, 0},
     {"_rcpp_module_boot_kgramFreqs", (DL_FUNC) &_rcpp_module_boot_kgramFreqs, 0},
-    {"_rcpp_module_boot_probability", (DL_FUNC) &_rcpp_module_boot_probability, 0},
     {NULL, NULL, 0}
 };
 

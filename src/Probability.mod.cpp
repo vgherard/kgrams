@@ -90,7 +90,7 @@ CharacterVector sample_sentences_ml(kgramFreqs & f,
         return sample_sentences<Sampler<MLSmoother> >(n, max_length, smp, T);
 }
 
-RCPP_MODULE(probability) {
+RCPP_MODULE(Probability) {
         function("probability_sbo", &probability_sbo);
         function("probability_addk", &probability_addk);
         function("probability_ml", &probability_ml);
