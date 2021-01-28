@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['sampler_21',['Sampler',['../classSampler.html',1,'']]],
-  ['sbosmoother_22',['SBOSmoother',['../classSBOSmoother.html',1,'']]]
+  ['sampler_28',['Sampler',['../classSampler.html',1,'']]],
+  ['sbosmoother_29',['SBOSmoother',['../classSBOSmoother.html',1,'']]]
 ];

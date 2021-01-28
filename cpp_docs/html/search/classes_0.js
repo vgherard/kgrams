@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['addksmoother_16',['AddkSmoother',['../classAddkSmoother.html',1,'']]]
+  ['addksmoother_23',['AddkSmoother',['../classAddkSmoother.html',1,'']]]
 ];

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['dict_5fcontains_26',['dict_contains',['../classkgramFreqs.html#af373d32fdaf89ce3cabcec60e2d7bfb3',1,'kgramFreqs']]]
+  ['contains_34',['contains',['../classDictionary.html#a857a89001fea6b80e04f5227dc6d9472',1,'Dictionary']]]
 ];

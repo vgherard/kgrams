@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['query_31',['query',['../classkgramFreqs.html#ac5da5c73ea09a8b540562c2f3213294f',1,'kgramFreqs']]]
+  ['length_41',['length',['../classDictionary.html#ab6a571b0f5de675ad3640d78f40214a0',1,'Dictionary']]]
 ];

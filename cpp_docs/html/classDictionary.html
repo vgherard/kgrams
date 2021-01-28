@@ -69,32 +69,214 @@ $(function() {
 <div class="title">Dictionary Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Word dictionary for language models.  
+ <a href="classDictionary.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Dictionary_8h_source.html">Dictionary.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a12977333c299a56212a0af28b6b91cd2"><td class="memItemLeft" align="right" valign="top"><a id="a12977333c299a56212a0af28b6b91cd2"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Dictionary</b> (const std::vector&lt; std::string &gt; &amp;dict)</td></tr>
+<tr class="memitem:aee8d612bc9d323c38faba045ba384b8b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDictionary.html#aee8d612bc9d323c38faba045ba384b8b">Dictionary</a> ()</td></tr>
+<tr class="memdesc:aee8d612bc9d323c38faba045ba384b8b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Default constructor.  <a href="classDictionary.html#aee8d612bc9d323c38faba045ba384b8b">More...</a><br /></td></tr>
+<tr class="separator:aee8d612bc9d323c38faba045ba384b8b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a12977333c299a56212a0af28b6b91cd2"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDictionary.html#a12977333c299a56212a0af28b6b91cd2">Dictionary</a> (const std::vector&lt; std::string &gt; &amp;dict)</td></tr>
+<tr class="memdesc:a12977333c299a56212a0af28b6b91cd2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize <a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a> from list of words.  <a href="classDictionary.html#a12977333c299a56212a0af28b6b91cd2">More...</a><br /></td></tr>
 <tr class="separator:a12977333c299a56212a0af28b6b91cd2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a857a89001fea6b80e04f5227dc6d9472"><td class="memItemLeft" align="right" valign="top"><a id="a857a89001fea6b80e04f5227dc6d9472"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>contains</b> (std::string word) const</td></tr>
+<tr class="memitem:a857a89001fea6b80e04f5227dc6d9472"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDictionary.html#a857a89001fea6b80e04f5227dc6d9472">contains</a> (std::string <a class="el" href="classDictionary.html#a5332d939313694753656b9c31e7ace2a">word</a>) const</td></tr>
+<tr class="memdesc:a857a89001fea6b80e04f5227dc6d9472"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a word is contained in the <a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a>.  <a href="classDictionary.html#a857a89001fea6b80e04f5227dc6d9472">More...</a><br /></td></tr>
 <tr class="separator:a857a89001fea6b80e04f5227dc6d9472"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9eb27106f6fad4f3d32d4d069e0d4174"><td class="memItemLeft" align="right" valign="top"><a id="a9eb27106f6fad4f3d32d4d069e0d4174"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>insert</b> (std::string word)</td></tr>
+<tr class="memitem:a9eb27106f6fad4f3d32d4d069e0d4174"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDictionary.html#a9eb27106f6fad4f3d32d4d069e0d4174">insert</a> (std::string <a class="el" href="classDictionary.html#a5332d939313694753656b9c31e7ace2a">word</a>)</td></tr>
+<tr class="memdesc:a9eb27106f6fad4f3d32d4d069e0d4174"><td class="mdescLeft">&#160;</td><td class="mdescRight">Insert a word in the <a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a>.  <a href="classDictionary.html#a9eb27106f6fad4f3d32d4d069e0d4174">More...</a><br /></td></tr>
 <tr class="separator:a9eb27106f6fad4f3d32d4d069e0d4174"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5332d939313694753656b9c31e7ace2a"><td class="memItemLeft" align="right" valign="top"><a id="a5332d939313694753656b9c31e7ace2a"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>word</b> (std::string index) const</td></tr>
+<tr class="memitem:a5332d939313694753656b9c31e7ace2a"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDictionary.html#a5332d939313694753656b9c31e7ace2a">word</a> (std::string <a class="el" href="classDictionary.html#afc498da8f320f7933852f164dd72d914">index</a>) const</td></tr>
+<tr class="memdesc:a5332d939313694753656b9c31e7ace2a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the word corresponding to a given word index.  <a href="classDictionary.html#a5332d939313694753656b9c31e7ace2a">More...</a><br /></td></tr>
 <tr class="separator:a5332d939313694753656b9c31e7ace2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afc498da8f320f7933852f164dd72d914"><td class="memItemLeft" align="right" valign="top"><a id="afc498da8f320f7933852f164dd72d914"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>index</b> (std::string word) const</td></tr>
+<tr class="memitem:afc498da8f320f7933852f164dd72d914"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDictionary.html#afc498da8f320f7933852f164dd72d914">index</a> (std::string <a class="el" href="classDictionary.html#a5332d939313694753656b9c31e7ace2a">word</a>) const</td></tr>
+<tr class="memdesc:afc498da8f320f7933852f164dd72d914"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return the index corresponding to a given word.  <a href="classDictionary.html#afc498da8f320f7933852f164dd72d914">More...</a><br /></td></tr>
 <tr class="separator:afc498da8f320f7933852f164dd72d914"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab6a571b0f5de675ad3640d78f40214a0"><td class="memItemLeft" align="right" valign="top"><a id="ab6a571b0f5de675ad3640d78f40214a0"></a>
-size_t&#160;</td><td class="memItemRight" valign="bottom"><b>length</b> () const</td></tr>
+<tr class="memitem:ab6a571b0f5de675ad3640d78f40214a0"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDictionary.html#ab6a571b0f5de675ad3640d78f40214a0">length</a> () const</td></tr>
+<tr class="memdesc:ab6a571b0f5de675ad3640d78f40214a0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return size of the dictionary, excluding the special tokens (BOS, EOS, UNK).  <a href="classDictionary.html#ab6a571b0f5de675ad3640d78f40214a0">More...</a><br /></td></tr>
 <tr class="separator:ab6a571b0f5de675ad3640d78f40214a0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a246e6323f6ac0fa909eae5ffafd92638"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDictionary.html#a246e6323f6ac0fa909eae5ffafd92638">size</a> () const</td></tr>
+<tr class="memdesc:a246e6323f6ac0fa909eae5ffafd92638"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return size of the dictionary, excluding the special tokens (BOS, EOS, UNK).  <a href="classDictionary.html#a246e6323f6ac0fa909eae5ffafd92638">More...</a><br /></td></tr>
+<tr class="separator:a246e6323f6ac0fa909eae5ffafd92638"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a156ca127e850de7dc50b636fc6ff1c13"><td class="memItemLeft" align="right" valign="top">std::pair&lt; size_t, std::string &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classDictionary.html#a156ca127e850de7dc50b636fc6ff1c13">kgram_code</a> (std::string kgram) const</td></tr>
 <tr class="memdesc:a156ca127e850de7dc50b636fc6ff1c13"><td class="mdescLeft">&#160;</td><td class="mdescRight">Extract k-gram code from a string.  <a href="classDictionary.html#a156ca127e850de7dc50b636fc6ff1c13">More...</a><br /></td></tr>
 <tr class="separator:a156ca127e850de7dc50b636fc6ff1c13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Word dictionary for language models. </p>
+<p>This class has two main purposes: (i) store a list of "known" words to be used within a language model and (ii) provide conversions between word and k-gram tokens and word and k-gram codes (strings of integers), where the latters are employed in the internal implementation of <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables.">kgramFreqs</a> class. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aee8d612bc9d323c38faba045ba384b8b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aee8d612bc9d323c38faba045ba384b8b">&#9670;&nbsp;</a></span>Dictionary() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Dictionary::Dictionary </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Default constructor. </p>
+<p>Only special tokens (BOS, EOS, UNK) are included in the dictionary. </p>
+
+</div>
+</div>
+<a id="a12977333c299a56212a0af28b6b91cd2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a12977333c299a56212a0af28b6b91cd2">&#9670;&nbsp;</a></span>Dictionary() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Dictionary::Dictionary </td>
+          <td>(</td>
+          <td class="paramtype">const std::vector&lt; std::string &gt; &amp;&#160;</td>
+          <td class="paramname"><em>dict</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize <a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a> from list of words. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">dict</td><td>A vector of strings. List of words to be included in the dictionary.</td></tr>
+  </table>
+  </dd>
+</dl>
+<p>In addition to the words explicitly included, the constructor also adds the special tokens (BOS, EOS, UNK) to the dictionary. </p>
+
+</div>
+</div>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="a857a89001fea6b80e04f5227dc6d9472"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a857a89001fea6b80e04f5227dc6d9472">&#9670;&nbsp;</a></span>contains()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool Dictionary::contains </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>word</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Check if a word is contained in the <a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">word</td><td>A string. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>true if the word is contained in the <a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a>, false otherwise. </dd></dl>
+
+</div>
+</div>
+<a id="afc498da8f320f7933852f164dd72d914"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc498da8f320f7933852f164dd72d914">&#9670;&nbsp;</a></span>index()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Dictionary::index </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>word</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the index corresponding to a given word. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">word</td><td>A string. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A string, index corresponding to 'word'. </dd></dl>
+
+</div>
+</div>
+<a id="a9eb27106f6fad4f3d32d4d069e0d4174"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9eb27106f6fad4f3d32d4d069e0d4174">&#9670;&nbsp;</a></span>insert()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Dictionary::insert </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>word</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Insert a word in the <a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a>. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">word</td><td>A string. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <a id="a156ca127e850de7dc50b636fc6ff1c13"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a156ca127e850de7dc50b636fc6ff1c13">&#9670;&nbsp;</a></span>kgram_code()</h2>
 
@@ -120,7 +302,105 @@ size_t&#160;</td><td class="memItemRight" valign="bottom"><b>length</b> () const
 </div><div class="memdoc">
 
 <p>Extract k-gram code from a string. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">kgram</td><td>a string. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A pair of a positive integer and a string. The integer is the order of the input k-gram (i.e. 'k'), while the string is its code, obtained by pasting the individual word codes separated by a space.</dd></dl>
 <p>Automatically takes care of leading, trailing and multiple spaces, recognizes the EOS token. </p>
+
+</div>
+</div>
+<a id="ab6a571b0f5de675ad3640d78f40214a0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab6a571b0f5de675ad3640d78f40214a0">&#9670;&nbsp;</a></span>length()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Dictionary::length </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return size of the dictionary, excluding the special tokens (BOS, EOS, UNK). </p>
+<dl class="section return"><dt>Returns</dt><dd>A positive integer. Size of the dictionary. </dd></dl>
+
+</div>
+</div>
+<a id="a246e6323f6ac0fa909eae5ffafd92638"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a246e6323f6ac0fa909eae5ffafd92638">&#9670;&nbsp;</a></span>size()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">size_t Dictionary::size </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return size of the dictionary, excluding the special tokens (BOS, EOS, UNK). </p>
+<dl class="section return"><dt>Returns</dt><dd>A positive integer. Size of the dictionary. </dd></dl>
+
+</div>
+</div>
+<a id="a5332d939313694753656b9c31e7ace2a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5332d939313694753656b9c31e7ace2a">&#9670;&nbsp;</a></span>word()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string Dictionary::word </td>
+          <td>(</td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>index</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return the word corresponding to a given word index. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">index</td><td>A string. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A string, word corresponding to 'index'. </dd></dl>
 
 </div>
 </div>

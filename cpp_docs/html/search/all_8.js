@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['sampler_11',['Sampler',['../classSampler.html',1,'']]],
-  ['sbosmoother_12',['SBOSmoother',['../classSBOSmoother.html',1,'']]]
+  ['process_5fsentences_14',['process_sentences',['../classkgramFreqs.html#a4bb234aaef38425b076aaaada7069d12',1,'kgramFreqs']]]
 ];

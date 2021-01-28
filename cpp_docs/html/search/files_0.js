@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kgramfreqs_2eh_25',['kgramFreqs.h',['../kgramFreqs_8h.html',1,'']]]
+  ['dictionary_2eh_32',['Dictionary.h',['../Dictionary_8h.html',1,'']]]
 ];

@@ -1,31 +1,122 @@
 \hypertarget{classDictionary}{}\doxysection{Dictionary Class Reference}
 \label{classDictionary}\index{Dictionary@{Dictionary}}
+
+
+Word dictionary for language models.  
+
+
+
+
+{\ttfamily \#include $<$Dictionary.\+h$>$}
+
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classDictionary_a12977333c299a56212a0af28b6b91cd2}\label{classDictionary_a12977333c299a56212a0af28b6b91cd2}} 
-{\bfseries Dictionary} (const std\+::vector$<$ std\+::string $>$ \&dict)
-\item 
-\mbox{\Hypertarget{classDictionary_a857a89001fea6b80e04f5227dc6d9472}\label{classDictionary_a857a89001fea6b80e04f5227dc6d9472}} 
-bool {\bfseries contains} (std\+::string word) const
-\item 
-\mbox{\Hypertarget{classDictionary_a9eb27106f6fad4f3d32d4d069e0d4174}\label{classDictionary_a9eb27106f6fad4f3d32d4d069e0d4174}} 
-void {\bfseries insert} (std\+::string word)
-\item 
-\mbox{\Hypertarget{classDictionary_a5332d939313694753656b9c31e7ace2a}\label{classDictionary_a5332d939313694753656b9c31e7ace2a}} 
-std\+::string {\bfseries word} (std\+::string index) const
-\item 
-\mbox{\Hypertarget{classDictionary_afc498da8f320f7933852f164dd72d914}\label{classDictionary_afc498da8f320f7933852f164dd72d914}} 
-std\+::string {\bfseries index} (std\+::string word) const
-\item 
-\mbox{\Hypertarget{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}\label{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}} 
-size\+\_\+t {\bfseries length} () const
-\item 
+\mbox{\hyperlink{classDictionary_aee8d612bc9d323c38faba045ba384b8b}{Dictionary}} ()
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classDictionary_a12977333c299a56212a0af28b6b91cd2}{Dictionary}} (const std\+::vector$<$ std\+::string $>$ \&dict)
+\begin{DoxyCompactList}\small\item\em Initialize \mbox{\hyperlink{classDictionary}{Dictionary}} from list of words. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classDictionary_a857a89001fea6b80e04f5227dc6d9472}{contains}} (std\+::string \mbox{\hyperlink{classDictionary_a5332d939313694753656b9c31e7ace2a}{word}}) const
+\begin{DoxyCompactList}\small\item\em Check if a word is contained in the \mbox{\hyperlink{classDictionary}{Dictionary}}. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classDictionary_a9eb27106f6fad4f3d32d4d069e0d4174}{insert}} (std\+::string \mbox{\hyperlink{classDictionary_a5332d939313694753656b9c31e7ace2a}{word}})
+\begin{DoxyCompactList}\small\item\em Insert a word in the \mbox{\hyperlink{classDictionary}{Dictionary}}. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classDictionary_a5332d939313694753656b9c31e7ace2a}{word}} (std\+::string \mbox{\hyperlink{classDictionary_afc498da8f320f7933852f164dd72d914}{index}}) const
+\begin{DoxyCompactList}\small\item\em Return the word corresponding to a given word index. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classDictionary_afc498da8f320f7933852f164dd72d914}{index}} (std\+::string \mbox{\hyperlink{classDictionary_a5332d939313694753656b9c31e7ace2a}{word}}) const
+\begin{DoxyCompactList}\small\item\em Return the index corresponding to a given word. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}{length}} () const
+\begin{DoxyCompactList}\small\item\em Return size of the dictionary, excluding the special tokens (B\+OS, E\+OS, U\+NK). \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classDictionary_a246e6323f6ac0fa909eae5ffafd92638}{size}} () const
+\begin{DoxyCompactList}\small\item\em Return size of the dictionary, excluding the special tokens (B\+OS, E\+OS, U\+NK). \end{DoxyCompactList}\item 
 std\+::pair$<$ size\+\_\+t, std\+::string $>$ \mbox{\hyperlink{classDictionary_a156ca127e850de7dc50b636fc6ff1c13}{kgram\+\_\+code}} (std\+::string kgram) const
 \begin{DoxyCompactList}\small\item\em Extract k-\/gram code from a string. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
+\doxysubsection{Detailed Description}
+Word dictionary for language models. 
+
+This class has two main purposes\+: (i) store a list of \char`\"{}known\char`\"{} words to be used within a language model and (ii) provide conversions between word and k-\/gram tokens and word and k-\/gram codes (strings of integers), where the latters are employed in the internal implementation of \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} class. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classDictionary_aee8d612bc9d323c38faba045ba384b8b}\label{classDictionary_aee8d612bc9d323c38faba045ba384b8b}} 
+\index{Dictionary@{Dictionary}!Dictionary@{Dictionary}}
+\index{Dictionary@{Dictionary}!Dictionary@{Dictionary}}
+\doxysubsubsection{\texorpdfstring{Dictionary()}{Dictionary()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily Dictionary\+::\+Dictionary (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Default constructor. 
+
+Only special tokens (B\+OS, E\+OS, U\+NK) are included in the dictionary. \mbox{\Hypertarget{classDictionary_a12977333c299a56212a0af28b6b91cd2}\label{classDictionary_a12977333c299a56212a0af28b6b91cd2}} 
+\index{Dictionary@{Dictionary}!Dictionary@{Dictionary}}
+\index{Dictionary@{Dictionary}!Dictionary@{Dictionary}}
+\doxysubsubsection{\texorpdfstring{Dictionary()}{Dictionary()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily Dictionary\+::\+Dictionary (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::string $>$ \&}]{dict }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Initialize \mbox{\hyperlink{classDictionary}{Dictionary}} from list of words. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em dict} & A vector of strings. List of words to be included in the dictionary.\\
+\hline
+\end{DoxyParams}
+In addition to the words explicitly included, the constructor also adds the special tokens (B\+OS, E\+OS, U\+NK) to the dictionary. 
+
 \doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classDictionary_a857a89001fea6b80e04f5227dc6d9472}\label{classDictionary_a857a89001fea6b80e04f5227dc6d9472}} 
+\index{Dictionary@{Dictionary}!contains@{contains}}
+\index{contains@{contains}!Dictionary@{Dictionary}}
+\doxysubsubsection{\texorpdfstring{contains()}{contains()}}
+{\footnotesize\ttfamily bool Dictionary\+::contains (\begin{DoxyParamCaption}\item[{std\+::string}]{word }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Check if a word is contained in the \mbox{\hyperlink{classDictionary}{Dictionary}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em word} & A string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if the word is contained in the \mbox{\hyperlink{classDictionary}{Dictionary}}, false otherwise. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDictionary_afc498da8f320f7933852f164dd72d914}\label{classDictionary_afc498da8f320f7933852f164dd72d914}} 
+\index{Dictionary@{Dictionary}!index@{index}}
+\index{index@{index}!Dictionary@{Dictionary}}
+\doxysubsubsection{\texorpdfstring{index()}{index()}}
+{\footnotesize\ttfamily std\+::string Dictionary\+::index (\begin{DoxyParamCaption}\item[{std\+::string}]{word }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return the index corresponding to a given word. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em word} & A string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string, index corresponding to \textquotesingle{}word\textquotesingle{}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDictionary_a9eb27106f6fad4f3d32d4d069e0d4174}\label{classDictionary_a9eb27106f6fad4f3d32d4d069e0d4174}} 
+\index{Dictionary@{Dictionary}!insert@{insert}}
+\index{insert@{insert}!Dictionary@{Dictionary}}
+\doxysubsubsection{\texorpdfstring{insert()}{insert()}}
+{\footnotesize\ttfamily void Dictionary\+::insert (\begin{DoxyParamCaption}\item[{std\+::string}]{word }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Insert a word in the \mbox{\hyperlink{classDictionary}{Dictionary}}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em word} & A string. \\
+\hline
+\end{DoxyParams}
 \mbox{\Hypertarget{classDictionary_a156ca127e850de7dc50b636fc6ff1c13}\label{classDictionary_a156ca127e850de7dc50b636fc6ff1c13}} 
 \index{Dictionary@{Dictionary}!kgram\_code@{kgram\_code}}
 \index{kgram\_code@{kgram\_code}!Dictionary@{Dictionary}}
@@ -36,8 +127,60 @@ std\+::pair$<$ size\+\_\+t, std\+::string $>$ \mbox{\hyperlink{classDictionary_a
 
 Extract k-\/gram code from a string. 
 
-Automatically takes care of leading, trailing and multiple spaces, recognizes the E\+OS token. 
+
+\begin{DoxyParams}{Parameters}
+{\em kgram} & a string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A pair of a positive integer and a string. The integer is the order of the input k-\/gram (i.\+e. \textquotesingle{}k\textquotesingle{}), while the string is its code, obtained by pasting the individual word codes separated by a space.
+\end{DoxyReturn}
+Automatically takes care of leading, trailing and multiple spaces, recognizes the E\+OS token. \mbox{\Hypertarget{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}\label{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}} 
+\index{Dictionary@{Dictionary}!length@{length}}
+\index{length@{length}!Dictionary@{Dictionary}}
+\doxysubsubsection{\texorpdfstring{length()}{length()}}
+{\footnotesize\ttfamily size\+\_\+t Dictionary\+::length (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return size of the dictionary, excluding the special tokens (B\+OS, E\+OS, U\+NK). 
+
+\begin{DoxyReturn}{Returns}
+A positive integer. Size of the dictionary. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDictionary_a246e6323f6ac0fa909eae5ffafd92638}\label{classDictionary_a246e6323f6ac0fa909eae5ffafd92638}} 
+\index{Dictionary@{Dictionary}!size@{size}}
+\index{size@{size}!Dictionary@{Dictionary}}
+\doxysubsubsection{\texorpdfstring{size()}{size()}}
+{\footnotesize\ttfamily size\+\_\+t Dictionary\+::size (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return size of the dictionary, excluding the special tokens (B\+OS, E\+OS, U\+NK). 
+
+\begin{DoxyReturn}{Returns}
+A positive integer. Size of the dictionary. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classDictionary_a5332d939313694753656b9c31e7ace2a}\label{classDictionary_a5332d939313694753656b9c31e7ace2a}} 
+\index{Dictionary@{Dictionary}!word@{word}}
+\index{word@{word}!Dictionary@{Dictionary}}
+\doxysubsubsection{\texorpdfstring{word()}{word()}}
+{\footnotesize\ttfamily std\+::string Dictionary\+::word (\begin{DoxyParamCaption}\item[{std\+::string}]{index }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return the word corresponding to a given word index. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em index} & A string. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string, word corresponding to \textquotesingle{}index\textquotesingle{}. 
+\end{DoxyReturn}
+
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-src/Dictionary.\+h\end{DoxyCompactItemize}
+src/\mbox{\hyperlink{Dictionary_8h}{Dictionary.\+h}}\end{DoxyCompactItemize}

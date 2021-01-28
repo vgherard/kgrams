@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['kgram_5fcode_4',['kgram_code',['../classDictionary.html#a156ca127e850de7dc50b636fc6ff1c13',1,'Dictionary']]],
-  ['kgramfreqs_5',['kgramFreqs',['../classkgramFreqs.html',1,'kgramFreqs'],['../classkgramFreqs.html#a643870753bba844777757777f45c900b',1,'kgramFreqs::kgramFreqs(size_t N)'],['../classkgramFreqs.html#a2e60804eb9861f102595d857f92f4180',1,'kgramFreqs::kgramFreqs(size_t N, const std::vector&lt; std::string &gt; &amp;dict)']]],
-  ['kgramfreqs_2eh_6',['kgramFreqs.h',['../kgramFreqs_8h.html',1,'']]]
+  ['index_6',['index',['../classDictionary.html#afc498da8f320f7933852f164dd72d914',1,'Dictionary']]],
+  ['insert_7',['insert',['../classDictionary.html#a9eb27106f6fad4f3d32d4d069e0d4174',1,'Dictionary']]]
 ];
