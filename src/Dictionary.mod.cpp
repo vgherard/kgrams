@@ -14,7 +14,7 @@ LogicalVector query_word(XPtr<Dictionary> xptr, CharacterVector word)
         size_t len = word.length();
         LogicalVector res(len);
         for (size_t i = 0; i < len; ++i) {
-                res[i] = xptr->contains_word(as<std::string>(word[i]));
+                res[i] = xptr->contains(as<std::string>(word[i]));
         }
         return res;
 }
@@ -98,7 +98,7 @@ XPtr<Dictionary> dict_thresh(Rcpp::CharacterVector text, size_t thresh)
                 line = *it;
                 WordStream ws(line);
                 while ((word = ws.pop_word()) != EOS_TOK) {
-                        if (res->contains_word(word))
+                        if (res->contains(word))
                                 continue;
                         counts[word]++;
                         if (counts[word] > thresh) 
