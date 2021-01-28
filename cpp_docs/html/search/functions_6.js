@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['process_5fsentences_43',['process_sentences',['../classkgramFreqs.html#a4bb234aaef38425b076aaaada7069d12',1,'kgramFreqs']]]
+  ['mlsmoother_45',['MLSmoother',['../classMLSmoother.html#aa0831b9f1c69bb7c67e743d45a2f4828',1,'MLSmoother']]]
 ];

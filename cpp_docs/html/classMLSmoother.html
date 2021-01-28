@@ -70,14 +70,19 @@ $(function() {
 <div class="title">MLSmoother Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Maximum-Likelihood continuation probability smoother.  
+ <a href="classMLSmoother.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Smoothers_8h_source.html">Smoothers.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:aa0831b9f1c69bb7c67e743d45a2f4828"><td class="memItemLeft" align="right" valign="top"><a id="aa0831b9f1c69bb7c67e743d45a2f4828"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>MLSmoother</b> (<a class="el" href="classkgramFreqs.html">kgramFreqs</a> &amp;f)</td></tr>
+<tr class="memitem:aa0831b9f1c69bb7c67e743d45a2f4828"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMLSmoother.html#aa0831b9f1c69bb7c67e743d45a2f4828">MLSmoother</a> (<a class="el" href="classkgramFreqs.html">kgramFreqs</a> &amp;f)</td></tr>
+<tr class="memdesc:aa0831b9f1c69bb7c67e743d45a2f4828"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize an <a class="el" href="classAddkSmoother.html" title="Add-k continuation probability smoother.">AddkSmoother</a> from a <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables.">kgramFreqs</a> object with a fixed constant 'k'.  <a href="classMLSmoother.html#aa0831b9f1c69bb7c67e743d45a2f4828">More...</a><br /></td></tr>
 <tr class="separator:aa0831b9f1c69bb7c67e743d45a2f4828"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab5a8f5a23421bc2034398c3a8f2ae0a5"><td class="memItemLeft" align="right" valign="top"><a id="ab5a8f5a23421bc2034398c3a8f2ae0a5"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (const std::string &amp;word, std::string context)</td></tr>
+<tr class="memitem:ab5a8f5a23421bc2034398c3a8f2ae0a5"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classMLSmoother.html#ab5a8f5a23421bc2034398c3a8f2ae0a5">operator()</a> (const std::string &amp;word, std::string context)</td></tr>
+<tr class="memdesc:ab5a8f5a23421bc2034398c3a8f2ae0a5"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return Maximum-Likelihood continuation probability of a word given a context.  <a href="classMLSmoother.html#ab5a8f5a23421bc2034398c3a8f2ae0a5">More...</a><br /></td></tr>
 <tr class="separator:ab5a8f5a23421bc2034398c3a8f2ae0a5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
@@ -86,6 +91,90 @@ Friends</h2></td></tr>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler&lt; MLSmoother &gt;</b></td></tr>
 <tr class="separator:a4c325e923ef91baa6b8702e556695282"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Maximum-Likelihood continuation probability smoother. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="aa0831b9f1c69bb7c67e743d45a2f4828"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa0831b9f1c69bb7c67e743d45a2f4828">&#9670;&nbsp;</a></span>MLSmoother()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">MLSmoother::MLSmoother </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classkgramFreqs.html">kgramFreqs</a> &amp;&#160;</td>
+          <td class="paramname"><em>f</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize an <a class="el" href="classAddkSmoother.html" title="Add-k continuation probability smoother.">AddkSmoother</a> from a <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables.">kgramFreqs</a> object with a fixed constant 'k'. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>a <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables.">kgramFreqs</a> class object. k-gram frequency table from which "bare" k-gram counts are read off. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab5a8f5a23421bc2034398c3a8f2ae0a5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab5a8f5a23421bc2034398c3a8f2ae0a5">&#9670;&nbsp;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double MLSmoother::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>word</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>context</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return Maximum-Likelihood continuation probability of a word given a context. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">word</td><td>A string. Word for which the continuation probability is to be computed. </td></tr>
+    <tr><td class="paramname">context</td><td>A string. Context conditioning the probability of 'word'. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a positive number. Maximum-Likelihood continuation probability of 'word' given 'context'. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/<a class="el" href="Smoothers_8h_source.html">Smoothers.h</a></li>
 </ul>

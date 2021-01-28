@@ -70,14 +70,19 @@ $(function() {
 <div class="title">SBOSmoother Class Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Stupid Backoff continuation probability smoother.  
+ <a href="classSBOSmoother.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Smoothers_8h_source.html">Smoothers.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a2b07e49be049903b191da6d104459a80"><td class="memItemLeft" align="right" valign="top"><a id="a2b07e49be049903b191da6d104459a80"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>SBOSmoother</b> (<a class="el" href="classkgramFreqs.html">kgramFreqs</a> &amp;f, const double &amp;lambda)</td></tr>
+<tr class="memitem:a2b07e49be049903b191da6d104459a80"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSBOSmoother.html#a2b07e49be049903b191da6d104459a80">SBOSmoother</a> (<a class="el" href="classkgramFreqs.html">kgramFreqs</a> &amp;f, const double &amp;lambda)</td></tr>
+<tr class="memdesc:a2b07e49be049903b191da6d104459a80"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a <a class="el" href="classSBOSmoother.html" title="Stupid Backoff continuation probability smoother.">SBOSmoother</a> from a <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables.">kgramFreqs</a> object with a fixed backoff penalization.  <a href="classSBOSmoother.html#a2b07e49be049903b191da6d104459a80">More...</a><br /></td></tr>
 <tr class="separator:a2b07e49be049903b191da6d104459a80"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5339c7f0c4792ed34864e5c7a967d16c"><td class="memItemLeft" align="right" valign="top"><a id="a5339c7f0c4792ed34864e5c7a967d16c"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>operator()</b> (const std::string &amp;word, std::string context)</td></tr>
+<tr class="memitem:a5339c7f0c4792ed34864e5c7a967d16c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSBOSmoother.html#a5339c7f0c4792ed34864e5c7a967d16c">operator()</a> (const std::string &amp;word, std::string context)</td></tr>
+<tr class="memdesc:a5339c7f0c4792ed34864e5c7a967d16c"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return Stupid Backoff continuation score of a word given a context.  <a href="classSBOSmoother.html#a5339c7f0c4792ed34864e5c7a967d16c">More...</a><br /></td></tr>
 <tr class="separator:a5339c7f0c4792ed34864e5c7a967d16c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="friends"></a>
@@ -86,6 +91,101 @@ Friends</h2></td></tr>
 class&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler&lt; SBOSmoother &gt;</b></td></tr>
 <tr class="separator:adc3125d4f7521050a439e3cf122e1262"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><p>Stupid Backoff continuation probability smoother. </p>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a2b07e49be049903b191da6d104459a80"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2b07e49be049903b191da6d104459a80">&#9670;&nbsp;</a></span>SBOSmoother()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SBOSmoother::SBOSmoother </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classkgramFreqs.html">kgramFreqs</a> &amp;&#160;</td>
+          <td class="paramname"><em>f</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const double &amp;&#160;</td>
+          <td class="paramname"><em>lambda</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize a <a class="el" href="classSBOSmoother.html" title="Stupid Backoff continuation probability smoother.">SBOSmoother</a> from a <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables.">kgramFreqs</a> object with a fixed backoff penalization. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">f</td><td>a <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables.">kgramFreqs</a> class object. k-gram frequency table from which "bare" k-gram counts are read off. </td></tr>
+    <tr><td class="paramname">lambda</td><td>positive number. Penalization in Stupid Backoff recursion. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a5339c7f0c4792ed34864e5c7a967d16c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5339c7f0c4792ed34864e5c7a967d16c">&#9670;&nbsp;</a></span>operator()()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">double SBOSmoother::operator() </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;&#160;</td>
+          <td class="paramname"><em>word</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string&#160;</td>
+          <td class="paramname"><em>context</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Return Stupid Backoff continuation score of a word given a context. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">word</td><td>A string. Word for which the continuation score is to be computed. </td></tr>
+    <tr><td class="paramname">context</td><td>A string. Context conditioning the score of 'word'. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>a positive number. Stupid Backoff continuation score of 'word' given 'context'. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
 <li>src/<a class="el" href="Smoothers_8h_source.html">Smoothers.h</a></li>
 </ul>

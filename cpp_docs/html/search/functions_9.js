@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['v_46',['V',['../classkgramFreqs.html#a253c29213d16ccece264766884e66e9b',1,'kgramFreqs']]]
+  ['process_5fsentences_48',['process_sentences',['../classkgramFreqs.html#a4bb234aaef38425b076aaaada7069d12',1,'kgramFreqs']]]
 ];

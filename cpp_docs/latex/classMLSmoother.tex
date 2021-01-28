@@ -1,20 +1,71 @@
 \hypertarget{classMLSmoother}{}\doxysection{M\+L\+Smoother Class Reference}
 \label{classMLSmoother}\index{MLSmoother@{MLSmoother}}
+
+
+Maximum-\/\+Likelihood continuation probability smoother.  
+
+
+
+
+{\ttfamily \#include $<$Smoothers.\+h$>$}
+
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classMLSmoother_aa0831b9f1c69bb7c67e743d45a2f4828}\label{classMLSmoother_aa0831b9f1c69bb7c67e743d45a2f4828}} 
-{\bfseries M\+L\+Smoother} (\mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} \&f)
-\item 
-\mbox{\Hypertarget{classMLSmoother_ab5a8f5a23421bc2034398c3a8f2ae0a5}\label{classMLSmoother_ab5a8f5a23421bc2034398c3a8f2ae0a5}} 
-double {\bfseries operator()} (const std\+::string \&word, std\+::string context)
-\end{DoxyCompactItemize}
+\mbox{\hyperlink{classMLSmoother_aa0831b9f1c69bb7c67e743d45a2f4828}{M\+L\+Smoother}} (\mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} \&f)
+\begin{DoxyCompactList}\small\item\em Initialize an \mbox{\hyperlink{classAddkSmoother}{Addk\+Smoother}} from a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} object with a fixed constant \textquotesingle{}k\textquotesingle{}. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classMLSmoother_ab5a8f5a23421bc2034398c3a8f2ae0a5}{operator()}} (const std\+::string \&word, std\+::string context)
+\begin{DoxyCompactList}\small\item\em Return Maximum-\/\+Likelihood continuation probability of a word given a context. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Friends}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{classMLSmoother_a4c325e923ef91baa6b8702e556695282}\label{classMLSmoother_a4c325e923ef91baa6b8702e556695282}} 
 class {\bfseries Sampler$<$ M\+L\+Smoother $>$}
 \end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Maximum-\/\+Likelihood continuation probability smoother. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classMLSmoother_aa0831b9f1c69bb7c67e743d45a2f4828}\label{classMLSmoother_aa0831b9f1c69bb7c67e743d45a2f4828}} 
+\index{MLSmoother@{MLSmoother}!MLSmoother@{MLSmoother}}
+\index{MLSmoother@{MLSmoother}!MLSmoother@{MLSmoother}}
+\doxysubsubsection{\texorpdfstring{MLSmoother()}{MLSmoother()}}
+{\footnotesize\ttfamily M\+L\+Smoother\+::\+M\+L\+Smoother (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} \&}]{f }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Initialize an \mbox{\hyperlink{classAddkSmoother}{Addk\+Smoother}} from a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} object with a fixed constant \textquotesingle{}k\textquotesingle{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} class object. k-\/gram frequency table from which \char`\"{}bare\char`\"{} k-\/gram counts are read off. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classMLSmoother_ab5a8f5a23421bc2034398c3a8f2ae0a5}\label{classMLSmoother_ab5a8f5a23421bc2034398c3a8f2ae0a5}} 
+\index{MLSmoother@{MLSmoother}!operator()@{operator()}}
+\index{operator()@{operator()}!MLSmoother@{MLSmoother}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily double M\+L\+Smoother\+::operator() (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{word,  }\item[{std\+::string}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return Maximum-\/\+Likelihood continuation probability of a word given a context. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em word} & A string. Word for which the continuation probability is to be computed. \\
+\hline
+{\em context} & A string. Context conditioning the probability of \textquotesingle{}word\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a positive number. Maximum-\/\+Likelihood continuation probability of \textquotesingle{}word\textquotesingle{} given \textquotesingle{}context\textquotesingle{}. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

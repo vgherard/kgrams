@@ -1,20 +1,73 @@
 \hypertarget{classAddkSmoother}{}\doxysection{Addk\+Smoother Class Reference}
 \label{classAddkSmoother}\index{AddkSmoother@{AddkSmoother}}
+
+
+Add-\/k continuation probability smoother.  
+
+
+
+
+{\ttfamily \#include $<$Smoothers.\+h$>$}
+
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classAddkSmoother_a3598dd1360e0260a8c609763ad744888}\label{classAddkSmoother_a3598dd1360e0260a8c609763ad744888}} 
-{\bfseries Addk\+Smoother} (\mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} \&f, const double \&k)
-\item 
-\mbox{\Hypertarget{classAddkSmoother_ae93df19437d446f2b32f056e4f78a5a2}\label{classAddkSmoother_ae93df19437d446f2b32f056e4f78a5a2}} 
-double {\bfseries operator()} (const std\+::string \&word, std\+::string context)
-\end{DoxyCompactItemize}
+\mbox{\hyperlink{classAddkSmoother_a3598dd1360e0260a8c609763ad744888}{Addk\+Smoother}} (\mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} \&f, const double \&k)
+\begin{DoxyCompactList}\small\item\em Initialize an \mbox{\hyperlink{classAddkSmoother}{Addk\+Smoother}} from a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} object with a fixed constant \textquotesingle{}k\textquotesingle{}. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classAddkSmoother_ae93df19437d446f2b32f056e4f78a5a2}{operator()}} (const std\+::string \&word, std\+::string context)
+\begin{DoxyCompactList}\small\item\em Return Add-\/k continuation probability of a word given a context. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Friends}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{classAddkSmoother_a0fb72994be2bf2c00cd4684aa31e0db6}\label{classAddkSmoother_a0fb72994be2bf2c00cd4684aa31e0db6}} 
 class {\bfseries Sampler$<$ Addk\+Smoother $>$}
 \end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Add-\/k continuation probability smoother. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classAddkSmoother_a3598dd1360e0260a8c609763ad744888}\label{classAddkSmoother_a3598dd1360e0260a8c609763ad744888}} 
+\index{AddkSmoother@{AddkSmoother}!AddkSmoother@{AddkSmoother}}
+\index{AddkSmoother@{AddkSmoother}!AddkSmoother@{AddkSmoother}}
+\doxysubsubsection{\texorpdfstring{AddkSmoother()}{AddkSmoother()}}
+{\footnotesize\ttfamily Addk\+Smoother\+::\+Addk\+Smoother (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} \&}]{f,  }\item[{const double \&}]{k }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Initialize an \mbox{\hyperlink{classAddkSmoother}{Addk\+Smoother}} from a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} object with a fixed constant \textquotesingle{}k\textquotesingle{}. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} class object. k-\/gram frequency table from which \char`\"{}bare\char`\"{} k-\/gram counts are read off. \\
+\hline
+{\em k} & positive number. Constant weight added to k-\/gram counts. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classAddkSmoother_ae93df19437d446f2b32f056e4f78a5a2}\label{classAddkSmoother_ae93df19437d446f2b32f056e4f78a5a2}} 
+\index{AddkSmoother@{AddkSmoother}!operator()@{operator()}}
+\index{operator()@{operator()}!AddkSmoother@{AddkSmoother}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily double Addk\+Smoother\+::operator() (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{word,  }\item[{std\+::string}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return Add-\/k continuation probability of a word given a context. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em word} & A string. Word for which the continuation probability is to be computed. \\
+\hline
+{\em context} & A string. Context conditioning the probability of \textquotesingle{}word\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a positive number. Add-\/k continuation probability of \textquotesingle{}word\textquotesingle{} given \textquotesingle{}context\textquotesingle{}. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

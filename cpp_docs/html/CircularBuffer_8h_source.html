@@ -79,16 +79,15 @@ $(function() {
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;        <span class="keywordtype">size_t</span> pos_;</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;        std::vector&lt;T&gt; stream_;</div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <span class="comment">// Constructor, initializing first size_ - 1 positions to &#39;init&#39;. </span></div>
-<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;        <a class="code" href="classCircularBuffer.html">CircularBuffer</a> (<span class="keywordtype">size_t</span> size, T init) </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;                : size_(size), pos_(0), stream_(size, init) {}</div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keywordtype">void</span> lshift () { pos_ = (pos_ + 1) % size_; }</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keywordtype">void</span> rshift () { pos_ = pos_ &gt; 0 ? pos_ - 1 : size_ - 1; }</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keyword">const</span> T &amp; read ()  { <span class="keywordflow">return</span> stream_[pos_]; }</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;        <span class="keywordtype">void</span> write (<span class="keyword">const</span> T &amp; t)  { stream_[pos_] = t; }</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;};</div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="preprocessor">#endif // UTILS_H</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;        <a class="code" href="classCircularBuffer.html">CircularBuffer</a> (<span class="keywordtype">size_t</span> size, T init) </div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160;                : size_(size), pos_(0), stream_(size, init) {}</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;        <span class="keywordtype">void</span> lshift () { pos_ = (pos_ + 1) % size_; }</div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;        <span class="keywordtype">void</span> rshift () { pos_ = pos_ &gt; 0 ? pos_ - 1 : size_ - 1; }</div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;        <span class="keyword">const</span> T &amp; read ()  { <span class="keywordflow">return</span> stream_[pos_]; }</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;        <span class="keywordtype">void</span> write (<span class="keyword">const</span> T &amp; t)  { stream_[pos_] = t; }</div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;};</div>
+<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="preprocessor">#endif // UTILS_H</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <div class="ttc" id="aclassCircularBuffer_html"><div class="ttname"><a href="classCircularBuffer.html">CircularBuffer</a></div><div class="ttdef"><b>Definition:</b> CircularBuffer.h:5</div></div>
 <!-- start footer part -->

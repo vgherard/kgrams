@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['mlsmoother_27',['MLSmoother',['../classMLSmoother.html',1,'']]]
+  ['mlsmoother_29',['MLSmoother',['../classMLSmoother.html',1,'']]]
 ];

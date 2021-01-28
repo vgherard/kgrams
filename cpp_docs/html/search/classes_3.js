@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['kgramfreqs_26',['kgramFreqs',['../classkgramFreqs.html',1,'']]]
+  ['kgramfreqs_28',['kgramFreqs',['../classkgramFreqs.html',1,'']]]
 ];

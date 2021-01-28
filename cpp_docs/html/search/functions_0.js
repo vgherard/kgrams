@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['contains_34',['contains',['../classDictionary.html#a857a89001fea6b80e04f5227dc6d9472',1,'Dictionary']]]
+  ['addksmoother_36',['AddkSmoother',['../classAddkSmoother.html#a3598dd1360e0260a8c609763ad744888',1,'AddkSmoother']]]
 ];

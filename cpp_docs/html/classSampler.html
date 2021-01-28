@@ -69,24 +69,120 @@ $(function() {
 <div class="title">Sampler&lt; Smoother &gt; Class Template Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
+
+<p>Sample sequences from a k-gram language model.  
+ <a href="classSampler.html#details">More...</a></p>
+
+<p><code>#include &lt;<a class="el" href="Sampler_8h_source.html">Sampler.h</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:ac3f42526f581a18bb1a6f37286e85b82"><td class="memItemLeft" align="right" valign="top"><a id="ac3f42526f581a18bb1a6f37286e85b82"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Sampler</b> (Smoother prob)</td></tr>
+<tr class="memitem:ac3f42526f581a18bb1a6f37286e85b82"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSampler.html#ac3f42526f581a18bb1a6f37286e85b82">Sampler</a> (Smoother prob)</td></tr>
+<tr class="memdesc:ac3f42526f581a18bb1a6f37286e85b82"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initialize a <a class="el" href="classSampler.html" title="Sample sequences from a k-gram language model.">Sampler</a> from a given smoother object.  <a href="classSampler.html#ac3f42526f581a18bb1a6f37286e85b82">More...</a><br /></td></tr>
 <tr class="separator:ac3f42526f581a18bb1a6f37286e85b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a54c3254ff220a25f941eb512569df891"><td class="memItemLeft" align="right" valign="top"><a id="a54c3254ff220a25f941eb512569df891"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>sample_word</b> (std::string context, double T)</td></tr>
-<tr class="separator:a54c3254ff220a25f941eb512569df891"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afb4734cb1f847fbb10fe91a99d95fa50"><td class="memItemLeft" align="right" valign="top"><a id="afb4734cb1f847fbb10fe91a99d95fa50"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>sample_word_rej</b> (std::string context)</td></tr>
-<tr class="separator:afb4734cb1f847fbb10fe91a99d95fa50"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a518e006e48ac453221f0864cd467fcc4"><td class="memItemLeft" align="right" valign="top"><a id="a518e006e48ac453221f0864cd467fcc4"></a>
-std::string&#160;</td><td class="memItemRight" valign="bottom"><b>sample_sentence</b> (size_t max_length, double T)</td></tr>
-<tr class="separator:a518e006e48ac453221f0864cd467fcc4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a25b611a409f6488907b84312d634bac4"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classSampler.html#a25b611a409f6488907b84312d634bac4">sample_sentence</a> (size_t max_length, double T=1.0)</td></tr>
+<tr class="memdesc:a25b611a409f6488907b84312d634bac4"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sample a sentence from the probability distribution specified by the smoother.  <a href="classSampler.html#a25b611a409f6488907b84312d634bac4">More...</a><br /></td></tr>
+<tr class="separator:a25b611a409f6488907b84312d634bac4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
+<div class="textblock"><h3>template&lt;class Smoother&gt;<br />
+class Sampler&lt; Smoother &gt;</h3>
+
+<p>Sample sequences from a k-gram language model. </p>
+<dl class="tparams"><dt>Template Parameters</dt><dd>
+  <table class="tparams">
+    <tr><td class="paramname">Smoother</td><td>Smoother object for sampling probabilities of k-grams. </td></tr>
+  </table>
+  </dd>
+</dl>
+</div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="ac3f42526f581a18bb1a6f37286e85b82"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3f42526f581a18bb1a6f37286e85b82">&#9670;&nbsp;</a></span>Sampler()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Smoother &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="classSampler.html">Sampler</a>&lt; Smoother &gt;::<a class="el" href="classSampler.html">Sampler</a> </td>
+          <td>(</td>
+          <td class="paramtype">Smoother&#160;</td>
+          <td class="paramname"><em>prob</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Initialize a <a class="el" href="classSampler.html" title="Sample sequences from a k-gram language model.">Sampler</a> from a given smoother object. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">prob</td><td>the smoother to be used for generating sampling probabilities. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a25b611a409f6488907b84312d634bac4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a25b611a409f6488907b84312d634bac4">&#9670;&nbsp;</a></span>sample_sentence()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;class Smoother &gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string <a class="el" href="classSampler.html">Sampler</a>&lt; Smoother &gt;::sample_sentence </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>max_length</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>T</em> = <code>1.0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sample a sentence from the probability distribution specified by the smoother. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">max_length</td><td>Maximum length of sampled sequences (truncation occurs if max_length is reached). </td></tr>
+    <tr><td class="paramname">T</td><td>optional temperature parameter. Defaults to 1.0. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>A string. Sampled sentence. </dd></dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following file:<ul>
-<li>src/<a class="el" href="Smoothers_8h_source.html">Smoothers.h</a></li>
+<li>src/<a class="el" href="Sampler_8h_source.html">Sampler.h</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

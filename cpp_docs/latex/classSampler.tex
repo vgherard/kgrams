@@ -1,22 +1,79 @@
 \hypertarget{classSampler}{}\doxysection{Sampler$<$ Smoother $>$ Class Template Reference}
 \label{classSampler}\index{Sampler$<$ Smoother $>$@{Sampler$<$ Smoother $>$}}
+
+
+Sample sequences from a k-\/gram language model.  
+
+
+
+
+{\ttfamily \#include $<$Sampler.\+h$>$}
+
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
+\mbox{\hyperlink{classSampler_ac3f42526f581a18bb1a6f37286e85b82}{Sampler}} (Smoother prob)
+\begin{DoxyCompactList}\small\item\em Initialize a \mbox{\hyperlink{classSampler}{Sampler}} from a given smoother object. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{classSampler_a25b611a409f6488907b84312d634bac4}{sample\+\_\+sentence}} (size\+\_\+t max\+\_\+length, double T=1.\+0)
+\begin{DoxyCompactList}\small\item\em Sample a sentence from the probability distribution specified by the smoother. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\subsubsection*{template$<$class Smoother$>$\newline
+class Sampler$<$ Smoother $>$}
+
+Sample sequences from a k-\/gram language model. 
+
+
+\begin{DoxyTemplParams}{Template Parameters}
+{\em Smoother} & Smoother object for sampling probabilities of k-\/grams. \\
+\hline
+\end{DoxyTemplParams}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
 \mbox{\Hypertarget{classSampler_ac3f42526f581a18bb1a6f37286e85b82}\label{classSampler_ac3f42526f581a18bb1a6f37286e85b82}} 
-{\bfseries Sampler} (Smoother prob)
-\item 
-\mbox{\Hypertarget{classSampler_a54c3254ff220a25f941eb512569df891}\label{classSampler_a54c3254ff220a25f941eb512569df891}} 
-std\+::string {\bfseries sample\+\_\+word} (std\+::string context, double T)
-\item 
-\mbox{\Hypertarget{classSampler_afb4734cb1f847fbb10fe91a99d95fa50}\label{classSampler_afb4734cb1f847fbb10fe91a99d95fa50}} 
-std\+::string {\bfseries sample\+\_\+word\+\_\+rej} (std\+::string context)
-\item 
-\mbox{\Hypertarget{classSampler_a518e006e48ac453221f0864cd467fcc4}\label{classSampler_a518e006e48ac453221f0864cd467fcc4}} 
-std\+::string {\bfseries sample\+\_\+sentence} (size\+\_\+t max\+\_\+length, double T)
-\end{DoxyCompactItemize}
+\index{Sampler$<$ Smoother $>$@{Sampler$<$ Smoother $>$}!Sampler@{Sampler}}
+\index{Sampler@{Sampler}!Sampler$<$ Smoother $>$@{Sampler$<$ Smoother $>$}}
+\doxysubsubsection{\texorpdfstring{Sampler()}{Sampler()}}
+{\footnotesize\ttfamily template$<$class Smoother $>$ \\
+\mbox{\hyperlink{classSampler}{Sampler}}$<$ Smoother $>$\+::\mbox{\hyperlink{classSampler}{Sampler}} (\begin{DoxyParamCaption}\item[{Smoother}]{prob }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Initialize a \mbox{\hyperlink{classSampler}{Sampler}} from a given smoother object. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em prob} & the smoother to be used for generating sampling probabilities. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSampler_a25b611a409f6488907b84312d634bac4}\label{classSampler_a25b611a409f6488907b84312d634bac4}} 
+\index{Sampler$<$ Smoother $>$@{Sampler$<$ Smoother $>$}!sample\_sentence@{sample\_sentence}}
+\index{sample\_sentence@{sample\_sentence}!Sampler$<$ Smoother $>$@{Sampler$<$ Smoother $>$}}
+\doxysubsubsection{\texorpdfstring{sample\_sentence()}{sample\_sentence()}}
+{\footnotesize\ttfamily template$<$class Smoother $>$ \\
+std\+::string \mbox{\hyperlink{classSampler}{Sampler}}$<$ Smoother $>$\+::sample\+\_\+sentence (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{max\+\_\+length,  }\item[{double}]{T = {\ttfamily 1.0} }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Sample a sentence from the probability distribution specified by the smoother. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em max\+\_\+length} & Maximum length of sampled sequences (truncation occurs if max\+\_\+length is reached). \\
+\hline
+{\em T} & optional temperature parameter. Defaults to 1.\+0. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A string. Sampled sentence. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
 \item 
-src/Smoothers.\+h\end{DoxyCompactItemize}
+src/Sampler.\+h\end{DoxyCompactItemize}

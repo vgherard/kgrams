@@ -1,77 +1,32 @@
+/** 
+ *  @file   Dictionary.h 
+ *  @brief  Definition of Smoother classes 
+ *  @author Valerio Gherardi
+ ***********************************************/
+
 #ifndef SMOOTHERS_H
 #define SMOOTHERS_H
 
 #include "kgramFreqs.h"
+#include "Sampler.h"
 #include <Rmath.h>
 #include <cmath>
 #include <limits>
 
-
-template<class Smoother>
-class Sampler {
-        Smoother prob_;
-public:
-        Sampler (Smoother prob) : prob_(prob) {} 
-        std::string sample_word(std::string context, double T) {
-                std::string res;
-                double best = 0, tmp;
-                std::string word;
-                for (size_t i = 1; i <= prob_.V_; ++i) {
-                        word = prob_.f_.dictionary()->word(std::to_string(i));
-                        tmp = std::pow(prob_(word, context), 1 / T); 
-                        tmp /= R::rexp(1.);
-                        if (tmp > best) {
-                                best = tmp;
-                                res = word;
-                        }
-                }
-                tmp = std::pow(prob_(EOS_TOK, context), 1 / T) / R::rexp(1.);
-                if (tmp > best)
-                        res = EOS_TOK;
-                return res;
-        }
-        
-        std::string sample_word_rej(std::string context) {
-                std::string res;
-                double best = 0, tmp;
-                std::string word;
-                while (true) {
-                        size_t n = R::runif(0, prob_.V_);
-                        word = prob_.f_.dictionary()->word(std::to_string(n));
-                        if (prob_(word, context) / R::runif(0, 1) > 1)
-                                return word;
-                }
-        }
-        
-        
-        std::string sample_sentence(size_t max_length, double T) {
-                std::string res = "", prefix = "";
-                for (size_t i = 1; i < prob_.f_.N(); ++i) {
-                        prefix += BOS_TOK + " ";
-                }
-                
-                size_t n_words = 0;
-                std::string new_word; size_t start = 0;
-                while (n_words < max_length and new_word != EOS_TOK) {
-                        n_words++;
-                        new_word = sample_word(prefix, T);
-                        res += new_word + " ";
-                        prefix += " " + new_word;
-                        start = prefix.find_first_not_of(" ");
-                        start = prefix.find_first_of(" ", start);
-                        prefix = prefix.substr(start + 1);
-                }
-
-                return res;     
-        }
-        
-        
-}; // template class Sampler
-
+/**
+ * @class SBOSmoother
+ * @brief Stupid Backoff continuation probability smoother
+ */
 class SBOSmoother {
-        kgramFreqs & f_;
-        size_t V_;
-        const double & lambda_;
+        /*--------Private variables--------*/
+        kgramFreqs & f_; /**< @brief Underlying kgramFreqs object */
+        size_t V_; /**< @brief Size of dictionary */
+        const double & lambda_; /**< @brief Backoff penalization */
+        
+        /*--------Private methods--------*/
+        /**
+         * @brief Remove first word from context
+         */
         void backoff (std::string & context) {
                 size_t pos = context.find_first_not_of(" ");
                 pos = context.find_first_of(" ", pos);
@@ -81,15 +36,38 @@ class SBOSmoother {
                         context = context.substr(pos);
         }
 public:
+        /*--------Constructor--------*/
+        /**
+         * @brief Initialize a SBOSmoother from a kgramFreqs object with a fixed
+         * backoff penalization.
+         * @param f a kgramFreqs class object. k-gram frequency table from which
+         * "bare" k-gram counts are read off.
+         * @param lambda positive number. Penalization in Stupid Backoff 
+         * recursion. 
+         */
         SBOSmoother (kgramFreqs & f, const double & lambda) 
                 : f_(f), V_(f.V()), lambda_(lambda) {}
+        
+        /*--------Probabilities--------*/
+        /**
+         * @brief Return Stupid Backoff continuation score of a word given a 
+         * context.
+         * @param word A string. Word for which the continuation score 
+         * is to be computed.
+         * @param context A string. Context conditioning the score of 
+         * 'word'.
+         * @return a positive number. Stupid Backoff continuation score of
+         * 'word' given 'context'.
+         */
         double operator() (const std::string & word, std::string context)
         {
                 double kgram_count, penalization = 1.;
+                size_t n_backoffs = 0;
                 while ((kgram_count = f_.query(context + " " + word)) == 0) {
                         backoff(context);
                         penalization *= lambda_;
-                        if (context == "")
+                        n_backoffs++;
+                        if (n_backoffs > f_.N() - 1)
                                 return 0;
                 }
                 return penalization * kgram_count / f_.query(context);
@@ -98,13 +76,38 @@ public:
         friend class Sampler<SBOSmoother>;
 }; // class SBOSmoother
 
+/**
+ * @class AddkSmoother
+ * @brief Add-k continuation probability smoother
+ */
 class AddkSmoother {
-        kgramFreqs & f_;
-        size_t V_;
-        const double & k_;
+        /*--------Private variables--------*/
+        kgramFreqs & f_; /**< @brief Underlying kgramFreqs object */
+        size_t V_; /**< @brief Size of dictionary */
+        const double & k_; /**< @brief constant weight added to k-gram counts */
 public:
+        /*--------Constructor--------*/
+        /**
+         * @brief Initialize an AddkSmoother from a kgramFreqs object with a 
+         * fixed constant 'k'.
+         * @param f a kgramFreqs class object. k-gram frequency table from which
+         * "bare" k-gram counts are read off.
+         * @param k positive number. Constant weight added to k-gram counts.
+         */
         AddkSmoother (kgramFreqs & f, const double & k) 
                 : f_(f), V_(f.V()), k_(k) {}
+        
+        /*--------Probabilities--------*/
+        /**
+         * @brief Return Add-k continuation probability of a word 
+         * given a context.
+         * @param word A string. Word for which the continuation probability 
+         * is to be computed.
+         * @param context A string. Context conditioning the probability of 
+         * 'word'.
+         * @return a positive number. Add-k continuation probability of
+         * 'word' given 'context'.
+         */
         double operator() (const std::string & word, std::string context)
         {
                 double num = f_.query(context + " " + word) + k_;
@@ -115,11 +118,36 @@ public:
         friend class Sampler<AddkSmoother>;
 }; // class AddkSmoother
 
+/**
+ * @class MLSmoother
+ * @brief Maximum-Likelihood continuation probability smoother
+ */
 class MLSmoother {
-        kgramFreqs & f_;
-        size_t V_; 
+        /*--------Private variables--------*/
+        kgramFreqs & f_; /**< @brief Underlying kgramFreqs object */
+        size_t V_; /**< @brief Size of dictionary */
 public:
+        /*--------Constructor--------*/
+        /**
+         * @brief Initialize an AddkSmoother from a kgramFreqs object with a 
+         * fixed constant 'k'.
+         * @param f a kgramFreqs class object. k-gram frequency table from which
+         * "bare" k-gram counts are read off.
+         */
         MLSmoother (kgramFreqs & f) : f_(f), V_(f.V()) {}
+        
+        /*--------Probabilities--------*/
+        /**
+         * @brief Return Maximum-Likelihood continuation probability of a word 
+         * given a context.
+         * @param word A string. Word for which the continuation probability 
+         * is to be computed.
+         * @param context A string. Context conditioning the probability of 
+         * 'word'.
+         * @return a positive number. Maximum-Likelihood continuation 
+         * probability of 'word' given 'context'.
+         */
+        
         double operator() (const std::string & word, std::string context)
         {
                 double den = f_.query(context);
@@ -131,8 +159,5 @@ public:
         
         friend class Sampler<MLSmoother>;
 }; // class MLSmoother
-
-
-
 
 #endif //SMOOTHERS_H

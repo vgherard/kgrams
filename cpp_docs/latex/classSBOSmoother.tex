@@ -1,20 +1,73 @@
 \hypertarget{classSBOSmoother}{}\doxysection{S\+B\+O\+Smoother Class Reference}
 \label{classSBOSmoother}\index{SBOSmoother@{SBOSmoother}}
+
+
+Stupid Backoff continuation probability smoother.  
+
+
+
+
+{\ttfamily \#include $<$Smoothers.\+h$>$}
+
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classSBOSmoother_a2b07e49be049903b191da6d104459a80}\label{classSBOSmoother_a2b07e49be049903b191da6d104459a80}} 
-{\bfseries S\+B\+O\+Smoother} (\mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} \&f, const double \&lambda)
-\item 
-\mbox{\Hypertarget{classSBOSmoother_a5339c7f0c4792ed34864e5c7a967d16c}\label{classSBOSmoother_a5339c7f0c4792ed34864e5c7a967d16c}} 
-double {\bfseries operator()} (const std\+::string \&word, std\+::string context)
-\end{DoxyCompactItemize}
+\mbox{\hyperlink{classSBOSmoother_a2b07e49be049903b191da6d104459a80}{S\+B\+O\+Smoother}} (\mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} \&f, const double \&lambda)
+\begin{DoxyCompactList}\small\item\em Initialize a \mbox{\hyperlink{classSBOSmoother}{S\+B\+O\+Smoother}} from a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} object with a fixed backoff penalization. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classSBOSmoother_a5339c7f0c4792ed34864e5c7a967d16c}{operator()}} (const std\+::string \&word, std\+::string context)
+\begin{DoxyCompactList}\small\item\em Return Stupid Backoff continuation score of a word given a context. \end{DoxyCompactList}\end{DoxyCompactItemize}
 \doxysubsection*{Friends}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\Hypertarget{classSBOSmoother_adc3125d4f7521050a439e3cf122e1262}\label{classSBOSmoother_adc3125d4f7521050a439e3cf122e1262}} 
 class {\bfseries Sampler$<$ S\+B\+O\+Smoother $>$}
 \end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Stupid Backoff continuation probability smoother. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSBOSmoother_a2b07e49be049903b191da6d104459a80}\label{classSBOSmoother_a2b07e49be049903b191da6d104459a80}} 
+\index{SBOSmoother@{SBOSmoother}!SBOSmoother@{SBOSmoother}}
+\index{SBOSmoother@{SBOSmoother}!SBOSmoother@{SBOSmoother}}
+\doxysubsubsection{\texorpdfstring{SBOSmoother()}{SBOSmoother()}}
+{\footnotesize\ttfamily S\+B\+O\+Smoother\+::\+S\+B\+O\+Smoother (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} \&}]{f,  }\item[{const double \&}]{lambda }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Initialize a \mbox{\hyperlink{classSBOSmoother}{S\+B\+O\+Smoother}} from a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} object with a fixed backoff penalization. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em f} & a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} class object. k-\/gram frequency table from which \char`\"{}bare\char`\"{} k-\/gram counts are read off. \\
+\hline
+{\em lambda} & positive number. Penalization in Stupid Backoff recursion. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSBOSmoother_a5339c7f0c4792ed34864e5c7a967d16c}\label{classSBOSmoother_a5339c7f0c4792ed34864e5c7a967d16c}} 
+\index{SBOSmoother@{SBOSmoother}!operator()@{operator()}}
+\index{operator()@{operator()}!SBOSmoother@{SBOSmoother}}
+\doxysubsubsection{\texorpdfstring{operator()()}{operator()()}}
+{\footnotesize\ttfamily double S\+B\+O\+Smoother\+::operator() (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{word,  }\item[{std\+::string}]{context }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return Stupid Backoff continuation score of a word given a context. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em word} & A string. Word for which the continuation score is to be computed. \\
+\hline
+{\em context} & A string. Context conditioning the score of \textquotesingle{}word\textquotesingle{}. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+a positive number. Stupid Backoff continuation score of \textquotesingle{}word\textquotesingle{} given \textquotesingle{}context\textquotesingle{}. 
+\end{DoxyReturn}
 
 
 The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}

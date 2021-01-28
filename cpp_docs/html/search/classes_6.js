@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['wordcount_30',['WordCount',['../structWordCount.html',1,'']]],
-  ['wordstream_31',['WordStream',['../classWordStream.html',1,'']]]
+  ['wordcount_32',['WordCount',['../structWordCount.html',1,'']]],
+  ['wordstream_33',['WordStream',['../classWordStream.html',1,'']]]
 ];
