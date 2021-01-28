@@ -13,7 +13,6 @@
 void kgramFreqs::process_sentences(const std::vector<std::string> & sentences,
                                    bool fixed_dictionary) 
 {
-        CircularBuffer<std::string> paddings(N_, "");
         // Add counts for the various <BOS> <BOS> ... <BOS> paddings
         std::string padding = "";
         for (int k = 1; k < N_; ++k) {
