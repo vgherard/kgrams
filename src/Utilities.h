@@ -71,8 +71,8 @@ size_t tokenize_sentences(std::string & line,
                 std::smatch m = *it;
                 end = m.position();
                 line_res.push_back(
-                        keep_first ? 
-                line.substr(start, end - start) + " " + line[end] :
+                        keep_first ?
+                        line.substr(start, end - start) + " " + line[end] :
                         line.substr(start, end - start)
                 );
                 start = end + m.length();
