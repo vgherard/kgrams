@@ -82,7 +82,7 @@ public:
         /*--------Process k-gram counts--------*/
         void process_sentences (const std::vector<std::string> &,
                                 bool fixed_dictionary = false
-                                        ); // kgramFreqs.cpp 
+        ); // kgramFreqs.cpp 
         
         /*--------Query k-grams and words--------*/
         // Get k-gram counts
@@ -94,7 +94,7 @@ public:
          * @return true or false.
          */
         bool dict_contains (std::string word) const
-                { return dict_.contains(word); }
+        { return dict_.contains(word); }
         /**
          * @brief Return pointer to object's dictionary.
          * @return Dictionary *. Pointer to object's dictionary.
