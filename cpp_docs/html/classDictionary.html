@@ -74,6 +74,15 @@ $(function() {
  <a href="classDictionary.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="Dictionary_8h_source.html">Dictionary.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for Dictionary:</div>
+<div class="dyncontent">
+<div class="center"><img src="classDictionary__inherit__graph.png" border="0" usemap="#Dictionary_inherit__map" alt="Inheritance graph"/></div>
+<map name="Dictionary_inherit__map" id="Dictionary_inherit__map">
+<area shape="rect" title="Word dictionary for language models." alt="" coords="10,5,99,32"/>
+<area shape="rect" href="classDictionaryR.html" title=" " alt="" coords="5,80,104,107"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -107,7 +116,7 @@ Public Member Functions</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Word dictionary for language models. </p>
-<p>This class has two main purposes: (i) store a list of "known" words to be used within a language model and (ii) provide conversions between word and k-gram tokens and word and k-gram codes (strings of integers), where the latters are employed in the internal implementation of <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables.">kgramFreqs</a> class. </p>
+<p>This class has two main purposes: (i) store a list of "known" words to be used within a language model and (ii) provide conversions between word and k-gram tokens and word and k-gram codes (strings of integers), where the latters are employed in the internal implementation of <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables">kgramFreqs</a> class. </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="aee8d612bc9d323c38faba045ba384b8b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aee8d612bc9d323c38faba045ba384b8b">&#9670;&nbsp;</a></span>Dictionary() <span class="overload">[1/2]</span></h2>
@@ -309,7 +318,8 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>A pair of a positive integer and a string. The integer is the order of the input k-gram (i.e. 'k'), while the string is its code, obtained by pasting the individual word codes separated by a space.</dd></dl>
-<p>Automatically takes care of leading, trailing and multiple spaces, recognizes the EOS token. </p>
+<p>Automatically takes care of leading, trailing and multiple spaces, recognizes the EOS token. <br  />
+ </p>
 
 </div>
 </div>

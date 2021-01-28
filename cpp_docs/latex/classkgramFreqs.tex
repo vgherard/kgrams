@@ -2,19 +2,32 @@
 \label{classkgramFreqs}\index{kgramFreqs@{kgramFreqs}}
 
 
-Store k-\/gram frequency counts in hash tables.  
+Store k-\/gram frequency counts in hash tables ~\newline
+  
 
 
 
 
 {\ttfamily \#include $<$kgram\+Freqs.\+h$>$}
 
+
+
+Inheritance diagram for kgram\+Freqs\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=161pt]{classkgramFreqs__inherit__graph}
+\end{center}
+\end{figure}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
 \mbox{\hyperlink{classkgramFreqs_a643870753bba844777757777f45c900b}{kgram\+Freqs}} (size\+\_\+t \mbox{\hyperlink{classkgramFreqs_a214a055d9fd6b70f730e51bbec77b54b}{N}})
 \begin{DoxyCompactList}\small\item\em Constructor with empty dictionary. \end{DoxyCompactList}\item 
 \mbox{\hyperlink{classkgramFreqs_a2e60804eb9861f102595d857f92f4180}{kgram\+Freqs}} (size\+\_\+t \mbox{\hyperlink{classkgramFreqs_a214a055d9fd6b70f730e51bbec77b54b}{N}}, const std\+::vector$<$ std\+::string $>$ \&dict)
+\begin{DoxyCompactList}\small\item\em Constructor with predefined dictionary. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classkgramFreqs_a11e2f4fbbe5412c828bc2fc5fd28d015}{kgram\+Freqs}} (size\+\_\+t \mbox{\hyperlink{classkgramFreqs_a214a055d9fd6b70f730e51bbec77b54b}{N}}, const \mbox{\hyperlink{classDictionary}{Dictionary}} \&dict)
 \begin{DoxyCompactList}\small\item\em Constructor with predefined dictionary. \end{DoxyCompactList}\item 
 void \mbox{\hyperlink{classkgramFreqs_a4bb234aaef38425b076aaaada7069d12}{process\+\_\+sentences}} (const std\+::vector$<$ std\+::string $>$ \&, bool fixed\+\_\+dictionary=false)
 \begin{DoxyCompactList}\small\item\em store k-\/gram counts from a list of sentences. \end{DoxyCompactList}\item 
@@ -23,22 +36,23 @@ double \mbox{\hyperlink{classkgramFreqs_ac5da5c73ea09a8b540562c2f3213294f}{query
 bool \mbox{\hyperlink{classkgramFreqs_af373d32fdaf89ce3cabcec60e2d7bfb3}{dict\+\_\+contains}} (std\+::string word) const
 \begin{DoxyCompactList}\small\item\em Check if a word is found in the dictionary. \end{DoxyCompactList}\item 
 size\+\_\+t \mbox{\hyperlink{classkgramFreqs_a214a055d9fd6b70f730e51bbec77b54b}{N}} () const
-\begin{DoxyCompactList}\small\item\em Return pointer to object\textquotesingle{}s dictionary. \end{DoxyCompactList}\item 
+\begin{DoxyCompactList}\small\item\em Maximum order of k-\/grams. \end{DoxyCompactList}\item 
 size\+\_\+t \mbox{\hyperlink{classkgramFreqs_a253c29213d16ccece264766884e66e9b}{V}} () const
 \begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classDictionary}{Dictionary}} size. \end{DoxyCompactList}\item 
-\mbox{\Hypertarget{classkgramFreqs_a6222fb438c67d9608bac5492d31391b5}\label{classkgramFreqs_a6222fb438c67d9608bac5492d31391b5}} 
-\mbox{\hyperlink{classDictionary}{Dictionary}} $\ast$ {\bfseries dictionary} ()
-\end{DoxyCompactItemize}
+\mbox{\Hypertarget{classkgramFreqs_a9cfd749105425bbbc23e0fffe000c73e}\label{classkgramFreqs_a9cfd749105425bbbc23e0fffe000c73e}} 
+const \mbox{\hyperlink{classDictionary}{Dictionary}} \& \mbox{\hyperlink{classkgramFreqs_a9cfd749105425bbbc23e0fffe000c73e}{dictionary}} () const
+\begin{DoxyCompactList}\small\item\em Return constant reference to \mbox{\hyperlink{classDictionary}{Dictionary}}. \end{DoxyCompactList}\end{DoxyCompactItemize}
 
 
 \doxysubsection{Detailed Description}
-Store k-\/gram frequency counts in hash tables. 
+Store k-\/gram frequency counts in hash tables ~\newline
+ 
 
 \doxysubsection{Constructor \& Destructor Documentation}
 \mbox{\Hypertarget{classkgramFreqs_a643870753bba844777757777f45c900b}\label{classkgramFreqs_a643870753bba844777757777f45c900b}} 
 \index{kgramFreqs@{kgramFreqs}!kgramFreqs@{kgramFreqs}}
 \index{kgramFreqs@{kgramFreqs}!kgramFreqs@{kgramFreqs}}
-\doxysubsubsection{\texorpdfstring{kgramFreqs()}{kgramFreqs()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+\doxysubsubsection{\texorpdfstring{kgramFreqs()}{kgramFreqs()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
 {\footnotesize\ttfamily kgram\+Freqs\+::kgram\+Freqs (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{N }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
@@ -53,7 +67,7 @@ Constructor with empty dictionary.
 Constructs a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} object of order N with an empty dictionary. \mbox{\Hypertarget{classkgramFreqs_a2e60804eb9861f102595d857f92f4180}\label{classkgramFreqs_a2e60804eb9861f102595d857f92f4180}} 
 \index{kgramFreqs@{kgramFreqs}!kgramFreqs@{kgramFreqs}}
 \index{kgramFreqs@{kgramFreqs}!kgramFreqs@{kgramFreqs}}
-\doxysubsubsection{\texorpdfstring{kgramFreqs()}{kgramFreqs()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+\doxysubsubsection{\texorpdfstring{kgramFreqs()}{kgramFreqs()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
 {\footnotesize\ttfamily kgram\+Freqs\+::kgram\+Freqs (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{N,  }\item[{const std\+::vector$<$ std\+::string $>$ \&}]{dict }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
 
 
@@ -65,6 +79,23 @@ Constructor with predefined dictionary.
 {\em N} & Positive integer. Maximum order of k-\/grams to be considered. \\
 \hline
 {\em dict} & a list of strings (words) to be included in the dictionary. \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classkgramFreqs_a11e2f4fbbe5412c828bc2fc5fd28d015}\label{classkgramFreqs_a11e2f4fbbe5412c828bc2fc5fd28d015}} 
+\index{kgramFreqs@{kgramFreqs}!kgramFreqs@{kgramFreqs}}
+\index{kgramFreqs@{kgramFreqs}!kgramFreqs@{kgramFreqs}}
+\doxysubsubsection{\texorpdfstring{kgramFreqs()}{kgramFreqs()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily kgram\+Freqs\+::kgram\+Freqs (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{N,  }\item[{const \mbox{\hyperlink{classDictionary}{Dictionary}} \&}]{dict }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor with predefined dictionary. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em N} & Positive integer. Maximum order of k-\/grams to be considered. \\
+\hline
+{\em dict} & a \mbox{\hyperlink{classDictionary}{Dictionary}}. \\
 \hline
 \end{DoxyParams}
 
@@ -96,12 +127,9 @@ true or false.
 
 
 
-Return pointer to object\textquotesingle{}s dictionary. 
+Maximum order of k-\/grams. 
 
 \begin{DoxyReturn}{Returns}
-\mbox{\hyperlink{classDictionary}{Dictionary}} $\ast$. Pointer to object\textquotesingle{}s dictionary.
-\end{DoxyReturn}
-Maximum order of k-\/grams. \begin{DoxyReturn}{Returns}
 A positive integer N, the maximum order of k-\/grams for which frequency counts can be stored. 
 \end{DoxyReturn}
 \mbox{\Hypertarget{classkgramFreqs_a4bb234aaef38425b076aaaada7069d12}\label{classkgramFreqs_a4bb234aaef38425b076aaaada7069d12}} 

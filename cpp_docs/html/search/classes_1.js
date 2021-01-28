@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['circularbuffer_26',['CircularBuffer',['../classCircularBuffer.html',1,'']]]
+  ['circularbuffer_27',['CircularBuffer',['../classCircularBuffer.html',1,'']]]
 ];

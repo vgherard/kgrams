@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['dictionary_27',['Dictionary',['../classDictionary.html',1,'']]]
+  ['dictionary_28',['Dictionary',['../classDictionary.html',1,'']]],
+  ['dictionaryr_29',['DictionaryR',['../classDictionaryR.html',1,'']]]
 ];

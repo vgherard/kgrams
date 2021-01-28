@@ -199,7 +199,7 @@ JAVADOC_AUTOBRIEF      = NO
 
 # If the JAVADOC_BANNER tag is set to YES then doxygen will interpret a line
 # such as
-# /***************
+# \\\*************
 # as being the beginning of a Javadoc-style comment "banner". If set to NO, the
 # Javadoc-style will behave just like regular comments and it will not be
 # interpreted by doxygen.

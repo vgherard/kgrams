@@ -70,10 +70,20 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Store k-gram frequency counts in hash tables.  
+<p>Store k-gram frequency counts in hash tables <br  />
+  
  <a href="classkgramFreqs.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="kgramFreqs_8h_source.html">kgramFreqs.h</a>&gt;</code></p>
+<div class="dynheader">
+Inheritance diagram for kgramFreqs:</div>
+<div class="dyncontent">
+<div class="center"><img src="classkgramFreqs__inherit__graph.png" border="0" usemap="#kgramFreqs_inherit__map" alt="Inheritance graph"/></div>
+<map name="kgramFreqs_inherit__map" id="kgramFreqs_inherit__map">
+<area shape="rect" title="Store k&#45;gram frequency counts in hash tables" alt="" coords="10,5,109,32"/>
+<area shape="rect" href="classkgramFreqsR.html" title=" " alt="" coords="5,80,113,107"/>
+</map>
+<center><span class="legend">[<a href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -83,6 +93,9 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a2e60804eb9861f102595d857f92f4180"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classkgramFreqs.html#a2e60804eb9861f102595d857f92f4180">kgramFreqs</a> (size_t <a class="el" href="classkgramFreqs.html#a214a055d9fd6b70f730e51bbec77b54b">N</a>, const std::vector&lt; std::string &gt; &amp;dict)</td></tr>
 <tr class="memdesc:a2e60804eb9861f102595d857f92f4180"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with predefined dictionary.  <a href="classkgramFreqs.html#a2e60804eb9861f102595d857f92f4180">More...</a><br /></td></tr>
 <tr class="separator:a2e60804eb9861f102595d857f92f4180"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a11e2f4fbbe5412c828bc2fc5fd28d015"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classkgramFreqs.html#a11e2f4fbbe5412c828bc2fc5fd28d015">kgramFreqs</a> (size_t <a class="el" href="classkgramFreqs.html#a214a055d9fd6b70f730e51bbec77b54b">N</a>, const <a class="el" href="classDictionary.html">Dictionary</a> &amp;dict)</td></tr>
+<tr class="memdesc:a11e2f4fbbe5412c828bc2fc5fd28d015"><td class="mdescLeft">&#160;</td><td class="mdescRight">Constructor with predefined dictionary.  <a href="classkgramFreqs.html#a11e2f4fbbe5412c828bc2fc5fd28d015">More...</a><br /></td></tr>
+<tr class="separator:a11e2f4fbbe5412c828bc2fc5fd28d015"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4bb234aaef38425b076aaaada7069d12"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classkgramFreqs.html#a4bb234aaef38425b076aaaada7069d12">process_sentences</a> (const std::vector&lt; std::string &gt; &amp;, bool fixed_dictionary=false)</td></tr>
 <tr class="memdesc:a4bb234aaef38425b076aaaada7069d12"><td class="mdescLeft">&#160;</td><td class="mdescRight">store k-gram counts from a list of sentences.  <a href="classkgramFreqs.html#a4bb234aaef38425b076aaaada7069d12">More...</a><br /></td></tr>
 <tr class="separator:a4bb234aaef38425b076aaaada7069d12"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -93,20 +106,22 @@ Public Member Functions</h2></td></tr>
 <tr class="memdesc:af373d32fdaf89ce3cabcec60e2d7bfb3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Check if a word is found in the dictionary.  <a href="classkgramFreqs.html#af373d32fdaf89ce3cabcec60e2d7bfb3">More...</a><br /></td></tr>
 <tr class="separator:af373d32fdaf89ce3cabcec60e2d7bfb3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a214a055d9fd6b70f730e51bbec77b54b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classkgramFreqs.html#a214a055d9fd6b70f730e51bbec77b54b">N</a> () const</td></tr>
-<tr class="memdesc:a214a055d9fd6b70f730e51bbec77b54b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return pointer to object's dictionary.  <a href="classkgramFreqs.html#a214a055d9fd6b70f730e51bbec77b54b">More...</a><br /></td></tr>
+<tr class="memdesc:a214a055d9fd6b70f730e51bbec77b54b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Maximum order of k-grams.  <a href="classkgramFreqs.html#a214a055d9fd6b70f730e51bbec77b54b">More...</a><br /></td></tr>
 <tr class="separator:a214a055d9fd6b70f730e51bbec77b54b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a253c29213d16ccece264766884e66e9b"><td class="memItemLeft" align="right" valign="top">size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classkgramFreqs.html#a253c29213d16ccece264766884e66e9b">V</a> () const</td></tr>
 <tr class="memdesc:a253c29213d16ccece264766884e66e9b"><td class="mdescLeft">&#160;</td><td class="mdescRight"><a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a> size.  <a href="classkgramFreqs.html#a253c29213d16ccece264766884e66e9b">More...</a><br /></td></tr>
 <tr class="separator:a253c29213d16ccece264766884e66e9b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6222fb438c67d9608bac5492d31391b5"><td class="memItemLeft" align="right" valign="top"><a id="a6222fb438c67d9608bac5492d31391b5"></a>
-<a class="el" href="classDictionary.html">Dictionary</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>dictionary</b> ()</td></tr>
-<tr class="separator:a6222fb438c67d9608bac5492d31391b5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9cfd749105425bbbc23e0fffe000c73e"><td class="memItemLeft" align="right" valign="top"><a id="a9cfd749105425bbbc23e0fffe000c73e"></a>
+const <a class="el" href="classDictionary.html">Dictionary</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classkgramFreqs.html#a9cfd749105425bbbc23e0fffe000c73e">dictionary</a> () const</td></tr>
+<tr class="memdesc:a9cfd749105425bbbc23e0fffe000c73e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Return constant reference to <a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a>. <br /></td></tr>
+<tr class="separator:a9cfd749105425bbbc23e0fffe000c73e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Store k-gram frequency counts in hash tables. </p>
+<div class="textblock"><p>Store k-gram frequency counts in hash tables <br  />
+ </p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="a643870753bba844777757777f45c900b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a643870753bba844777757777f45c900b">&#9670;&nbsp;</a></span>kgramFreqs() <span class="overload">[1/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a643870753bba844777757777f45c900b">&#9670;&nbsp;</a></span>kgramFreqs() <span class="overload">[1/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -136,12 +151,12 @@ Public Member Functions</h2></td></tr>
   </table>
   </dd>
 </dl>
-<p>Constructs a <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables.">kgramFreqs</a> object of order N with an empty dictionary. </p>
+<p>Constructs a <a class="el" href="classkgramFreqs.html" title="Store k-gram frequency counts in hash tables">kgramFreqs</a> object of order N with an empty dictionary. </p>
 
 </div>
 </div>
 <a id="a2e60804eb9861f102595d857f92f4180"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a2e60804eb9861f102595d857f92f4180">&#9670;&nbsp;</a></span>kgramFreqs() <span class="overload">[2/2]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e60804eb9861f102595d857f92f4180">&#9670;&nbsp;</a></span>kgramFreqs() <span class="overload">[2/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -179,6 +194,51 @@ Public Member Functions</h2></td></tr>
   <table class="params">
     <tr><td class="paramname">N</td><td>Positive integer. Maximum order of k-grams to be considered. </td></tr>
     <tr><td class="paramname">dict</td><td>a list of strings (words) to be included in the dictionary. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a11e2f4fbbe5412c828bc2fc5fd28d015"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a11e2f4fbbe5412c828bc2fc5fd28d015">&#9670;&nbsp;</a></span>kgramFreqs() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">kgramFreqs::kgramFreqs </td>
+          <td>(</td>
+          <td class="paramtype">size_t&#160;</td>
+          <td class="paramname"><em>N</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classDictionary.html">Dictionary</a> &amp;&#160;</td>
+          <td class="paramname"><em>dict</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Constructor with predefined dictionary. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">N</td><td>Positive integer. Maximum order of k-grams to be considered. </td></tr>
+    <tr><td class="paramname">dict</td><td>a <a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a>. </td></tr>
   </table>
   </dd>
 </dl>
@@ -244,9 +304,8 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p>Return pointer to object's dictionary. </p>
-<dl class="section return"><dt>Returns</dt><dd><a class="el" href="classDictionary.html" title="Word dictionary for language models.">Dictionary</a> *. Pointer to object's dictionary.</dd></dl>
-<p>Maximum order of k-grams. </p><dl class="section return"><dt>Returns</dt><dd>A positive integer N, the maximum order of k-grams for which frequency counts can be stored. </dd></dl>
+<p>Maximum order of k-grams. </p>
+<dl class="section return"><dt>Returns</dt><dd>A positive integer N, the maximum order of k-grams for which frequency counts can be stored. </dd></dl>
 
 </div>
 </div>

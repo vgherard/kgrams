@@ -1,5 +1,5 @@
-new_kgrams_dictionary <- function(xptr) {
-        structure(list(), cpp_obj = xptr, class = "kgrams_dictionary")
+new_kgrams_dictionary <- function(cpp_obj) {
+        structure(list(), cpp_obj = cpp_obj, class = "kgrams_dictionary")
 }
 
 #' @export
@@ -15,8 +15,8 @@ dictionary <- kgrams_dictionary
 
 #' @export
 kgrams_dictionary.kgram_freqs <- function(object, ...) {
-        xptr <- get_dict_xptr(attr(object, "cpp_obj"))
-        return(new_kgrams_dictionary(xptr))
+        dict_cpp <- attr(object, "cpp_obj")$dictionary()
+        return(new_kgrams_dictionary(dict_cpp))
 }
 
 #' @export
@@ -44,12 +44,10 @@ kgrams_dictionary.kgrams_dictionary <- function(object, ...)
         return(object)
 
 kgrams_dictionary_default <- function() {
-        ## MOdify!
-        temp <- new(kgramFreqs)
-        xptr <- get_dict_xptr(temp)
-        return(new_kgrams_dictionary(xptr))
+        cpp_obj <- new(Dictionary)
+        return(new_kgrams_dictionary(cpp_obj))
 }
 
 #' @export
 length.kgrams_dictionary <- function(x)
-        length_kgrams_dictionary(attr(x, "cpp_obj"))
+        attr(x, "cpp_obj")$length()

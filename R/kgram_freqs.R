@@ -106,13 +106,13 @@ kgram_freqs <- function(object,
                         .preprocess = identity, 
                         .tokenize_sentences = identity,
                         batch_size = NULL,
-                        dictionary = dictionary(),
+                        dictionary = NULL,
                         fixed_dictionary = FALSE,
                         ...
 ) 
 {
-        # ...argcheck()...
-        f <- new(kgramFreqs, N, dictionary)
+        dictionary <- dictionary(dictionary)
+        f <- new(kgramFreqs, N, attr(dictionary, "cpp_obj"))
         process <- function(batch) 
         {
                 batch <- .preprocess(batch)

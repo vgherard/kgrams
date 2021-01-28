@@ -12,7 +12,7 @@ kgram_freqs(
   .preprocess = identity,
   .tokenize_sentences = identity,
   batch_size = NULL,
-  dictionary = dictionary(),
+  dictionary = NULL,
   fixed_dictionary = FALSE,
   ...
 )
