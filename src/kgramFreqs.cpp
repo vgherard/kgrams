@@ -1,5 +1,16 @@
 #include "kgramFreqs.h"
 
+/**
+ * @brief store k-gram counts from a list of sentences.
+ * @param sentences Vector of strings. A list of sentences from which to 
+ * extract sentences
+ * @param fixed_dictionary true or false. If true, any new word not appearing in 
+ * the dictionary encountered during processing is replaced by an Unknown-Word 
+ * token. Otherwise, new words are added to the dictionary.
+ * @details Each entry of 'sentences' is considered a single sentence. 
+ * For each sentence, anything separated by one or more space characters is 
+ * considered a word.
+ */
 void kgramFreqs::process_sentences(const std::vector<std::string> & sentences,
                                    bool fixed_dictionary) 
 {
@@ -13,7 +24,7 @@ void kgramFreqs::process_sentences(const std::vector<std::string> & sentences,
                 paddings.write(padding);
                 paddings.lshift();
                 
-                // Add BOS counts
+                // Add counts for the various <BOS> <BOS> ... <BOS> padding
                 if (k > 0)
                         padding.pop_back();
                 freqs_[k][padding] += sentences.size();
@@ -22,54 +33,57 @@ void kgramFreqs::process_sentences(const std::vector<std::string> & sentences,
                 process_sentence(sentence, paddings, fixed_dictionary);
 }
 
+// Note: the 'prefixes' buffer is supposed to be passed by value from
+// process_sentences(), in order to reinitialize it to <BOS> <BOS> ... <BOS> 
+// at the start of each iteration (sentence).
+
 void kgramFreqs::process_sentence(const std::string & sentence,
                                   CircularBuffer<std::string> prefixes,
                                   bool fixed_dictionary)
 {
         WordStream stream(sentence);
-        std::string current, prefix;
+        std::string word, prefix;
         while (not stream.eos()) {
-                freqs_[0][""]++;
-                // Read next word
-                current = stream.pop_word();
-                // Substitute with ___UNK___ index if current is OOV
-                if ((not dict_.contains_word(current)) & (not fixed_dictionary))
-                        dict_.insert(current);
+                freqs_[0][""]++; // Increase total words count
+                word = stream.pop_word();
                 
-                current = dict_.index(current); 
+                if ((not dict_.contains(word)) & (not fixed_dictionary))
+                        dict_.insert(word);
                 
-                // Increase k-gram counts for (k>1)-grams ending at 'current'
+                word = dict_.index(word); // UNK_TOK if 'word' not in dictionary
+                
+                // Increase k-gram counts for (k>1)-grams ending at 'word'
                 for (size_t k = 1; k <= N_; ++k) {
                         prefix = prefixes.read();
-                        freqs_[k][prefix + current]++;
+                        freqs_[k][prefix + word]++;
                         // Update prefix buffer for next word
-                        prefixes.write(prefix + current + " ");
+                        prefixes.write(prefix + word + " ");
                         prefixes.lshift();
                 }
-                // Overwrite the last spurious N-gram prefix ending at 'current'
+                // Overwrite the last spurious N-gram prefix ending at 'word'
+                // With an empty prefix and realign prefix buffer
                 prefixes.rshift();
                 prefixes.write("");
         }
 }
 
-std::pair<size_t, std::string> kgramFreqs::kgram_code (std::string kgram) const
-{
-        std::pair<size_t, std::string> res{0, ""};
-        WordStream stream(kgram);
-        std::string word, index;
-        for (; ; res.first++) {
-                word = stream.pop_word();
-                if (stream.eos()) break;
-                index = dict_.index(word);
-                res.second += index + " ";
-        }
-        if (res.first > 0) 
-                res.second.pop_back();
-        return res;
-}
+/**
+ * @brief Retrieve counts for a given k-gram.
+ * @param kgram string. The k-gram to be queried.
+ * @return A positive integer. Number of occurrences of 'kgram' in the text data
+ * processed so far.
+ * @details query() considers anything delimited by one or more characters as a
+ * word. Thus, for instance, the calls
+ * \verbatim query("i love you") \endverbatim 
+ * or
+ * \verbatim query(" i love you ") \endverbatim 
+ * or 
+ * \verbatim query("  i    love  you   ") \endverbatim 
+ * would all produce the same result.
+ */
 
 double kgramFreqs::query (std::string kgram) const {
-        auto p = kgram_code(kgram);
+        auto p = dict_.kgram_code(kgram);
         if (p.first > N_) return 0;
         auto it = freqs_[p.first].find(p.second);
         return it != freqs_[p.first].end() ? it->second : 0;
