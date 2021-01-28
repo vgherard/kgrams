@@ -79,6 +79,9 @@ public:
         kgramFreqs(size_t N, const std::vector<std::string> & dict)
                 : N_(N), freqs_(N + 1), dict_(dict) {}
         
+        kgramFreqs(size_t N, const Dictionary & dict)
+                : N_(N), freqs_(N + 1), dict_(dict) {}
+        
         /*--------Process k-gram counts--------*/
         void process_sentences (const std::vector<std::string> &,
                                 bool fixed_dictionary = false

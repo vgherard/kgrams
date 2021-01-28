@@ -26,7 +26,8 @@ RCPP_MODULE(kgramFreqs) {
         class_<kgramFreqs>("kgramFreqs")
         
         .constructor<size_t>()
-        .constructor<size_t, std::vector<std::string> >()
+        //.constructor<size_t, std::vector<std::string> >()
+        .constructor<size_t, const Dictionary & >()
 
         .method("process_sentences", &kgramFreqs::process_sentences)
         

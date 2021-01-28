@@ -39,6 +39,10 @@ kgrams_dictionary.character <- function(object, ...)
         return(new_kgrams_dictionary(xptr))
 }
 
+#' @export
+kgrams_dictionary.kgrams_dictionary <- function(object, ...) 
+        return(object)
+
 kgrams_dictionary_default <- function() {
         ## MOdify!
         temp <- new(kgramFreqs)
