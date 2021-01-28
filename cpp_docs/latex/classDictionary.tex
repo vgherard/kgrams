@@ -1,0 +1,43 @@
+\hypertarget{classDictionary}{}\doxysection{Dictionary Class Reference}
+\label{classDictionary}\index{Dictionary@{Dictionary}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classDictionary_a12977333c299a56212a0af28b6b91cd2}\label{classDictionary_a12977333c299a56212a0af28b6b91cd2}} 
+{\bfseries Dictionary} (const std\+::vector$<$ std\+::string $>$ \&dict)
+\item 
+\mbox{\Hypertarget{classDictionary_a857a89001fea6b80e04f5227dc6d9472}\label{classDictionary_a857a89001fea6b80e04f5227dc6d9472}} 
+bool {\bfseries contains} (std\+::string word) const
+\item 
+\mbox{\Hypertarget{classDictionary_a9eb27106f6fad4f3d32d4d069e0d4174}\label{classDictionary_a9eb27106f6fad4f3d32d4d069e0d4174}} 
+void {\bfseries insert} (std\+::string word)
+\item 
+\mbox{\Hypertarget{classDictionary_a5332d939313694753656b9c31e7ace2a}\label{classDictionary_a5332d939313694753656b9c31e7ace2a}} 
+std\+::string {\bfseries word} (std\+::string index) const
+\item 
+\mbox{\Hypertarget{classDictionary_afc498da8f320f7933852f164dd72d914}\label{classDictionary_afc498da8f320f7933852f164dd72d914}} 
+std\+::string {\bfseries index} (std\+::string word) const
+\item 
+\mbox{\Hypertarget{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}\label{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}} 
+size\+\_\+t {\bfseries length} () const
+\item 
+std\+::pair$<$ size\+\_\+t, std\+::string $>$ \mbox{\hyperlink{classDictionary_a156ca127e850de7dc50b636fc6ff1c13}{kgram\+\_\+code}} (std\+::string kgram) const
+\begin{DoxyCompactList}\small\item\em Extract k-\/gram code from a string. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classDictionary_a156ca127e850de7dc50b636fc6ff1c13}\label{classDictionary_a156ca127e850de7dc50b636fc6ff1c13}} 
+\index{Dictionary@{Dictionary}!kgram\_code@{kgram\_code}}
+\index{kgram\_code@{kgram\_code}!Dictionary@{Dictionary}}
+\doxysubsubsection{\texorpdfstring{kgram\_code()}{kgram\_code()}}
+{\footnotesize\ttfamily std\+::pair$<$size\+\_\+t, std\+::string$>$ Dictionary\+::kgram\+\_\+code (\begin{DoxyParamCaption}\item[{std\+::string}]{kgram }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Extract k-\/gram code from a string. 
+
+Automatically takes care of leading, trailing and multiple spaces, recognizes the E\+OS token. 
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+src/Dictionary.\+h\end{DoxyCompactItemize}

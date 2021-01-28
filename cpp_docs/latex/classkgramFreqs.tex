@@ -1,0 +1,163 @@
+\hypertarget{classkgramFreqs}{}\doxysection{kgram\+Freqs Class Reference}
+\label{classkgramFreqs}\index{kgramFreqs@{kgramFreqs}}
+
+
+Store k-\/gram frequency counts in hash tables.  
+
+
+
+
+{\ttfamily \#include $<$kgram\+Freqs.\+h$>$}
+
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{classkgramFreqs_a643870753bba844777757777f45c900b}{kgram\+Freqs}} (size\+\_\+t \mbox{\hyperlink{classkgramFreqs_a214a055d9fd6b70f730e51bbec77b54b}{N}})
+\begin{DoxyCompactList}\small\item\em Constructor with empty dictionary. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classkgramFreqs_a2e60804eb9861f102595d857f92f4180}{kgram\+Freqs}} (size\+\_\+t \mbox{\hyperlink{classkgramFreqs_a214a055d9fd6b70f730e51bbec77b54b}{N}}, const std\+::vector$<$ std\+::string $>$ \&dict)
+\begin{DoxyCompactList}\small\item\em Constructor with predefined dictionary. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{classkgramFreqs_a4bb234aaef38425b076aaaada7069d12}{process\+\_\+sentences}} (const std\+::vector$<$ std\+::string $>$ \&, bool fixed\+\_\+dictionary=false)
+\begin{DoxyCompactList}\small\item\em store k-\/gram counts from a list of sentences. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{classkgramFreqs_ac5da5c73ea09a8b540562c2f3213294f}{query}} (std\+::string) const
+\begin{DoxyCompactList}\small\item\em Retrieve counts for a given k-\/gram. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classkgramFreqs_af373d32fdaf89ce3cabcec60e2d7bfb3}{dict\+\_\+contains}} (std\+::string word) const
+\begin{DoxyCompactList}\small\item\em Check if a word is found in the dictionary. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classkgramFreqs_a214a055d9fd6b70f730e51bbec77b54b}{N}} () const
+\begin{DoxyCompactList}\small\item\em Return pointer to object\textquotesingle{}s dictionary. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{classkgramFreqs_a253c29213d16ccece264766884e66e9b}{V}} () const
+\begin{DoxyCompactList}\small\item\em \mbox{\hyperlink{classDictionary}{Dictionary}} size. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classkgramFreqs_a6222fb438c67d9608bac5492d31391b5}\label{classkgramFreqs_a6222fb438c67d9608bac5492d31391b5}} 
+\mbox{\hyperlink{classDictionary}{Dictionary}} $\ast$ {\bfseries dictionary} ()
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Store k-\/gram frequency counts in hash tables. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classkgramFreqs_a643870753bba844777757777f45c900b}\label{classkgramFreqs_a643870753bba844777757777f45c900b}} 
+\index{kgramFreqs@{kgramFreqs}!kgramFreqs@{kgramFreqs}}
+\index{kgramFreqs@{kgramFreqs}!kgramFreqs@{kgramFreqs}}
+\doxysubsubsection{\texorpdfstring{kgramFreqs()}{kgramFreqs()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily kgram\+Freqs\+::kgram\+Freqs (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{N }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor with empty dictionary. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em N} & Positive integer. Maximum order of k-\/grams to be considered.\\
+\hline
+\end{DoxyParams}
+Constructs a \mbox{\hyperlink{classkgramFreqs}{kgram\+Freqs}} object of order N with an empty dictionary. \mbox{\Hypertarget{classkgramFreqs_a2e60804eb9861f102595d857f92f4180}\label{classkgramFreqs_a2e60804eb9861f102595d857f92f4180}} 
+\index{kgramFreqs@{kgramFreqs}!kgramFreqs@{kgramFreqs}}
+\index{kgramFreqs@{kgramFreqs}!kgramFreqs@{kgramFreqs}}
+\doxysubsubsection{\texorpdfstring{kgramFreqs()}{kgramFreqs()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily kgram\+Freqs\+::kgram\+Freqs (\begin{DoxyParamCaption}\item[{size\+\_\+t}]{N,  }\item[{const std\+::vector$<$ std\+::string $>$ \&}]{dict }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Constructor with predefined dictionary. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em N} & Positive integer. Maximum order of k-\/grams to be considered. \\
+\hline
+{\em dict} & a list of strings (words) to be included in the dictionary. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classkgramFreqs_af373d32fdaf89ce3cabcec60e2d7bfb3}\label{classkgramFreqs_af373d32fdaf89ce3cabcec60e2d7bfb3}} 
+\index{kgramFreqs@{kgramFreqs}!dict\_contains@{dict\_contains}}
+\index{dict\_contains@{dict\_contains}!kgramFreqs@{kgramFreqs}}
+\doxysubsubsection{\texorpdfstring{dict\_contains()}{dict\_contains()}}
+{\footnotesize\ttfamily bool kgram\+Freqs\+::dict\+\_\+contains (\begin{DoxyParamCaption}\item[{std\+::string}]{word }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Check if a word is found in the dictionary. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em word} & a string. Word to be queried. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true or false. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classkgramFreqs_a214a055d9fd6b70f730e51bbec77b54b}\label{classkgramFreqs_a214a055d9fd6b70f730e51bbec77b54b}} 
+\index{kgramFreqs@{kgramFreqs}!N@{N}}
+\index{N@{N}!kgramFreqs@{kgramFreqs}}
+\doxysubsubsection{\texorpdfstring{N()}{N()}}
+{\footnotesize\ttfamily size\+\_\+t kgram\+Freqs\+::N (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Return pointer to object\textquotesingle{}s dictionary. 
+
+\begin{DoxyReturn}{Returns}
+\mbox{\hyperlink{classDictionary}{Dictionary}} $\ast$. Pointer to object\textquotesingle{}s dictionary.
+\end{DoxyReturn}
+Maximum order of k-\/grams. \begin{DoxyReturn}{Returns}
+A positive integer N, the maximum order of k-\/grams for which frequency counts can be stored. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classkgramFreqs_a4bb234aaef38425b076aaaada7069d12}\label{classkgramFreqs_a4bb234aaef38425b076aaaada7069d12}} 
+\index{kgramFreqs@{kgramFreqs}!process\_sentences@{process\_sentences}}
+\index{process\_sentences@{process\_sentences}!kgramFreqs@{kgramFreqs}}
+\doxysubsubsection{\texorpdfstring{process\_sentences()}{process\_sentences()}}
+{\footnotesize\ttfamily void kgram\+Freqs\+::process\+\_\+sentences (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::string $>$ \&}]{sentences,  }\item[{bool}]{fixed\+\_\+dictionary = {\ttfamily false} }\end{DoxyParamCaption})}
+
+
+
+store k-\/gram counts from a list of sentences. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em sentences} & Vector of strings. A list of sentences from which to extract sentences \\
+\hline
+{\em fixed\+\_\+dictionary} & true or false. If true, any new word not appearing in the dictionary encountered during processing is replaced by an Unknown-\/\+Word token. Otherwise, new words are added to the dictionary.\\
+\hline
+\end{DoxyParams}
+Each entry of \textquotesingle{}sentences\textquotesingle{} is considered a single sentence. For each sentence, anything separated by one or more space characters is considered a word. \mbox{\Hypertarget{classkgramFreqs_ac5da5c73ea09a8b540562c2f3213294f}\label{classkgramFreqs_ac5da5c73ea09a8b540562c2f3213294f}} 
+\index{kgramFreqs@{kgramFreqs}!query@{query}}
+\index{query@{query}!kgramFreqs@{kgramFreqs}}
+\doxysubsubsection{\texorpdfstring{query()}{query()}}
+{\footnotesize\ttfamily double kgram\+Freqs\+::query (\begin{DoxyParamCaption}\item[{std\+::string}]{kgram }\end{DoxyParamCaption}) const}
+
+
+
+Retrieve counts for a given k-\/gram. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em kgram} & string. The k-\/gram to be queried. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A positive integer. Number of occurrences of \textquotesingle{}kgram\textquotesingle{} in the text data processed so far.
+\end{DoxyReturn}
+\mbox{\hyperlink{classkgramFreqs_ac5da5c73ea09a8b540562c2f3213294f}{query()}} considers anything delimited by one or more characters as a word. Thus, for instance, the calls \begin{DoxyVerb}query("i love you") \end{DoxyVerb}
+ or \begin{DoxyVerb}query(" i love you ") \end{DoxyVerb}
+ or \begin{DoxyVerb}query("  i    love  you   ") \end{DoxyVerb}
+ would all produce the same result. \mbox{\Hypertarget{classkgramFreqs_a253c29213d16ccece264766884e66e9b}\label{classkgramFreqs_a253c29213d16ccece264766884e66e9b}} 
+\index{kgramFreqs@{kgramFreqs}!V@{V}}
+\index{V@{V}!kgramFreqs@{kgramFreqs}}
+\doxysubsubsection{\texorpdfstring{V()}{V()}}
+{\footnotesize\ttfamily size\+\_\+t kgram\+Freqs\+::V (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+\mbox{\hyperlink{classDictionary}{Dictionary}} size. 
+
+\begin{DoxyReturn}{Returns}
+A positive integer V. Size of the dictionary, excluding the Begin-\/\+Of-\/\+Sentence, End-\/\+Of-\/\+Sentence and Unknown word tokens. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+src/\mbox{\hyperlink{kgramFreqs_8h}{kgram\+Freqs.\+h}}\item 
+src/kgram\+Freqs.\+cpp\end{DoxyCompactItemize}
