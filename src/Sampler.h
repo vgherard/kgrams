@@ -1,40 +1,34 @@
-/** 
- *  @file   Dictionary.h 
- *  @brief  Definition of Sampler template class 
- *  @author Valerio Gherardi
- ***********************************************/
+/// @file   Dictionary.h 
+/// @brief  Definition of Sampler template class 
+/// @author Valerio Gherardi
 
 #ifndef SAMPLER_H
 #define SAMPLER_H
 
 #include "special_tokens.h"
 
+/// @class Sampler
+/// @brief Sample sequences from a k-gram language model
+/// @tparam Smoother Smoother object for sampling probabilities of k-grams.
 
-/**
- * @class Sampler
- * @brief Sample sequences from a k-gram language model
- * @tparam Smoother Smoother object for sampling probabilities of k-grams.
- */
 template<class Smoother>
 class Sampler {
-        /*--------Private variables--------*/
-        /**
-         * @brief Smoother object for sampling probabilities
-         */
+        //--------Private variables--------//
+        
+        /// @brief Smoother object for sampling probabilities
         Smoother prob_;
         
-        /*--------Private methods--------*/
-        /**
-         * @brief Sample a word from the probability distribution specified
-         * by the context ((N-1)-gram prefix), with an optional temperature. 
-         */
+        //--------Private methods--------//
+        
+        /// @brief Sample a word from the probability distribution specified
+        /// by the context ((N-1)-gram prefix), with an optional temperature. 
         std::string sample_word(std::string context, double T = 1.0) {
                 std::string res;
                 double best = 0, tmp;
                 std::string word;
                 // Sample word from P(word|context) using Gumbel-Max trick
                 for (size_t i = 1; i <= prob_.V_; ++i) {
-                        word = prob_.f_.dictionary()->word(std::to_string(i));
+                        word = prob_.f_.dictionary().word(std::to_string(i));
                         tmp = std::pow(prob_(word, context), 1 / T); 
                         tmp /= R::rexp(1.);
                         if (tmp > best) {
@@ -50,8 +44,8 @@ class Sampler {
                 return res;
         }
         
-        //** Not yet implemented. Sampling using simple rejection method.
-        //** N.B.: requires normalized probabilities.
+        // Not yet implemented. Sampling using simple rejection method.
+        // N.B.: requires normalized probabilities.
         //
         // std::string sample_word_rej(std::string context) {
         //         std::string res;
@@ -65,22 +59,19 @@ class Sampler {
         //         }
         // }
 public:
-        /*--------Constructor--------*/
-        /**
-         * @brief Initialize a Sampler from a given smoother object.
-         * @param prob the smoother to be used for generating sampling 
-         * probabilities.
-         */
+        //--------Constructor--------//
+        
+        /// @brief Initialize a Sampler from a given smoother object.
+        /// @param prob the smoother to be used for generating sampling 
+        /// probabilities.
         Sampler (Smoother prob) : prob_(prob) {}
         
-        /**
-         * @brief Sample a sentence from the probability distribution specified
-         * by the smoother.
-         * @param max_length Maximum length of sampled sequences (truncation
-         * occurs if max_length is reached).
-         * @param T optional temperature parameter. Defaults to 1.0.
-         * @return A string. Sampled sentence.
-         */
+        /// @brief Sample a sentence from the probability distribution specified
+        /// by the smoother.
+        /// @param max_length Maximum length of sampled sequences (truncation
+        /// occurs if max_length is reached).
+        /// @param T optional temperature parameter. Defaults to 1.0.
+        /// @return A string. Sampled sentence.
         std::string sample_sentence(size_t max_length, double T = 1.0) {
                 std::string res = "", context = "";
                 for (size_t i = 1; i < prob_.f_.N(); ++i) {
@@ -101,8 +92,6 @@ public:
                 }
                 return res + "[...] (truncated output)";     
         }
-        
-        
 }; // class Sampler<Smoother>
 
 #endif // SAMPLER_H

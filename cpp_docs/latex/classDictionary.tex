@@ -9,6 +9,16 @@ Word dictionary for language models.
 
 {\ttfamily \#include $<$Dictionary.\+h$>$}
 
+
+
+Inheritance diagram for Dictionary\+:
+\nopagebreak
+\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[width=154pt]{classDictionary__inherit__graph}
+\end{center}
+\end{figure}
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
@@ -135,7 +145,8 @@ Extract k-\/gram code from a string.
 \begin{DoxyReturn}{Returns}
 A pair of a positive integer and a string. The integer is the order of the input k-\/gram (i.\+e. \textquotesingle{}k\textquotesingle{}), while the string is its code, obtained by pasting the individual word codes separated by a space.
 \end{DoxyReturn}
-Automatically takes care of leading, trailing and multiple spaces, recognizes the E\+OS token. \mbox{\Hypertarget{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}\label{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}} 
+Automatically takes care of leading, trailing and multiple spaces, recognizes the E\+OS token. ~\newline
+ \mbox{\Hypertarget{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}\label{classDictionary_ab6a571b0f5de675ad3640d78f40214a0}} 
 \index{Dictionary@{Dictionary}!length@{length}}
 \index{length@{length}!Dictionary@{Dictionary}}
 \doxysubsubsection{\texorpdfstring{length()}{length()}}
