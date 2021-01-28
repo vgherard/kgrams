@@ -15,6 +15,7 @@ IntegerVector kgramFreqsR::queryR(CharacterVector kgram)
 
 RCPP_EXPOSED_CLASS(kgramFreqs);
 RCPP_EXPOSED_CLASS(Dictionary);
+RCPP_EXPOSED_CLASS(DictionaryR);
 
 RCPP_MODULE(kgramFreqs) {
         class_<kgramFreqs>("___kgramFreqs")
@@ -23,7 +24,6 @@ RCPP_MODULE(kgramFreqs) {
                 .method("process_sentences", &kgramFreqs::process_sentences)
                 .const_method("N", &kgramFreqs::N)
                 .const_method("V", &kgramFreqs::V)
-                .method("dictionary", &kgramFreqs::dictionary)
         ;
         
         class_<kgramFreqsR>("kgramFreqs")
@@ -31,5 +31,6 @@ RCPP_MODULE(kgramFreqs) {
                 .constructor<size_t>()
                 .constructor<size_t, const Dictionary & >()
                 .method("query", &kgramFreqsR::queryR)
+                .method("dictionary", &kgramFreqsR::dictionaryR)
         ;
 }

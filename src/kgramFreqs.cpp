@@ -14,22 +14,14 @@ void kgramFreqs::process_sentences(const std::vector<std::string> & sentences,
                                    bool fixed_dictionary) 
 {
         CircularBuffer<std::string> paddings(N_, "");
-        // Define BOS paddings for 1-grams, 2-grams, ..., N-grams 
-        for (int k = 0; k < N_; ++k) {
-                std::string padding = "";
-                for (size_t j = 0; j < k; ++j) {
-                        padding += BOS_IND + " ";
-                }
-                paddings.write(padding);
-                paddings.lshift();
-                
-                // Add counts for the various <BOS> <BOS> ... <BOS> padding
-                if (k > 0)
-                        padding.pop_back();
-                freqs_[k][padding] += sentences.size();
+        // Add counts for the various <BOS> <BOS> ... <BOS> paddings
+        std::string padding = "";
+        for (int k = 1; k < N_; ++k) {
+                padding += BOS_TOK + " ";
+                freqs_[k][dict_.kgram_code(padding).second] += sentences.size();
         }
         for (const std::string & sentence : sentences) 
-                process_sentence(sentence, paddings, fixed_dictionary);
+                process_sentence(sentence, fixed_dictionary);
 }
 
 // Note: the 'prefixes' buffer is supposed to be passed by value from
@@ -37,9 +29,9 @@ void kgramFreqs::process_sentences(const std::vector<std::string> & sentences,
 // at the start of each iteration (sentence).
 
 void kgramFreqs::process_sentence(const std::string & sentence,
-                                  CircularBuffer<std::string> prefixes,
                                   bool fixed_dictionary)
 {
+        CircularBuffer<std::string> prefixes = padding_;
         WordStream stream(sentence);
         std::string word, prefix;
         while (not stream.eos()) {

@@ -40,7 +40,7 @@ LogicalVector DictionaryR::query(CharacterVector word) const
         return res;
 }
 
-void DictionaryR::insert(CharacterVector word_list)
+void DictionaryR::insertR(CharacterVector word_list)
 {
         std::string str;
         for (String word : word_list) {
@@ -89,7 +89,7 @@ void DictionaryR::insert_above(Rcpp::CharacterVector text, size_t thresh)
 }
 
 RCPP_EXPOSED_CLASS(Dictionary);
-RCPP_EXPOSED_CLASS(kgramFreqs);
+RCPP_EXPOSED_CLASS(DictionaryR);
 
 RCPP_MODULE(Dictionary) {
         class_<Dictionary>("___Dictionary")
@@ -102,7 +102,7 @@ RCPP_MODULE(Dictionary) {
                 .constructor()
                 .constructor<CharacterVector>()
                 .const_method("query", &DictionaryR::query)
-                .method("insert", &DictionaryR::insert)
+                .method("insert", &DictionaryR::insertR)
                 .method("insert_cover", &DictionaryR::insert_cover)
                 .method("insert_above", &DictionaryR::insert_above)
                 .method("insert_n", &DictionaryR::insert_n)

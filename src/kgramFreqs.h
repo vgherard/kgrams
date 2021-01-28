@@ -41,7 +41,7 @@ class kgramFreqs {
         /// and provide integer codes for known words. 
 
         Dictionary dict_;
-        
+        const CircularBuffer<std::string> padding_;
         //--------Private methods--------//
 
         /// @brief Get k-gram counts from sentence.
@@ -49,9 +49,20 @@ class kgramFreqs {
         /// public method process_sentences(), in order to reinitialize it to 
         // <BOS> <BOS> ... <BOS> at the start of each iteration (sentence)
         void process_sentence (const std::string &, 
-                               CircularBuffer<std::string>,
                                bool fixed_dictionary = false
                                        ); // kgramFreqs.cpp
+        CircularBuffer<std::string> generate_padding(size_t N) {
+                CircularBuffer<std::string> res(N, "");
+                for (int k = 0; k < N; ++k) {
+                        std::string padding = "";
+                        for (size_t j = 0; j < k; ++j) {
+                                padding += BOS_IND + " ";
+                        }
+                        res.write(padding);
+                        res.lshift();
+                }
+                return res;
+        }
 public:
         //--------Constructors--------//
         
@@ -60,7 +71,7 @@ public:
         /// @details Constructs a kgramFreqs object of order N with an empty 
         /// dictionary.
         kgramFreqs(size_t N)
-                : N_(N), freqs_(N + 1) {}
+                : N_(N), freqs_(N + 1), padding_(generate_padding(N)) {}
         
         /// @brief Constructor with predefined dictionary
         /// @param N     Positive integer. Maximum order of k-grams to be 
@@ -68,14 +79,14 @@ public:
         /// @param dict  a list of strings (words) to be included in the 
         ///              dictionary.
         kgramFreqs(size_t N, const std::vector<std::string> & dict)
-                : N_(N), freqs_(N + 1), dict_(dict) {}
+                : kgramFreqs(N) { dict_ = Dictionary(dict); }
         
         /// @brief Constructor with predefined dictionary
         /// @param N     Positive integer. Maximum order of k-grams to be 
         ///              considered.
         /// @param dict  a Dictionary.
         kgramFreqs(size_t N, const Dictionary & dict)
-                : N_(N), freqs_(N + 1), dict_(dict) {}
+                : kgramFreqs(N) { dict_ = Dictionary(dict); }
         
         //--------Process k-gram counts--------//
         void process_sentences (const std::vector<std::string> &,
@@ -104,9 +115,8 @@ public:
         /// tokens.
         size_t V() const { return dict_.length(); }
         
-        
-        /// @brief Return constant reference to Dictionary.
-        const Dictionary & dictionary() const { return dict_; };
+        /// @brief Return Dictionary.
+        Dictionary dictionary() { return dict_; };
 }; // kgramFreqs
 
 #endif // KGRAM_FREQS_H

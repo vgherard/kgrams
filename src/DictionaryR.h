@@ -27,11 +27,12 @@ class DictionaryR : public Dictionary {
 public:
         DictionaryR () : Dictionary() {}
         DictionaryR (CharacterVector word_list) 
-                : Dictionary() { insert(word_list); }
+                : Dictionary() { insertR(word_list); }
+        DictionaryR (const Dictionary & dict) : Dictionary(dict) {}
         
         LogicalVector query(CharacterVector word) const;
         
-        void insert (CharacterVector word_list);
+        void insertR (CharacterVector word_list);
         void insert_cover(Rcpp::CharacterVector text, double target);
         void insert_n(Rcpp::CharacterVector text, size_t n);
         void insert_above(Rcpp::CharacterVector text, size_t thresh);

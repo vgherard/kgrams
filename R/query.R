@@ -4,10 +4,10 @@ query <- function(object, x, ...)
 
 #' @export
 query.kgram_freqs <- function(object, x) {
-        query_kgram(attr(object, "cpp_obj"), x)
+        attr(object, "cpp_obj")$query(x)
 }
 
 #' @export
 query.kgrams_dictionary <- function(object, x) {
-        query_word(attr(object, "cpp_obj"), x)
+        attr(object, "cpp_obj")$query(x)
 }

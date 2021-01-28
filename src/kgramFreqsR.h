@@ -3,15 +3,16 @@
 
 #include <Rcpp.h>
 #include "kgramFreqs.h"
-#include "Dictionary.h"
+#include "DictionaryR.h"
 using namespace Rcpp;
 
-class kgramFreqsR : public kgramFreqs {
+class kgramFreqsR : private kgramFreqs {
 public:
         kgramFreqsR(size_t N) : kgramFreqs(N) {}
         kgramFreqsR(size_t N, const Dictionary & d) : kgramFreqs(N, d) {}
         
-        IntegerVector queryR(CharacterVector);
+        IntegerVector queryR (CharacterVector);
+        DictionaryR dictionaryR() { return DictionaryR(dictionary()); };
 };
 
 #endif
