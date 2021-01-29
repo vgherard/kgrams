@@ -1,28 +1,5 @@
 #include "kgramFreqs.h"
 
-/// @brief store k-gram counts from a list of sentences.
-/// @param sentences Vector of strings. A list of sentences from which to 
-/// extract sentences
-/// @param fixed_dictionary true or false. If true, any new word not appearing in 
-/// the dictionary encountered during processing is replaced by an Unknown-Word 
-/// token. Otherwise, new words are added to the dictionary.
-/// @details Each entry of 'sentences' is considered a single sentence. 
-/// For each sentence, anything separated by one or more space characters is 
-/// considered a word.
-
-void kgramFreqs::process_sentences(const std::vector<std::string> & sentences,
-                                   bool fixed_dictionary) 
-{
-        // Add counts for the various <BOS> <BOS> ... <BOS> paddings
-        std::string padding = "";
-        for (int k = 1; k < N_; ++k) {
-                padding += BOS_TOK + " ";
-                freqs_[k][dict_.kgram_code(padding).second] += sentences.size();
-        }
-        for (const std::string & sentence : sentences) 
-                process_sentence(sentence, fixed_dictionary);
-}
-
 // Note: the 'prefixes' buffer is supposed to be passed by value from
 // process_sentences(), in order to reinitialize it to <BOS> <BOS> ... <BOS> 
 // at the start of each iteration (sentence).
@@ -75,4 +52,46 @@ double kgramFreqs::query (std::string kgram) const {
         if (p.first > N_) return 0;
         auto it = freqs_[p.first].find(p.second);
         return it != freqs_[p.first].end() ? it->second : 0;
+}
+
+/// @brief Initialize a buffer of prefixes for processing sentences
+CircularBuffer<std::string> kgramFreqs::generate_padding() {
+        CircularBuffer<std::string> res(N_, "");
+        for (int k = 0; k < N_; ++k) {
+                std::string padding = "";
+                for (size_t j = 0; j < k; ++j) {
+                        padding += BOS_IND + " ";
+                }
+                res.write(padding);
+                res.lshift();
+        }
+        return res;
+}
+/// @brief Increase counts for <BOS>, <BOS> <BOS>, etc. by n
+void kgramFreqs::add_BOS_counts(size_t n) {
+        std::string padding = "";
+        for (int k = 1; k < N_; ++k) {
+                padding += BOS_TOK + " ";
+                freqs_[k][dict_.kgram_code(padding).second] += n;
+        }
+}
+
+/// @brief store k-gram counts from a list of sentences.
+/// @param sentences Vector of strings. A list of sentences from 
+/// which to store k-gram counts
+/// @param fixed_dictionary true or false. If true, any new word 
+/// not appearing in the dictionary encountered during processing is 
+/// replaced by an Unknown-Word  token. Otherwise, new words are 
+/// added to the dictionary.
+/// @details Each entry of 'sentences' is considered a single sentence. 
+/// For each sentence, anything separated by one or more space 
+/// characters is considered a word.
+void kgramFreqs::process_sentences(
+        const std::vector<std::string> & sentences, bool fixed_dictionary
+        ) 
+{
+        // Add counts for the various <BOS> <BOS> ... <BOS> paddings
+        add_BOS_counts(sentences.size());
+        for (const std::string & sentence : sentences) 
+                process_sentence(sentence, fixed_dictionary);
 }

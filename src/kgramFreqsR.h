@@ -9,10 +9,25 @@ using namespace Rcpp;
 class kgramFreqsR : private kgramFreqs {
 public:
         kgramFreqsR(size_t N) : kgramFreqs(N) {}
-        kgramFreqsR(size_t N, const Dictionary & d) : kgramFreqs(N, d) {}
+        kgramFreqsR(size_t N, const Dictionary & dict) : kgramFreqs(N, dict) {}
         
-        IntegerVector queryR (CharacterVector);
-        DictionaryR dictionaryR() { return DictionaryR(dictionary()); };
+        //--------Process k-gram counts--------//
+        /// @brief store k-gram counts from a list of sentences.
+        /// @param sentences Vector of strings. A list of sentences from 
+        /// which to store k-gram counts
+        /// @param fixed_dictionary true or false. If true, any new word 
+        /// not appearing in the dictionary encountered during processing is 
+        /// replaced by an Unknown-Word  token. Otherwise, new words are 
+        /// added to the dictionary.
+        /// @details Each entry of 'sentences' is considered a single sentence. 
+        /// For each sentence, anything separated by one or more space 
+        /// characters is considered a word.
+        void process_sentencesR(
+                CharacterVector & sentences, bool fixed_dictionary = false
+        );
+        
+        IntegerVector queryR (CharacterVector) const;
+        DictionaryR dictionaryR() const { return DictionaryR(dictionary()); };
 };
 
 #endif

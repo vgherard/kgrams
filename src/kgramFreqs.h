@@ -43,26 +43,22 @@ class kgramFreqs {
         Dictionary dict_;
         const CircularBuffer<std::string> padding_;
         //--------Private methods--------//
-
+        
+        /// @brief Initialize a buffer of prefixes for processing sentences
+        CircularBuffer<std::string> generate_padding();
+        
+protected:
+        /// @brief Increase counts for <BOS>, <BOS> <BOS>, etc. by n
+        void add_BOS_counts(size_t);
+        
         /// @brief Get k-gram counts from sentence.
         /// The 'prefixes' buffer is supposed to be passed by value from the
         /// public method process_sentences(), in order to reinitialize it to 
         // <BOS> <BOS> ... <BOS> at the start of each iteration (sentence)
         void process_sentence (const std::string &, 
                                bool fixed_dictionary = false
-                                       ); // kgramFreqs.cpp
-        CircularBuffer<std::string> generate_padding(size_t N) {
-                CircularBuffer<std::string> res(N, "");
-                for (int k = 0; k < N; ++k) {
-                        std::string padding = "";
-                        for (size_t j = 0; j < k; ++j) {
-                                padding += BOS_IND + " ";
-                        }
-                        res.write(padding);
-                        res.lshift();
-                }
-                return res;
-        }
+        ); // kgramFreqs.cpp
+        
 public:
         //--------Constructors--------//
         
@@ -71,7 +67,7 @@ public:
         /// @details Constructs a kgramFreqs object of order N with an empty 
         /// dictionary.
         kgramFreqs(size_t N)
-                : N_(N), freqs_(N + 1), padding_(generate_padding(N)) {}
+                : N_(N), freqs_(N + 1), padding_(generate_padding()) {}
         
         /// @brief Constructor with predefined dictionary
         /// @param N     Positive integer. Maximum order of k-grams to be 
@@ -89,9 +85,18 @@ public:
                 : kgramFreqs(N) { dict_ = Dictionary(dict); }
         
         //--------Process k-gram counts--------//
-        void process_sentences (const std::vector<std::string> &,
-                                bool fixed_dictionary = false
-        ); // kgramFreqs.cpp 
+        /// @brief store k-gram counts from a list of sentences.
+        /// @param sentences Vector of strings. A list of sentences from 
+        /// which to store k-gram counts
+        /// @param fixed_dictionary true or false. If true, any new word 
+        /// not appearing in the dictionary encountered during processing is 
+        /// replaced by an Unknown-Word  token. Otherwise, new words are 
+        /// added to the dictionary.
+        /// @details Each entry of 'sentences' is considered a single sentence. 
+        /// For each sentence, anything separated by one or more space 
+        /// characters is considered a word.
+        void process_sentences(const std::vector<std::string> & sentences,
+                               bool fixed_dictionary = false);
         
         //--------Query k-grams and words--------//
         // Get k-gram counts
@@ -116,7 +121,7 @@ public:
         size_t V() const { return dict_.length(); }
         
         /// @brief Return Dictionary.
-        Dictionary dictionary() { return dict_; };
+        Dictionary dictionary() const { return dict_; };
 }; // kgramFreqs
 
 #endif // KGRAM_FREQS_H
