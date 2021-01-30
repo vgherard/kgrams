@@ -104,6 +104,10 @@ NumericVector probability_generic (Smoother * smoother,
         return res;
 }
 
+//---------------- Models ----------------//
+
+// TODO: Is it possible to avoid the repetition below using a template class? 
+
 class SBOSmootherR : public SBOSmoother {
 public:
         SBOSmootherR (const kgramFreqsR & f, const double lambda) 
@@ -139,9 +143,9 @@ public:
         KNSmootherR (const kgramFreqsR & f, const double D) 
                 : KNSmoother(f, D) {}
         NumericVector probability (CharacterVector word, std::string context) 
-        { return probability_generic(this, word, context); }
+                { return probability_generic(this, word, context); }
         CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
-        { return sample_generic(this, n, max_length, T); }
+                { return sample_generic(this, n, max_length, T); }
 }; // class KNSmootherR
 
 #endif //SMOOTHING_R_H

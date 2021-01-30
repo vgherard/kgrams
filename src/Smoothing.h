@@ -145,9 +145,9 @@ class KNSmoother : public Smoother {
         // Defined in Smoothing.cpp
         std::string pop_lr (const std::string & kgram_code) const;
         
-        double continuation_probability (const std::string & word, 
-                                         std::string context,
-                                         size_t order) const;
+        // Compute continuation probability of word in given context
+        // k-gram order is passed 
+        double prob_cont (const std::string &, std::string, size_t) const;
 public:
         //--------Constructors--------//
         KNSmoother (const kgramFreqs & f, const double D); // Smoothing.cpp

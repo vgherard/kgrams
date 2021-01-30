@@ -117,6 +117,8 @@ KNSmoother::KNSmoother (const kgramFreqs & f, const double D)
                         // with exactly one space between word codes
                         kgram_code = it->first;
                         r_pos = kgram_code.find_last_of(" ");
+                        // Reject kgrams ending in BOS
+                        // In this way sum(prob(w|...)) = 1, where w != BOS
                         if (kgram_code.substr(r_pos + 1) == BOS_IND)
                                 continue;
                         l_pos = kgram_code.find_first_of(" ") + 1;
@@ -132,91 +134,116 @@ KNSmoother::KNSmoother (const kgramFreqs & f, const double D)
         
 }
 
-
-//--------Probabilities--------//
-
-/// @brief Return Maximum-Likelihood continuation probability of a word
+/// @brief Return Kneser-Ney continuation probability of a word
 /// given a context.
 /// @param word A string. Word for which the continuation probability
 /// is to be computed.
 /// @param context A string. Context conditioning the probability of
 /// 'word'.
-/// @return a positive number. Maximum-Likelihood continuation
+/// @return a positive number. Kneser-Ney continuation
 /// probability of 'word' given 'context'.
 double KNSmoother::operator() (const std::string & word, std::string context) 
 const {
-        context = truncate(context);
+        // The probability of word 'w' in context 'c' is given by:
+        //
+        //      Prob(w|c) = ProbDisc(w|c) + BackoffFac(c) * ProbCont(w|c--)
+        //
+        // where c-- is the backed-off context (remove first word from 'c') and:
+        //
+        //      ProbDisc(w|c) = [Count(c,w)-D]+ / Count(c)
+        //      BackoffFac(c) = 1 - sum_w(ProbDisc(w|c))
+        //                    = D * N1+(c,*) / Count(c)
+        //      ProbCont(w|c--) = Continuation probability of 'w|c--' 
+        //
+        // Here N1+(c,*) = (# different words following context 'c') is the
+        // continuation count; []+ denotes positive part; the continuation 
+        // probability is defined below. For the base case, we replace
+        //      ProbCont(w|) = 1 / V,
+        // where V is the number of words in the dictionary (without <BOS>)
+        
+        context = truncate(context); // keep at most N - 1 words
         double den = f_.query(context);
         double num = f_.query(context + " " + word) - D_;
         num = num > 0 ? num : 0;
         
-        // Compute probability part
-        double prob_part = den != 0 ? num / den : 0;
+        // Compute ProbDisc(w|c)
+        double prob_disc = den != 0 ? num / den : 0;
         
-        // handle directly the 1-gram probability case
+        // Handle separately the 1-gram probability case
         if (context == "") {
-                if (den == 0) return 0;
-                num = f_[1].size() - 1; // Remove BOS from seen words count.
-                double backoff_fac = den != 0 ? D_ * num / den : 1;
-                double cont_prob = 1 / (double)(f_.V() + 2);
-                // den == 0 is a silly case which should be barred from existing
-                return prob_part + backoff_fac * cont_prob;
-                
+                num = f_[1].size() - 1; // N1+(.) without considering <BOS>
+                // Compute BackoffFac(c)
+                double backoff_fac = den != 0 ? D_ * num / den : 1; 
+                // Compute ProbCont(c) (this is potentially > than num!)
+                double prob_cont = 1 / (double)(f_.V() + 2);
+                return prob_disc + backoff_fac * prob_cont;
         }
                 
-        
-        // Compute backoff factor 
-        // overwrite num which is no more necessary
-        auto p = f_.kgram_code(context);
+        // Compute BackoffFac(c)
+        // overwrite num which is no longer necessary
+        auto p = f_.kgram_code(context); // this is a pair {order, code}
         auto it = r_continuations_[p.first].find(p.second);
         num = it != r_continuations_[p.first].end() ? it->second : 0; 
-        double backoff_fac = den != 0 ? D_ * num / den : 1;
+        double backoff = den != 0 ? D_ * num / den : 1;
         
         // Backoff directly on the k-gram code (stored in p.second)
-        // overwrite 'context' with backed off context code
+        // overwrite 'context' with backed off context CODE
         size_t pos = p.second.find_first_of(" ");
         context = (pos != std::string::npos) ? p.second.substr(pos + 1) : "";
         
         // Compute continuation probability
         std::string index_word = f_.index(word);
-        double cont_prob = continuation_probability(index_word, 
-                                                    context,
-                                                    p.first);
-        
-        return prob_part + backoff_fac * cont_prob;
+        double prob_cont = this->prob_cont(index_word, context, p.first);
+        return prob_disc + backoff * prob_cont;
 }
 
-double KNSmoother::continuation_probability (const std::string & word, 
-                                             std::string context,
-                                             size_t order) 
-const {
-        // Compute den
+
+// Compute continuation probability of word in a given context. 'order' is the
+// k-gram order of context, passed for efficiency.
+double KNSmoother::prob_cont (
+        const std::string & word, std::string context, size_t order
+) const {
+        // The continuation probability of word 'w' in context 'c' is given by:
+        //
+        //      ProbCont(w|c) = ProbContDisc(w|c) + 
+        //                              BackoffFac(c) * ProbCont(w|c--)
+        //
+        // where c-- is the backed-off context (remove first word from 'c') and:
+        //
+        //      ProbContDisc(w|c) = [N1+(*,c,w)-D]+ / N1+(*,c,*)
+        //      BackoffFac(c) = 1 - sum_w(ProbContDisc(w|c))
+        //                    = D * N1+(c,*) / N1+(*,c,*)
+        //      ProbCont(w|c--) = Continuation probability of 'w|c--'
+        // For the base case, we replace
+        //      ProbCont(w|) = 1 / V,
+        // where V is the number of words in the dictionary (without <BOS>)
+        
+        // Compute denominator of ProbContDisc(w|c)
         auto it = lr_continuations_[order - 1].find(context);
         auto itend = lr_continuations_[order - 1].end();
         double den = it != itend ? it->second : 0;
         
-        // Compute num
+        // Compute numerator of ProbContDisc(w|c)
         it = l_continuations_[order].find(
-                context != "" ? context + " " + word : word);
+                context != "" ? context + " " + word : word
+                );
         itend = l_continuations_[order].end();
         double num = it != itend ? it->second - D_ : 0;
         num = num > 0 ? num : 0;
         
-        // Compute probability part
-        double prob_part = den != 0 ? num / den : 0;
+        // Compute ProbContDisc(w|c)
+        double prob_cont_disc = den != 0 ? num / den : 0;
         
         // handle directly the 1-gram probability case
         if (context == "") {
                 num = f_[1].size() - 1; // Remove BOS from seen words count.
                 double backoff_fac = den != 0 ? D_ * num / den : 1;
-                double cont_prob = 1 / (double)(f_.V() + 2);
+                double prob_cont_backoff = 1 / (double)(f_.V() + 2);
                 // den == 0 is a silly case which should be barred from existing
-                return prob_part + backoff_fac * cont_prob;
+                return prob_cont_disc + backoff_fac * prob_cont_backoff;
         }
                 
-        
-        // Compute backoff factor 
-        // overwrite num which is no more necessary
+        // Compute BackoffFac(c)
         it = r_continuations_[order - 1].find(context);
         itend = r_continuations_[order - 1].end();
         num = it != itend ? it->second : 0; 
@@ -226,22 +253,8 @@ const {
         size_t pos = context.find_first_of(" ");
         context = (pos != std::string::npos) ? context.substr(pos + 1) : "";
         
-        // Compute continuation probability
-        double cont_prob = continuation_probability(word, 
-                                                    context,
-                                                    order - 1);
+        // Compute ProbCont(w|c--)
+        double prob_cont_backoff = prob_cont(word, context, order - 1);
         
-        return prob_part + backoff_fac * cont_prob;
-}
-
-int main () {
-        kgramFreqs f(3);
-        std::vector<std::string> sentences{"a b a b a"};
-        f.process_sentences(sentences);
-        KNSmoother kn(f, 0.75);
-        double prob_a = kn.operator()("a", "a b");
-        double prob_b = kn.operator()("b", "a b");
-        double prob_EOS = kn.operator()(EOS_TOK, "a b");
-        double prob_UNK = kn.operator()(UNK_TOK, "a b");
-        return 0;
+        return prob_cont_disc + backoff_fac * prob_cont_backoff;
 }
