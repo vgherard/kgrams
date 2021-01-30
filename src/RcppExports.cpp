@@ -64,7 +64,7 @@ END_RCPP
 }
 
 RcppExport SEXP _rcpp_module_boot_Dictionary();
-RcppExport SEXP _rcpp_module_boot_Probability();
+RcppExport SEXP _rcpp_module_boot_Smoothing();
 RcppExport SEXP _rcpp_module_boot_kgramFreqs();
 
 static const R_CallMethodDef CallEntries[] = {
@@ -74,7 +74,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_kgrams_BOS", (DL_FUNC) &_kgrams_BOS, 0},
     {"_kgrams_UNK", (DL_FUNC) &_kgrams_UNK, 0},
     {"_rcpp_module_boot_Dictionary", (DL_FUNC) &_rcpp_module_boot_Dictionary, 0},
-    {"_rcpp_module_boot_Probability", (DL_FUNC) &_rcpp_module_boot_Probability, 0},
+    {"_rcpp_module_boot_Smoothing", (DL_FUNC) &_rcpp_module_boot_Smoothing, 0},
     {"_rcpp_module_boot_kgramFreqs", (DL_FUNC) &_rcpp_module_boot_kgramFreqs, 0},
     {NULL, NULL, 0}
 };

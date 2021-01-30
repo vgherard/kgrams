@@ -42,8 +42,8 @@ RCPP_EXPOSED_CLASS(kgramFreqsR);
 
 RCPP_MODULE(kgramFreqs) {
         class_<kgramFreqs>("___kgramFreqs")
-                .constructor<size_t>()
-                .constructor<size_t, const Dictionary & >()
+                //.constructor<size_t>()
+                //.constructor<size_t, const Dictionary & >()
                 .const_method("N", &kgramFreqs::N)
                 .const_method("V", &kgramFreqs::V)
         ;

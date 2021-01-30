@@ -102,12 +102,27 @@ public:
         // Get k-gram counts
         double query (std::string) const; // kgramFreqs.cpp
         
-        
         /// @brief Check if a word is found in the dictionary.
-        /// @param word  a string. Word to be queried.
+        /// @param word a string. Word to be queried.
         /// @return true or false.
         bool dict_contains (std::string word) const
                 { return dict_.contains(word); }
+        
+        /// @brief Return word from dictionary.
+        /// @param index a string.
+        /// @return a string.
+        std::string word (std::string index) const { return dict_.word(index); }
+        
+        /// @brief Return index of word from dictionary.
+        /// @param word a string.
+        /// @return a string.
+        std::string index (std::string word) const { return dict_.index(word); }
+        
+        /// @brief Return k-gram code from dictionary.
+        /// @param kgram a string.
+        /// @return a string.
+        std::pair<size_t, std::string> kgram_code (std::string kgram) const 
+                { return dict_.kgram_code(kgram); }
         
         /// @brief Maximum order of k-grams.
         /// @return A positive integer N, the maximum order of k-grams for which
@@ -119,6 +134,8 @@ public:
         /// excluding the Begin-Of-Sentence, End-Of-Sentence and Unknown word
         /// tokens.
         size_t V() const { return dict_.length(); }
+        
+        const FrequencyTable & operator[] (size_t k) const { return freqs_[k]; }
         
         /// @brief Return Dictionary.
         Dictionary dictionary() const { return dict_; };

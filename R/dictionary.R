@@ -64,7 +64,7 @@ dictionary <- function(text, ...) {
         if (missing(text) || is.null(text))
                 return(dictionary_missing())
         cpp_obj <- new(Dictionary)
-        UseMethod("dictionary", object)
+        UseMethod("dictionary", text)
 }
         
 #' @rdname dictionary
@@ -111,9 +111,9 @@ dictionary_missing <- function() {
 }
 
 dict_insert_task <- function(cpp_obj, .preprocess, size, cov, thresh) {
-        if (!is.null(size) + !is.null(size) + !is.null(thresh) > 1)
-                stop("At most one of 'size', 'cov' or 'thresh' can be specified"
-                )
+        # if (!is.null(size) + !is.null(size) + !is.null(thresh) > 1)
+        #         stop("At most one of 'size', 'cov' or 'thresh' can be specified"
+        #         )
         function(batch) {
                 batch <- .preprocess(batch)
                 if (!is.null(size)) {

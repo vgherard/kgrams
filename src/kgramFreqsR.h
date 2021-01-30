@@ -6,7 +6,7 @@
 #include "DictionaryR.h"
 using namespace Rcpp;
 
-class kgramFreqsR : private kgramFreqs {
+class kgramFreqsR : public kgramFreqs {
 public:
         kgramFreqsR(size_t N) : kgramFreqs(N) {}
         kgramFreqsR(size_t N, const Dictionary & dict) : kgramFreqs(N, dict) {}
