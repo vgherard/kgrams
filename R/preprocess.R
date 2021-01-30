@@ -21,14 +21,12 @@
 #' \code{gsub(pattern, "", x)}, respectively, provided that the regular 
 #' expression 'pattern' is correctly recognized by R.
 #' 
-#' Internally, \code{preprocess()} the string 'pattern' is converted into a C++ 
-        #' \code{std::regex} class by the default constructor 
+#' Internally, \code{preprocess()} converts the string 'pattern' is converted 
+#' into a C++ \code{std::regex} class by the default constructor 
 #' \code{std::regex::regex(std::string)}.
 #' @examples
 #' preprocess("#This Is An Example@@-@@!#")
-#' @export
-preprocess <- function(x, 
-                       erase = "[^.?!:;'[:alnum:][:space:]]", 
-                       lower_case = TRUE
-                       ) 
-        preprocess_cpp(x, erase, lower_case)
+#' @name preprocess
+NULL
+
+# Defined in UtilitiesR.cpp

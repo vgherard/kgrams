@@ -29,6 +29,7 @@
 #' sentences.
 #' @examples
 #' tokenize_sentences("Hi there! I'm using `sbo`.")
-#' @export
-tokenize_sentences <- function(x, EOS = "[.?!:;]+", keep_first = FALSE)
-        tokenize_sentences_cpp(x, EOS, keep_first)
+#' @name tokenize_sentences
+NULL
+
+# Defined in UtilitiesR.cpp

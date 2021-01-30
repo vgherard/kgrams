@@ -38,6 +38,7 @@ void kgramFreqsR::process_sentencesR(
 
 RCPP_EXPOSED_CLASS(Dictionary);
 RCPP_EXPOSED_CLASS(DictionaryR);
+RCPP_EXPOSED_CLASS(kgramFreqsR);
 
 RCPP_MODULE(kgramFreqs) {
         class_<kgramFreqs>("___kgramFreqs")
@@ -49,8 +50,9 @@ RCPP_MODULE(kgramFreqs) {
         
         class_<kgramFreqsR>("kgramFreqs")
                 .derives<kgramFreqs>("___kgramFreqs")
-                .constructor<size_t>()
+                //.constructor<size_t>()
                 .constructor<size_t, const Dictionary & >()
+                .constructor<const kgramFreqsR & >()
                 .method("process_sentences", &kgramFreqsR::process_sentencesR)
                 .const_method("query", &kgramFreqsR::queryR)
                 .const_method("dictionary", &kgramFreqsR::dictionaryR)

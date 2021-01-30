@@ -1,3 +1,5 @@
+
+
 #' @export
 probability <- function(freqs, word, context, 
                         method = c("StupidBackoff", "Add-k", "Laplace", "ML"), 
