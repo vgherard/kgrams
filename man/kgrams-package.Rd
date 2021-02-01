@@ -4,12 +4,12 @@
 \name{kgrams-package}
 \alias{kgrams}
 \alias{kgrams-package}
-\title{kgrams: What the Package Does (One Line, Title Case)}
+\title{kgrams: k-grams and k-gram Language Models in R}
 \description{
-What the package does (one paragraph).
+Build k-gram language models efficiently with an intuitive interface.
 }
 \author{
-\strong{Maintainer}: First Last \email{first.last@example.com} (\href{https://orcid.org/YOUR-ORCID-ID}{ORCID})
+\strong{Maintainer}: Valerio Gherardi \email{vgherard@sissa.it} (\href{https://orcid.org/0000-0002-8215-3013}{ORCID})
 
 }
 \keyword{internal}
