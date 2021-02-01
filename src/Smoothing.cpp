@@ -1,7 +1,16 @@
 #include "Smoothing.h"
-#include <iostream> // remove
+#include <cmath>
 
 //--------//----------------Smoother----------------//----------//
+
+
+std::string Smoother::generate_padding() {
+        std::string res = "";
+        for (size_t k = 0; k < N_ - 1; ++k) {
+                res += BOS_TOK + " ";
+        }
+        return res;
+}
 
 /// @brief truncate 'context' to last N - 1 words.
 std::string Smoother::truncate (std::string context) const {
@@ -17,6 +26,43 @@ std::string Smoother::truncate (std::string context) const {
                 n_words++;
         }
         return context.substr(start);
+}
+
+/// @brief Return sentence probability.
+/// @param sentence A string. Sentence of which the probability is to be
+/// computed.
+/// @return a positive number. Continuation probability of a word.
+/// @details Sentences are automatically padded (i.e. no need to include BOS and
+/// EOS tokens). In any case, any additional BOS and EOS tokens appearing in the
+/// word are automatically ignored.
+double Smoother::operator() (const std::string & sentence) 
+const {
+        std::string context = padding_, word;
+        WordStream ws(sentence);
+        
+        // Use log-prob for safety (avoid numerical underflow)
+        double log_prob = 0.; size_t pos;
+        while((word = ws.pop_word()) != EOS_TOK) {
+                // Ignore eventual BOS tokens explicitly included in the user's
+                // input.
+                if (word == BOS_TOK) continue;
+                // This will call the correct method when implemented by
+                // actual smoothers
+                log_prob += std::log(this->operator()(word, context));
+                // Update context: remove first word and append last
+                if (f_.N() > 1) {
+                        pos = context.find_first_not_of(" ");
+                        pos = context.find_first_of(" ", pos);
+                        context = context.substr(pos) + " " + word;
+                }
+        }
+        
+        // Add final EOS token. This is not automatically in the loop to handle
+        // the case where the user explicitly includes a final EOS token,
+        // in which case the iteration breaks.
+        log_prob += std::log(this->operator()(EOS_TOK, context));
+        
+        return std::exp(log_prob);
 }
 
 //--------//----------------SBOSmoother----------------//--------//
@@ -43,6 +89,8 @@ void SBOSmoother::backoff (std::string & context) const
 /// 'word' given 'context'.
 double SBOSmoother::operator() (const std::string & word, std::string context) 
 const {
+        if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
+                return -1;
         context = truncate(context);
         double kgram_count, penalization = 1.;
         while ((kgram_count = f_.query(context + " " + word)) == 0) {
@@ -66,9 +114,11 @@ const {
 /// 'word' given 'context'.
 double AddkSmoother::operator() (const std::string & word, std::string context)
 const {
+        if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
+                return -1;
         context = truncate(context);
         double num = f_.query(context + " " + word) + k_;
-        double den = f_.query(context) + k_ * (V_ + 2);
+        double den = f_.query(context) + k_ * (f_.V() + 2);
         return num / den;
 }
 
@@ -83,7 +133,9 @@ const {
 /// @return a positive number. Maximum-Likelihood continuation 
 /// probability of 'word' given 'context'.
 double MLSmoother::operator() (const std::string & word, std::string context)
-const {
+        const {
+        if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
+                return -1;
         context = truncate(context);
         double den = f_.query(context);
         if (den == 0)
@@ -127,8 +179,8 @@ KNSmoother::KNSmoother (const kgramFreqs & f, const double D)
                         r_continuations_[k - 1][kgram_code.substr(0, r_pos)]++;
                         if (k == 2) { lr_continuations_[0][""]++; continue; }
                         lr_continuations_[k - 2][ 
-                                kgram_code.substr(l_pos, r_pos - l_pos)
-                                ]++;
+                        kgram_code.substr(l_pos, r_pos - l_pos)
+                        ]++;
                 }
         }
         
@@ -143,7 +195,7 @@ KNSmoother::KNSmoother (const kgramFreqs & f, const double D)
 /// @return a positive number. Kneser-Ney continuation
 /// probability of 'word' given 'context'.
 double KNSmoother::operator() (const std::string & word, std::string context) 
-const {
+        const {
         // The probability of word 'w' in context 'c' is given by:
         //
         //      Prob(w|c) = ProbDisc(w|c) + BackoffFac(c) * ProbCont(w|c--)
@@ -161,6 +213,8 @@ const {
         //      ProbCont(w|) = 1 / V,
         // where V is the number of words in the dictionary (without <BOS>)
         
+        if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
+                return -1;
         context = truncate(context); // keep at most N - 1 words
         double den = f_.query(context);
         double num = f_.query(context + " " + word) - D_;
@@ -178,7 +232,7 @@ const {
                 double prob_cont = 1 / (double)(f_.V() + 2);
                 return prob_disc + backoff_fac * prob_cont;
         }
-                
+        
         // Compute BackoffFac(c)
         // overwrite num which is no longer necessary
         auto p = f_.kgram_code(context); // this is a pair {order, code}
@@ -201,7 +255,7 @@ const {
 // Compute continuation probability of word in a given context. 'order' is the
 // k-gram order of context, passed for efficiency.
 double KNSmoother::prob_cont (
-        const std::string & word, std::string context, size_t order
+                const std::string & word, std::string context, size_t order
 ) const {
         // The continuation probability of word 'w' in context 'c' is given by:
         //
@@ -226,7 +280,7 @@ double KNSmoother::prob_cont (
         // Compute numerator of ProbContDisc(w|c)
         it = l_continuations_[order].find(
                 context != "" ? context + " " + word : word
-                );
+        );
         itend = l_continuations_[order].end();
         double num = it != itend ? it->second - D_ : 0;
         num = num > 0 ? num : 0;
@@ -242,7 +296,7 @@ double KNSmoother::prob_cont (
                 // den == 0 is a silly case which should be barred from existing
                 return prob_cont_disc + backoff_fac * prob_cont_backoff;
         }
-                
+        
         // Compute BackoffFac(c)
         it = r_continuations_[order - 1].find(context);
         itend = r_continuations_[order - 1].end();
