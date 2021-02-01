@@ -4,9 +4,6 @@
     <loc>https://vgherard.github.io/kgrams//index.html</loc>
   </url>
   <url>
-    <loc>https://vgherard.github.io/kgrams//reference/conditional.html</loc>
-  </url>
-  <url>
     <loc>https://vgherard.github.io/kgrams//reference/dictionary.html</loc>
   </url>
   <url>
@@ -50,5 +47,8 @@
   </url>
   <url>
     <loc>https://vgherard.github.io/kgrams//reference/tokenize_sentences.html</loc>
+  </url>
+  <url>
+    <loc>https://vgherard.github.io/kgrams//reference/word_context.html</loc>
   </url>
 </urlset>
