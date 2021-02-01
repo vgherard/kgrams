@@ -4,7 +4,7 @@
 \alias{perplexity}
 \alias{perplexity.character}
 \alias{perplexity.connection}
-\title{Language Model Probabilities}
+\title{Language Model Perplexities}
 \usage{
 perplexity(
   text,
@@ -55,8 +55,7 @@ applied before computing perplexity.}
 a number. Perplexity of the language model on the test corpus.
 }
 \description{
-Compute sentence probabilities and word continuation conditional
-probabilities from a language model
+Compute language model perplexities on a test corpus.
 }
 \details{
 These generic functions are used to compute a \code{language_model}

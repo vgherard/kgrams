@@ -1,7 +1,6 @@
-#' Language Model Probabilities
+#' Language Model Perplexities
 #' 
-#' Compute sentence probabilities and word continuation conditional 
-#' probabilities from a language model
+#' Compute language model perplexities on a test corpus.
 #' 
 #' @author Valerio Gherardi
 #' @md

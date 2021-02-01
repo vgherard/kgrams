@@ -92,6 +92,44 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' @seealso \link[kgrams]{dictionary} \link[kgrams]{language_model} 
 #' \link[kgrams]{preprocess} \link[kgrams]{tokenize_sentences}
 #' 
+#' @examples
+#' # Build a k-gram frequency table from a character vector
+#' 
+#' f <- kgram_freqs("a b b a a", 3)
+#' query(f, c("a", "b")) # c(3, 2)
+#' query(f, c("a b", "a" %+% EOS(), BOS() %+% "a b")) # c(1, 1, 1)
+#' query(f, "a b b a") # NA (counts for k-grams of order k > 3 are not known)
+#' 
+#' 
+#'
+#' # Build a k-gram frequency table from a file connection
+#' 
+#' \dontrun{
+#' f <- kgram_freqs(file("myfile.txt"), 3)
+#' }
+#' 
+#' 
+#' # Build a k-gram frequency table from an URL connection
+#' \dontrun{
+#' ### Shakespeare's "Much Ado About Nothing" (entire play)
+#' con <- url("http://shakespeare.mit.edu/much_ado/full.html")
+#' 
+#' ### Strip-off html tags and put everything to lowercase 
+#' .preprocess <- function(x) {
+#'         x <- gsub("<[^>]+>||<[^>]+$||^[^>]+>$", "", x)
+#'         x <- x[x != ""]
+#'         return(tolower(x))
+#' }
+#' 
+#' ### Keep Shakespeare's punctuation 
+#' .tokenize_sentences <- function(x) {
+#'         kgrams::tokenize_sentences(x, keep_first = TRUE)
+#' }
+#' 
+#' f <- kgram_freqs(con, 3, .preprocess, .tokenize_sentences, batch_size = 1000)
+#' 
+#' query(f, c("leonato", "thy", "smartphones")) # c(145, 52, 0)
+#' }
 #' @name kgram_freqs
 NULL
 
@@ -122,16 +160,6 @@ kgram_freqs <- function(text,
 
 # Constructor from character vector
 #' @rdname kgram_freqs
-#' @examples
-#' # Build a k-gram frequency table from a character vector
-#' 
-#' f <- kgram_freqs("a b b a a", 3)
-#' query(f, c("a", "b")) # c(3, 2)
-#' query(f, c("a b", "a" %+% EOS(), BOS() %+% "a b")) # c(1, 1, 1)
-#' query(f, "a b b a") # NA (counts for k-grams of order k > 3 are not known)
-#' 
-#' 
-#' 
 #' @export
 kgram_freqs.character <- function(text, 
                                   N,
@@ -148,35 +176,6 @@ kgram_freqs.character <- function(text,
 
 # Constructor from connection
 #' @rdname kgram_freqs
-#' @examples
-#' # Build a k-gram frequency table from a file connection
-#' 
-#' \dontrun{
-#' f <- kgram_freqs(file("myfile.txt"), 3)}
-#' 
-#' 
-#' 
-#' # Build a k-gram frequency table from an URL connection
-#' 
-#' \dontrun{
-#' ### Shakespeare's "Much Ado About Nothing" (entire play)
-#' con <- url("http://shakespeare.mit.edu/much_ado/full.html")
-#' 
-#' ### Strip-off html tags and put everything to lowercase 
-#' .preprocess <- function(x) {
-#'         x <- gsub("<[^>]+>||<[^>]+$||^[^>]+>$", "", x)
-#'         x <- x[x != ""]
-#'         return(tolower(x))
-#' }
-#' 
-#' ### Keep Shakespeare's punctuation 
-#' .tokenize_sentences <- function(x) {
-#'         kgrams::tokenize_sentences(x, keep_first = TRUE)
-#' }
-#' 
-#' f <- kgram_freqs(con, 3, .preprocess, .tokenize_sentences, batch_size = 1000)
-#' 
-#' query(f, c("leonato", "thy", "smartphones")) # c(145, 52, 0)}
 #' @export
 kgram_freqs.connection <- function(text,
                                    N,

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sentence tokenizer — tokenize_sentences • kgrams</title>
+<title>Random Text Generation — sample_sentences • kgrams</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Sentence tokenizer — tokenize_sentences" />
-<meta property="og:description" content="Extract sentences from a batch of text lines." />
+<meta property="og:title" content="Random Text Generation — sample_sentences" />
+<meta property="og:description" content="Sample sentences from a language model's probability distribution." />
 
 
 
@@ -103,61 +103,67 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Sentence tokenizer</h1>
+    <h1>Random Text Generation</h1>
     
-    <div class="hidden name"><code>tokenize_sentences.Rd</code></div>
+    <div class="hidden name"><code>sample_sentences.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Extract sentences from a batch of text lines.</p>
+    <p>Sample sentences from a language model's probability distribution.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>tokenize_sentences</span><span class='op'>(</span><span class='va'>input</span>, EOS <span class='op'>=</span> <span class='st'>"[.?!:;]+"</span>, keep_first <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>sample_sentences</span><span class='op'>(</span><span class='va'>model</span>, <span class='va'>n</span>, <span class='va'>max_length</span>, t <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>EOS</th>
-      <td><p>a regular expression matching an End-Of-Sentence delimiter.</p></td>
+      <th>model</th>
+      <td><p>either an object of class <code>language_model</code>, or a
+<code>kgram_freqs</code> object. The language model from which probabilities
+are computed.</p></td>
     </tr>
     <tr>
-      <th>keep_first</th>
-      <td><p>TRUE or FALSE? Should the first character of the matches
-be appended to the returned sentences (with a space)?</p></td>
+      <th>n</th>
+      <td><p>an integer. Number of sentences to sample.</p></td>
     </tr>
     <tr>
-      <th>x</th>
-      <td><p>a character vector.</p></td>
+      <th>max_length</th>
+      <td><p>an integer. Maximum length of sampled sentences.</p></td>
+    </tr>
+    <tr>
+      <th>t</th>
+      <td><p>a positive number. Sampling temperature (optional); see Details.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a character vector, each entry of which corresponds to a single
-sentence.</p>
+    <p>a character vector of length <code>n</code>. Random sentences generated
+from the language model's distribution.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><code>tokenize_sentences()</code> splits text into sentences using a list of
-single character delimiters, specified by the parameter <code>EOS</code>.
-Specifically, when an EOS token is found, the next sentence begins at the
-first position in the input string not containing any of the EOS tokens
-<em>or white space</em> (so that entries like <code>"Hi there!!!"</code> or
-<code>"Hello . . ."</code> are both recognized as a single sentence).</p>
-<p>If <code>keep_first</code> is <code>FALSE</code>, the delimiters are stripped off from
-the returned sequences, which means that all delimiters are treated
-symmetrically.</p>
-<p>In the absence of any <code>EOS</code> delimiter, <code>tokenize_sentences()</code>
-returns the input as is, since parts of text corresponding to different
-entries of the input vector <code>x</code> are understood as parts of separate
-sentences.</p>
+    <p>This function samples sentences according the prescribed language model's
+probability distribution, with an optional temperature parameter.
+The temperature transform of a probability distribution is defined by
+<code>p(t) = exp(log(p) / t) / Z(t)</code> where <code>Z(t)</code> is the partition
+function, fixed by the normalization condition <code>sum(p(t)) = 1</code>.</p>
+<p>Sampling is performed word by word, using the already sampled string
+as context, starting from the Begin-Of-Sentence context (i.e. <code>N - 1</code>
+BOS tokens). Sampling stops either when an End-Of-Sentence token is
+encountered, or when the string exceeds <code>max_length</code>, in which case
+a truncated output is returned.</p>
+<p>A word of caution on some special smoothers: 'sbo' smoother (Stupid Backoff),
+does not produce normalized continuation probabilities, but rather
+continuation <em>scores</em>. Sampling is here performed by assuming that
+Stupid Backoff scores are <em>proportional</em> to actual probabilities.
+'ml' smoother (Maximum Likelihood) does not assign probabilities when the
+k-gram count of the context is zero. When this happens, the next word is
+chosen uniformly at random from the model's dictionary.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Valerio Gherardi</p>
 
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>tokenize_sentences</span><span class='op'>(</span><span class='st'>"Hi there! I'm using `sbo`."</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "Hi there"         " I'm using `sbo`" ""                </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

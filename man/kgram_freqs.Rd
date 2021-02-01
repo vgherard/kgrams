@@ -171,12 +171,11 @@ query(f, "a b b a") # NA (counts for k-grams of order k > 3 are not known)
 # Build a k-gram frequency table from a file connection
 
 \dontrun{
-f <- kgram_freqs(file("myfile.txt"), 3)}
-
+f <- kgram_freqs(file("myfile.txt"), 3)
+}
 
 
 # Build a k-gram frequency table from an URL connection
-
 \dontrun{
 ### Shakespeare's "Much Ado About Nothing" (entire play)
 con <- url("http://shakespeare.mit.edu/much_ado/full.html")
@@ -195,7 +194,8 @@ con <- url("http://shakespeare.mit.edu/much_ado/full.html")
 
 f <- kgram_freqs(con, 3, .preprocess, .tokenize_sentences, batch_size = 1000)
 
-query(f, c("leonato", "thy", "smartphones")) # c(145, 52, 0)}
+query(f, c("leonato", "thy", "smartphones")) # c(145, 52, 0)
+}
 }
 \seealso{
 \link[kgrams]{dictionary} \link[kgrams]{language_model}

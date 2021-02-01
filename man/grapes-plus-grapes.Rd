@@ -15,7 +15,7 @@ lhs \%+\% rhs
 a string or vector of strings.
 }
 \description{
-Brief synthax for string concatenation.
+String concatenation
 }
 \details{
 The expression \code{lhs \%+\% rhs} is equivalent to
@@ -27,4 +27,9 @@ See \link[base]{paste} for more details.
 }
 \seealso{
 \link[base]{paste}
+}
+\author{
+Valerio Gherardi
+
+Brief synthax for string concatenation.
 }

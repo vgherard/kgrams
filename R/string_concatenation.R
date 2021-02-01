@@ -1,5 +1,7 @@
 #' String concatenation
 #' 
+#' @author Valerio Gherardi
+#' 
 #' Brief synthax for string concatenation.
 #' 
 #' @param lhs a string or vector of strings.
