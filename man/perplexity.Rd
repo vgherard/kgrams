@@ -10,7 +10,7 @@ perplexity(
   text,
   model,
   .preprocess = attr(model, ".preprocess"),
-  .tokenize_senteces = attr(model, ".tokenize_sentences"),
+  .tokenize_sentences = attr(model, ".tokenize_sentences"),
   ...
 )
 
@@ -18,7 +18,7 @@ perplexity(
   text,
   model,
   .preprocess = attr(model, ".preprocess"),
-  .tokenize_senteces = attr(model, ".tokenize_sentences"),
+  .tokenize_sentences = attr(model, ".tokenize_sentences"),
   ...
 )
 
@@ -26,7 +26,7 @@ perplexity(
   text,
   model,
   .preprocess = attr(model, ".preprocess"),
-  .tokenize_senteces = attr(model, ".tokenize_sentences"),
+  .tokenize_sentences = attr(model, ".tokenize_sentences"),
   batch_size = NULL,
   ...
 )
@@ -43,13 +43,15 @@ are computed.}
 returning a character vector as output. Preprocessing transformation
 applied to input before computing perplexity.}
 
-\item{batch_size}{a length one positive integer or \code{NULL}.
-Size of text batches when reading text from a \code{connection}.
-If \code{NULL}, all input text is processed in a single batch.}
-
 \item{.tokenize_sentences}{a function taking a character vector as input and
 returning a character vector as output. Optional sentence tokenization step
 applied before computing perplexity.}
+
+\item{...}{further arguments passed to or from other methods.}
+
+\item{batch_size}{a length one positive integer or \code{NULL}.
+Size of text batches when reading text from a \code{connection}.
+If \code{NULL}, all input text is processed in a single batch.}
 }
 \value{
 a number. Perplexity of the language model on the test corpus.

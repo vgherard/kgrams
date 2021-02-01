@@ -7,5 +7,6 @@
 #' @useDynLib kgrams, .registration = TRUE
 #' @import methods
 #' @importFrom Rcpp sourceCpp loadModule
+#' @importFrom utils head
 ## usethis namespace: end
 NULL

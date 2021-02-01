@@ -52,7 +52,7 @@ smoother).
  
 freqs <- kgram_freqs("a a b a a b a b a b a b", 2)
 model <- language_model(freqs, "kn", D = 0.5)
-probability(model, word = "a", context = "b")
+probability("a" \%|\% "b", model)
 }
 \author{
 Valerio Gherardi

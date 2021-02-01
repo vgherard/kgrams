@@ -11,7 +11,7 @@ word \%|\% context
 \item{word}{a character vector. Word or words to include as the variable
 part of the conditional expression.}
 
-\item{contex}{a character vector of length one. The fixed (or "given") part
+\item{context}{a character vector of length one. The fixed (or "given") part
 of the conditional expression.}
 }
 \value{

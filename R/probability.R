@@ -8,7 +8,7 @@
 #'
 #' @param object a character vector for sentence probabilities, 
 #' a word-context conditional expression created with the 
-#' \link[kgrams]{conditional} operator `%|%` 
+#' conditional operator `%|%` (see \link[kgrams]{word_context}).
 #' for word continuation probabilities.
 #' @param model either an object of class \code{language_model}, or a 
 #' \code{kgram_freqs} object. The language model from which probabilities 

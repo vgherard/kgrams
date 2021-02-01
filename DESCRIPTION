@@ -8,7 +8,7 @@ Authors@R:
            email = "vgherard@sissa.it",
            comment = c(ORCID = "0000-0002-8215-3013"))
 Description: Build k-gram language models efficiently with an intuitive interface.
-License: GPL (>= 3)
+License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
@@ -16,7 +16,7 @@ RoxygenNote: 7.1.1
 LinkingTo: 
     Rcpp
 Imports: 
-    Rcpp, rlang
+    Rcpp, rlang, methods, utils
 SystemRequirements: C++11
 Depends: 
     R (>= 2.10)

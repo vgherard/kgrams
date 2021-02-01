@@ -85,10 +85,10 @@ dictionary.character <- function(text,
 #' @rdname dictionary
 #' @export
 dictionary.connection <- function(text,
-                                  N,
                                   .preprocess = identity,
-                                  dictionary = NULL,
-                                  open_dictionary = TRUE,
+                                  size = NULL, 
+                                  cov = NULL, 
+                                  thresh = NULL,
                                   batch_size = NULL,
                                   ...
                                   )

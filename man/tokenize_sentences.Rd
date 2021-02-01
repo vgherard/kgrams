@@ -7,12 +7,12 @@
 tokenize_sentences(input, EOS = "[.?!:;]+", keep_first = FALSE)
 }
 \arguments{
+\item{input}{a character vector.}
+
 \item{EOS}{a regular expression matching an End-Of-Sentence delimiter.}
 
 \item{keep_first}{TRUE or FALSE? Should the first character of the matches
 be appended to the returned sentences (with a space)?}
-
-\item{x}{a character vector.}
 }
 \value{
 a character vector, each entry of which corresponds to a single

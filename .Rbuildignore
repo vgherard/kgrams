@@ -6,3 +6,5 @@
 ^docs$
 ^pkgdown$
 ^data-raw$
+Doxyfile
+cpp_docs/

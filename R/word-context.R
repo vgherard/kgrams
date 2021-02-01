@@ -6,7 +6,7 @@
 #' 
 #' @param word a character vector. Word or words to include as the variable
 #' part of the conditional expression.
-#' @param contex a character vector of length one. The fixed (or "given") part
+#' @param context a character vector of length one. The fixed (or "given") part
 #' of the conditional expression.
 #' 
 #' @return a \code{word_context} class object.

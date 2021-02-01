@@ -19,6 +19,7 @@
 #' @param batch_size a length one positive integer or \code{NULL}.
 #' Size of text batches when reading text from a \code{connection}. 
 #' If \code{NULL}, all input text is processed in a single batch.
+#' @param ... further arguments passed to or from other methods.
 #' @return a number. Perplexity of the language model on the test corpus.
 #' 
 #' @details
@@ -74,7 +75,7 @@
 perplexity <- function(text,
                        model,
                        .preprocess = attr(model, ".preprocess"),
-                       .tokenize_senteces = attr(model, ".tokenize_sentences"),
+                       .tokenize_sentences = attr(model, ".tokenize_sentences"),
                        ...
                        )
 {
@@ -90,12 +91,12 @@ perplexity.character <- function(
         text,
         model,
         .preprocess = attr(model, ".preprocess"),
-        .tokenize_senteces = attr(model, ".tokenize_sentences"),
+        .tokenize_sentences = attr(model, ".tokenize_sentences"),
         ...
         ) 
 {
         text <- .preprocess(text)
-        text <- .tokenize_senteces(text)
+        text <- .tokenize_sentences(text)
         lp <- attr(model, "cpp_obj")$log_probability_sentence(text)
         cross_entropy <- -sum(lp$log_prob) / sum(lp$n_words) 
         return(exp(cross_entropy))
@@ -107,7 +108,7 @@ perplexity.connection <- function(
         text,
         model,
         .preprocess = attr(model, ".preprocess"),
-        .tokenize_senteces = attr(model, ".tokenize_sentences"),
+        .tokenize_sentences = attr(model, ".tokenize_sentences"),
         batch_size = NULL,
         ...
 ) 
@@ -120,7 +121,7 @@ perplexity.connection <- function(
         
         open(text, "r")
         while (length(batch <- readLines(text, batch_size))) {
-                batch <- .tokenize_senteces( .preprocess(batch) )
+                batch <- .tokenize_sentences( .preprocess(batch) )
                 lp <- attr(model, "cpp_obj")$log_probability_sentence(batch)
                 sum_log_prob <- sum_log_prob + sum(lp$log_prob)
                 n_words <- sum(lp$n_words)

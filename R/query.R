@@ -19,7 +19,7 @@
 #' dictionary entries. Queries of Begin-Of-Sentence (\code{BOS()}) and 
 #' End-Of-Sentence (\code{EOS()}) tokens always return \code{TRUE}, and queries
 #' of the Unknown-Word token return \code{FALSE} 
-#' (see \link[kgram]{special_tokens}).
+#' (see \link[kgrams]{special_tokens}).
 #' 
 #' On the other hand, queries of k-gram counts first perform a word level 
 #' tokenization, so that anything separated by one or more space characters 

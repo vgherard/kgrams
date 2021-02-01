@@ -21,7 +21,7 @@ probability(object, model, .preprocess = attr(model, ".preprocess"), ...)
 \arguments{
 \item{object}{a character vector for sentence probabilities,
 a word-context conditional expression created with the
-\link[kgrams]{conditional} operator \verb{\%|\%}
+conditional operator \verb{\%|\%} (see \link[kgrams]{word_context}).
 for word continuation probabilities.}
 
 \item{model}{either an object of class \code{language_model}, or a

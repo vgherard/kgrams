@@ -5,7 +5,7 @@
 #' @author Valerio Gherardi
 #' @md
 #'
-#' @param x a character vector.
+#' @param input a character vector.
 #' @param EOS a regular expression matching an End-Of-Sentence delimiter.
 #' @param keep_first TRUE or FALSE? Should the first character of the matches
 #' be appended to the returned sentences (with a space)?

@@ -64,7 +64,7 @@ process_sentences(
   text,
   freqs,
   .preprocess = attr(freqs, ".preprocess"),
-  tokenize_sentences = attr(freqs, ".tokenize_sentences"),
+  .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
   open_dictionary = TRUE,
   in_place = TRUE,
   batch_size = NULL,
