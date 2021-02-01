@@ -23,7 +23,33 @@
 #' @return a number. Perplexity of the language model on the test corpus.
 #' 
 #' @details
-#'
+#' These generic functions are used to compute a \code{language_model} 
+#' perplexity on a test corpus, which may be either a plain character vector 
+#' of text, or a connection from which text can be read in batches. 
+#' The second option is useful if one wants to avoid loading 
+#' the full text in physical memory, and allows to process text from 
+#' different sources such as files, compressed files or URLs.
+#' 
+#' "Perplexity" is defined here, following Chen and Goodman (99) 
+#' \strong{add this and other references}, as the exponential of the normalized 
+#' language model cross-entropy with the test corpus. Cross-entropy is
+#' normalized by the total number of words in the corpus, where we include
+#' the End-Of-Sentence tokens, but not the Begin-Of-Sentence tokens, in the
+#' word count.
+#' 
+#' The custom .preprocess and .tokenize_sentences arguments allow to apply
+#' transformations to the text corpus before the perplexity computation takes
+#' place. By default, the same functions used during model building are 
+#' employed, c.f. \link[kgrams]{kgram_freqs} and \link[kgrams]{language_model}.
+#' 
+#' A note of caution is in order. Perplexity is not defined for all language
+#' models available in \link[kgrams]{kgrams}. For instance, smoother 
+#' \code{"sbo"} (i.e. Stupid Backoff) does not produce normalized probabilities,
+#' and this is signaled by a warning (shown once per session) if the user 
+#' attempts to compute the perplexity for such a model. 
+#' In these cases, when possible, perplexity computations are performed 
+#' anyway case, as the results might still be useful (e.g. to tune the model's 
+#' parameters), even if their probabilistic interpretation does no longer hold.  
 #' @name perplexity
 
 #' @rdname perplexity
@@ -37,6 +63,7 @@ perplexity <- function(text,
 {
         # If 'model' is not a language model, try to coerce it to language model
         model <- as.language_model(model)
+        check_model_perplexity(model)
         UseMethod("perplexity", text)
 }
         
@@ -77,7 +104,7 @@ perplexity.connection <- function(
         open(text, "r")
         while (length(batch <- readLines(text, batch_size))) {
                 batch <- .tokenize_senteces( .preprocess(batch) )
-                lp <- attr(model, "cpp_obj")$log_probability_sentence(text)
+                lp <- attr(model, "cpp_obj")$log_probability_sentence(batch)
                 sum_log_prob <- sum_log_prob + sum(lp$log_prob)
                 n_words <- sum(lp$n_words)
         }
@@ -87,4 +114,35 @@ perplexity.connection <- function(
 }
 
 
+check_model_perplexity <- function(model) {
+        check_sbo_perplexity(model)
+        check_ml_perplexity(model)
+}
 
+check_sbo_perplexity <- function(model) {
+        if (!inherits(model) == "sbo") 
+                return(invisible(NULL))
+        h <- "Computing perplexity for Stupid Backoff model."
+        x <- "'sbo' smoother does not produce normalized probabilities."
+        i <- "Using Stupid Backoff scores for the computation."
+        msgs <- c(h, x = x, i = i)
+        rlang::warn(msgs, 
+                    class = "sbo_perplexity_warning",
+                    .frequency = "once", 
+                    .frequency_id = "sbo_perplex"
+                    )
+}
+
+check_ml_perplexity <- function(model) {
+        if (!inherits(model) == "ml") 
+                return(invisible(NULL))
+        h <- "Computing perplexity for Maximum-Likelihood model."
+        x <- "'ml' probabilities can be 'NA'."
+        i <- "Result may be 'NA'."
+        msgs <- c(h, x = x, i = i)
+        rlang::warn(msgs, 
+                    class = "ml_perplexity_warning",
+                    .frequency = "once", 
+                    .frequency_id = "ml_perplex"
+        )
+}

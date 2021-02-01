@@ -3,6 +3,7 @@
 \name{perplexity}
 \alias{perplexity}
 \alias{perplexity.character}
+\alias{perplexity.connection}
 \title{Language Model Probabilities}
 \usage{
 perplexity(
@@ -20,6 +21,15 @@ perplexity(
   .tokenize_senteces = attr(model, ".tokenize_sentences"),
   ...
 )
+
+\method{perplexity}{connection}(
+  text,
+  model,
+  .preprocess = attr(model, ".preprocess"),
+  .tokenize_senteces = attr(model, ".tokenize_sentences"),
+  batch_size = NULL,
+  ...
+)
 }
 \arguments{
 \item{text}{a character vector or connection. Test corpus from which
@@ -33,13 +43,13 @@ are computed.}
 returning a character vector as output. Preprocessing transformation
 applied to input before computing perplexity.}
 
-\item{.tokenize_sentences}{a function taking a character vector as input and
-returning a character vector as output. Optional sentence tokenization step
-applied before computing perplexity.}
-
 \item{batch_size}{a length one positive integer or \code{NULL}.
 Size of text batches when reading text from a \code{connection}.
 If \code{NULL}, all input text is processed in a single batch.}
+
+\item{.tokenize_sentences}{a function taking a character vector as input and
+returning a character vector as output. Optional sentence tokenization step
+applied before computing perplexity.}
 }
 \value{
 a number. Perplexity of the language model on the test corpus.
@@ -49,7 +59,33 @@ Compute sentence probabilities and word continuation conditional
 probabilities from a language model
 }
 \details{
+These generic functions are used to compute a \code{language_model}
+perplexity on a test corpus, which may be either a plain character vector
+of text, or a connection from which text can be read in batches.
+The second option is useful if one wants to avoid loading
+the full text in physical memory, and allows to process text from
+different sources such as files, compressed files or URLs.
 
+"Perplexity" is defined here, following Chen and Goodman (99)
+\strong{add this and other references}, as the exponential of the normalized
+language model cross-entropy with the test corpus. Cross-entropy is
+normalized by the total number of words in the corpus, where we include
+the End-Of-Sentence tokens, but not the Begin-Of-Sentence tokens, in the
+word count.
+
+The custom .preprocess and .tokenize_sentences arguments allow to apply
+transformations to the text corpus before the perplexity computation takes
+place. By default, the same functions used during model building are
+employed, c.f. \link[kgrams]{kgram_freqs} and \link[kgrams]{language_model}.
+
+A note of caution is in order. Perplexity is not defined for all language
+models available in \link[kgrams]{kgrams}. For instance, smoother
+\code{"sbo"} (i.e. Stupid Backoff) does not produce normalized probabilities,
+and this is signaled by a warning (shown once per session) if the user
+attempts to compute the perplexity for such a model.
+In these cases, when possible, perplexity computations are performed
+anyway case, as the results might still be useful (e.g. to tune the model's
+parameters), even if their probabilistic interpretation does no longer hold.
 }
 \author{
 Valerio Gherardi

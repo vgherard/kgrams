@@ -70,7 +70,10 @@ tokenization: anything delimited by (one or more) white space(s) is
 tokenized as a word. For sentence probabilities, Begin-Of-Sentence and
 End-Of-Sentence paddings are implicitly added to the input, but specifying
 them explicitly does not produce wrong results as BOS and EOS tokens are
-ignored by \code{probability()} (see the examples below).
+ignored by \code{probability()} (see the examples below). For continuation
+probabilities, any context of more than \code{N - 1} words (where
+\code{N} is the k-gram order the language model) is truncated to the last
+\code{N - 1} words.
 
 By default, the same \code{.preprocess()} and \code{.tokenize_sentences()}
 functions used during model building are applied to the input, but this can
