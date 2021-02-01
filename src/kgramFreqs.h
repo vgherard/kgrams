@@ -39,8 +39,9 @@ class kgramFreqs {
         /// @details The dictionary has two basic purposes: 
         /// identify unknown word (to be replaced with an "UNK" token), 
         /// and provide integer codes for known words. 
-
         Dictionary dict_;
+        
+        /// @brief Begin-Of-Sentence padding
         const CircularBuffer<std::string> padding_;
         //--------Private methods--------//
         
