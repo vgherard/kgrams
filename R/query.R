@@ -30,13 +30,14 @@
 #' corresponding to the Unknown-Word token (\code{UNK()}) (e.g., if 
 #' the word \code{"prcsrn"} is outside the dictionary, querying 
 #' \code{"i love prcsrn"} is the same as querying 
-#' \code{paste("i love", UNK())}). 
+#' \code{paste("i love", UNK())}). Queries from k-grams of order \code{k > N}
+#' will return \code{NA}.
 #' 
 #' See also the examples below.
 #'    
 #' @examples
 #' # Querying a k-gram frequency table
-#' f <- kgram_freqs("a a b a b c d e", N = 3, dictionary = c("a", "b"))
+#' f <- kgram_freqs("a a b a b c d e", N = 2, dictionary = c("a", "b"))
 #' query(f, c("a", "b")) # query single words
 #' query(f, c("a b")) # query a 2-gram
 #' identical(query(f, "c"), query(f, "d"))  # TRUE, both "c" and "d" are <UNK>
