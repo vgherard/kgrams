@@ -164,6 +164,30 @@ chosen uniformly at random from the model's dictionary.</p>
 
     <p>Valerio Gherardi</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Sample sentences from 8-gram Kneser-Ney model trained on Shakespeare's</span>
+<span class='co'># "Much Ado About Nothing"</span>
+
+
+<span class='co'>### Prepare the model and set seed</span>
+<span class='va'>freqs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>much_ado</span>, <span class='fl'>8</span>, .tokenize_sentences <span class='op'>=</span> <span class='va'>tokenize_sentences</span><span class='op'>)</span>
+<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>840</span><span class='op'>)</span>
+
+<span class='fu'>sample_sentences</span><span class='op'>(</span><span class='va'>model</span>, n <span class='op'>=</span> <span class='fl'>3</span>, max_length <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "we are now to the prince else by thy side [...] (truncated output)"         
+#&gt; [2] "don pedro leonato and his brother &lt;EOS&gt;"                                    
+#&gt; [3] "yet stand close as you know my inwardness and love [...] (truncated output)"</div><div class='input'>
+<span class='co'>### Sampling at high temperature</span>
+<span class='fu'>sample_sentences</span><span class='op'>(</span><span class='va'>model</span>, n <span class='op'>=</span> <span class='fl'>3</span>, max_length <span class='op'>=</span> <span class='fl'>10</span>, t <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "however villanies i cousins 'father armour signify down remnants ancientry [...] (truncated output)"
+#&gt; [2] "title iv hanged wring pestilence large hanged light blazon arrant [...] (truncated output)"         
+#&gt; [3] "woo soul afar slept sick decerns beside truant neighbour slanders [...] (truncated output)"         </div><div class='input'>
+<span class='co'>### Sampling at low temperature</span>
+<span class='fu'>sample_sentences</span><span class='op'>(</span><span class='va'>model</span>, n <span class='op'>=</span> <span class='fl'>3</span>, max_length <span class='op'>=</span> <span class='fl'>10</span>, t <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "i will go before and show him their examination &lt;EOS&gt;"                 
+#&gt; [2] "i will not be sworn but love may transform me [...] (truncated output)"
+#&gt; [3] "i will not be sworn but love may transform me [...] (truncated output)"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

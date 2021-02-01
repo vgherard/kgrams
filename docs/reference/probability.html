@@ -202,6 +202,33 @@ e.g. the input is a length one unprocessed character vector.</p>
 
     <p>Valerio Gherardi</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Usage of probability()</span>
+
+<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='st'>"a b b a b a b"</span>, <span class='fl'>2</span><span class='op'>)</span>
+
+
+
+<span class='co'>### Compute probabilities directly from 'f'. These are ML probabilities</span>
+
+<span class='co'>###### Sentence probabilities</span>
+<span class='op'>(</span> <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>probability</span><span class='op'>(</span><span class='st'>"a b b a b"</span>, <span class='va'>f</span><span class='op'>)</span> <span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.03125</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>p</span>, <span class='fu'>probability</span><span class='op'>(</span><span class='fu'>BOS</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%+%</span> <span class='st'>"a b b a b"</span> <span class='op'>%+%</span> <span class='fu'>EOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>f</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># TRUE</span>
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
+<span class='co'>###### Continuation probabilities</span>
+<span class='op'>(</span> <span class='va'>p</span> <span class='op'>&lt;-</span> <span class='fu'>probability</span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'>%|%</span> <span class='st'>"b"</span>, <span class='va'>f</span><span class='op'>)</span> <span class='op'>)</span> <span class='co'># Continuation probabilities</span>
+</div><div class='output co'>#&gt; [1] 0.5</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span><span class='op'>(</span><span class='va'>p</span>, <span class='fu'>probability</span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'>%|%</span> <span class='st'>"a b a b b a b"</span>, <span class='va'>f</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># TRUE</span>
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>probability</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='fu'>EOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'>UNK</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%|%</span> <span class='fu'>BOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>f</span><span class='op'>)</span> <span class='co'># c(1, 0, 0, 0)</span>
+</div><div class='output co'>#&gt; [1] 1 0 0 0</div><div class='input'><span class='fu'>probability</span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'>%|%</span> <span class='fu'>UNK</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>f</span><span class='op'>)</span> <span class='co'># NA, as context has count zero</span>
+</div><div class='output co'>#&gt; [1] NA</div><div class='input'>
+
+<span class='co'>### Compute probabilities from a language model</span>
+
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"laplace"</span><span class='op'>)</span>
+<span class='fu'>probability</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='fu'>EOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'>UNK</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%|%</span> <span class='fu'>BOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>m</span><span class='op'>)</span> <span class='co'># c(0.4, 0.2, 0.2, 0.2)</span>
+</div><div class='output co'>#&gt; [1] 0.4 0.2 0.2 0.2</div><div class='input'><span class='fu'>probability</span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'>%|%</span> <span class='fu'>UNK</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>m</span><span class='op'>)</span> <span class='co'># not NA</span>
+</div><div class='output co'>#&gt; [1] 0.25</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

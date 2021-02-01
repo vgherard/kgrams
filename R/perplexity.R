@@ -49,6 +49,24 @@
 #' In these cases, when possible, perplexity computations are performed 
 #' anyway case, as the results might still be useful (e.g. to tune the model's 
 #' parameters), even if their probabilistic interpretation does no longer hold.  
+#' @examples
+#' # Train 4-, 6-, and 8-gram models on Shakespeare's "Much Ado About Nothing",
+#' # compute their perplexities on the training and test corpora.
+#' # We use Shakespeare's "A Midsummer Night's Dream" as test. 
+#' 
+#' train <- much_ado
+#' test <- midsummer
+#' 
+#' FUN <- function(N) {
+#'         tknz <- tokenize_sentences
+#'         f <- kgram_freqs(train, N, .tokenize_sentences = tknz)
+#'         m <- language_model(f, "kn", D = 0.75)
+#'         c(train = perplexity(train, m), test = perplexity(test, m))
+#'         }
+#' 
+#' # Demonstrate overfitting of the higher order models
+#' sapply(c("N = 4" = 4, "N = 6" = 6, "N = 8" = 8), FUN) 
+#' 
 #' @name perplexity
 
 #' @rdname perplexity
@@ -119,7 +137,7 @@ check_model_perplexity <- function(model) {
 }
 
 check_sbo_perplexity <- function(model) {
-        if (!inherits(model) == "sbo") 
+        if (!inherits(model, "sbo")) 
                 return(invisible(NULL))
         h <- "Computing perplexity for Stupid Backoff model."
         x <- "'sbo' smoother does not produce normalized probabilities."
@@ -133,7 +151,7 @@ check_sbo_perplexity <- function(model) {
 }
 
 check_ml_perplexity <- function(model) {
-        if (!inherits(model) == "ml") 
+        if (!inherits(model, "ml") )
                 return(invisible(NULL))
         h <- "Computing perplexity for Maximum-Likelihood model."
         x <- "'ml' probabilities can be 'NA'."

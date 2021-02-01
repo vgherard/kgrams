@@ -45,6 +45,24 @@ Stupid Backoff scores are \emph{proportional} to actual probabilities.
 k-gram count of the context is zero. When this happens, the next word is
 chosen uniformly at random from the model's dictionary.
 }
+\examples{
+# Sample sentences from 8-gram Kneser-Ney model trained on Shakespeare's
+# "Much Ado About Nothing"
+
+
+### Prepare the model and set seed
+freqs <- kgram_freqs(much_ado, 8, .tokenize_sentences = tokenize_sentences)
+model <- language_model(freqs, "kn", D = 0.75)
+set.seed(840)
+
+sample_sentences(model, n = 3, max_length = 10)
+
+### Sampling at high temperature
+sample_sentences(model, n = 3, max_length = 10, t = 100)
+
+### Sampling at low temperature
+sample_sentences(model, n = 3, max_length = 10, t = 0.01)
+}
 \author{
 Valerio Gherardi
 }

@@ -206,6 +206,27 @@ parameters), even if their probabilistic interpretation does no longer hold.</p>
 
     <p>Valerio Gherardi</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Train 4-, 6-, and 8-gram models on Shakespeare's "Much Ado About Nothing",</span>
+<span class='co'># compute their perplexities on the training and test corpora.</span>
+<span class='co'># We use Shakespeare's "A Midsummer Night's Dream" as test. </span>
+
+<span class='va'>train</span> <span class='op'>&lt;-</span> <span class='va'>much_ado</span>
+<span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>midsummer</span>
+
+<span class='va'>FUN</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span> <span class='op'>{</span>
+        <span class='va'>tknz</span> <span class='op'>&lt;-</span> <span class='va'>tokenize_sentences</span>
+        <span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>train</span>, <span class='va'>N</span>, .tokenize_sentences <span class='op'>=</span> <span class='va'>tknz</span><span class='op'>)</span>
+        <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span>
+        <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span>train <span class='op'>=</span> <span class='fu'>perplexity</span><span class='op'>(</span><span class='va'>train</span>, <span class='va'>m</span><span class='op'>)</span>, test <span class='op'>=</span> <span class='fu'>perplexity</span><span class='op'>(</span><span class='va'>test</span>, <span class='va'>m</span><span class='op'>)</span><span class='op'>)</span>
+        <span class='op'>}</span>
+
+<span class='co'># Demonstrate overfitting of the higher order models</span>
+<span class='fu'><a href='https://rdrr.io/r/base/lapply.html'>sapply</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"N = 4"</span> <span class='op'>=</span> <span class='fl'>4</span>, <span class='st'>"N = 6"</span> <span class='op'>=</span> <span class='fl'>6</span>, <span class='st'>"N = 8"</span> <span class='op'>=</span> <span class='fl'>8</span><span class='op'>)</span>, <span class='va'>FUN</span><span class='op'>)</span> 
+</div><div class='output co'>#&gt;            N = 4      N = 6      N = 8
+#&gt; train   4.246197   2.823191   2.408267
+#&gt; test  550.587173 577.748344 607.659435</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

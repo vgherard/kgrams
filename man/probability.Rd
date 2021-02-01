@@ -81,6 +81,33 @@ be overriden with arbitrary functions. Notice that the
 \code{.tokenize_sentences} can be useful (for sentence probabilities) if
 e.g. the input is a length one unprocessed character vector.
 }
+\examples{
+# Usage of probability()
+
+f <- kgram_freqs("a b b a b a b", 2)
+
+
+
+### Compute probabilities directly from 'f'. These are ML probabilities
+
+###### Sentence probabilities
+( p <- probability("a b b a b", f) )
+identical(p, probability(BOS() \%+\% "a b b a b" \%+\% EOS(), f)) # TRUE
+
+###### Continuation probabilities
+( p <- probability("a" \%|\% "b", f) ) # Continuation probabilities
+identical(p, probability("a" \%|\% "a b a b b a b", f)) # TRUE
+probability(c("a", "b", EOS(), UNK()) \%|\% BOS(), f) # c(1, 0, 0, 0)
+probability("a" \%|\% UNK(), f) # NA, as context has count zero
+
+
+### Compute probabilities from a language model
+
+m <- language_model(f, "laplace")
+probability(c("a", "b", EOS(), UNK()) \%|\% BOS(), m) # c(0.4, 0.2, 0.2, 0.2)
+probability("a" \%|\% UNK(), m) # not NA
+
+}
 \author{
 Valerio Gherardi
 }

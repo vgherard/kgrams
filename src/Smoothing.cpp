@@ -59,10 +59,12 @@ const {
                 // actual smoothers
                 log_prob += std::log(this->operator()(word, context));
                 // Update context: remove first word and append last
-                if (f_.N() > 1) {
+                if (f_.N() > 2) {
                         pos = context.find_first_not_of(" ");
                         pos = context.find_first_of(" ", pos);
                         context = context.substr(pos) + " " + word;
+                } else if (f_.N() == 2) {
+                        context = word;
                 }
         }
         
