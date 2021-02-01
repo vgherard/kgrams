@@ -11,7 +11,7 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
                   )
 }
 
-#' k-gram frequency tables
+#' k-gram Frequency Tables
 #'
 #' Extract k-gram frequency counts from a text or a connection.
 #'
@@ -53,6 +53,14 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' or a connection. The second option is useful if one wants to avoid loading 
 #' the full text corpus in physical memory, allowing to process text from 
 #' different sources such as files, compressed files or URLs.
+#'
+#' The returned object is of class \code{kgram_freqs} (a thin wrapper 
+#' around the internal C++ class where all k-gram computations take place). 
+#' \code{kgram_freqs} objects have methods for querying bare k-gram frequencies
+#' (\link[kgrams]{query}) and maximum likelihood estimates of continuation
+#' probabilities \link[kgrams]{probability}). More importantly 
+#' \code{kgram_freqs} objects are used to create \link[kgrams]{language_model} 
+#' objects, which support various probability smoothing techniques.
 #' 
 #' The function \code{kgram_freqs()} is used to \emph{construct} a new
 #' \code{kgram_freqs} object, initializing it with the k-gram counts from 
@@ -77,15 +85,12 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' transformed input is presented to the tokenization algorithm as separate 
 #' sentence (these sentences are implicitly padded 
 #' with \code{N - 1} Begin-Of-Sentence (BOS) and one End-Of-Sentence (EOS) 
-#' tokens, respectively. This is illustrated in the examples).
+#' tokens, respectively. This is illustrated in the examples). For basic
+#' usage, this package offers the utilities \link[kgrams]{preprocess} and 
+#' \link[kgrams]{tokenize_sentences}.
 #' 
-#' The returned value is a \code{kgram_freqs} class object (a thin wrapper 
-#' around the internal C++ class where all k-gram computations take place). 
-#' \code{kgram_freqs} objects have methods for querying bare k-gram frequencies
-#' (\link[kgrams]{query}), obtaining smoothed continuation probability estimates 
-#' (\link[kgrams]{probability}) using various methods, sampling sentences 
-#' from various language models probability distributions and 
-#' \strong{(not yet implemented)} computing perplexities.
+#' @seealso \link[kgrams]{dictionary} \link[kgrams]{language_model} 
+#' \link[kgrams]{preprocess} \link[kgrams]{tokenize_sentences}
 #' 
 #' @name kgram_freqs
 NULL
@@ -100,7 +105,7 @@ kgram_freqs <- function(text,
                         dictionary = NULL,
                         open_dictionary = TRUE,
                         ...
-                        ) 
+) 
 {
         if (missing(dictionary) || is.null(dictionary))
                 dictionary <- dictionary()
@@ -110,13 +115,23 @@ kgram_freqs <- function(text,
         
         process <- kgram_process_task(
                 cpp_obj, .preprocess, .tokenize_sentences, open_dictionary
-                )
+        )
         
         UseMethod("kgram_freqs", text)
 }
 
 # Constructor from character vector
 #' @rdname kgram_freqs
+#' @examples
+#' # Build a k-gram frequency table from a character vector
+#' 
+#' f <- kgram_freqs("a b b a a", 3)
+#' query(f, c("a", "b")) # c(3, 2)
+#' query(f, c("a b", "a" %+% EOS(), BOS() %+% "a b")) # c(1, 1, 1)
+#' query(f, "a b b a") # NA (counts for k-grams of order k > 3 are not known)
+#' 
+#' 
+#' 
 #' @export
 kgram_freqs.character <- function(text, 
                                   N,
@@ -133,6 +148,35 @@ kgram_freqs.character <- function(text,
 
 # Constructor from connection
 #' @rdname kgram_freqs
+#' @examples
+#' # Build a k-gram frequency table from a file connection
+#' 
+#' \dontrun{
+#' f <- kgram_freqs(file("myfile.txt"), 3)}
+#' 
+#' 
+#' 
+#' # Build a k-gram frequency table from an URL connection
+#' 
+#' \dontrun{
+#' ### Shakespeare's "Much Ado About Nothing" (entire play)
+#' con <- url("http://shakespeare.mit.edu/much_ado/full.html")
+#' 
+#' ### Strip-off html tags and put everything to lowercase 
+#' .preprocess <- function(x) {
+#'         x <- gsub("<[^>]+>||<[^>]+$||^[^>]+>$", "", x)
+#'         x <- x[x != ""]
+#'         return(tolower(x))
+#' }
+#' 
+#' ### Keep Shakespeare's punctuation 
+#' .tokenize_sentences <- function(x) {
+#'         kgrams::tokenize_sentences(x, keep_first = TRUE)
+#' }
+#' 
+#' f <- kgram_freqs(con, 3, .preprocess, .tokenize_sentences, batch_size = 1000)
+#' 
+#' query(f, c("leonato", "thy", "smartphones")) # c(145, 52, 0)}
 #' @export
 kgram_freqs.connection <- function(text,
                                    N,
@@ -142,7 +186,7 @@ kgram_freqs.connection <- function(text,
                                    open_dictionary = TRUE,
                                    batch_size = NULL,
                                    ...
-                                   )
+)
 {
         if (is.null(batch_size)) 
                 batch_size <- -1L
@@ -164,7 +208,6 @@ process_sentences <- function(
         .preprocess = attr(freqs, ".preprocess"),
         .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
         open_dictionary = TRUE,
-        copy = FALSE,
         in_place = TRUE,
         ...
 ) 
@@ -183,11 +226,11 @@ process_sentences.character <- function(
         open_dictionary = TRUE,
         in_place = TRUE,
         ...
-        )
+)
 {
-        if (!in_placecopy) {
-                attr(freqs, "cpp_obj") <- cpp_obj <- new(kgramFreqs, cpp_obj)
-        }       
+        if (!in_place)
+                attr(freqs, "cpp_obj") <- new(kgramFreqs, attr(freqs, "cpp_obj"))
+        cpp_obj <- attr(freqs, "cpp_obj")
         process <- kgram_process_task(
                 cpp_obj, .preprocess, .tokenize_sentences, open_dictionary
         )
@@ -210,9 +253,10 @@ process_sentences.connection <- function(
         ...
 )
 {
-        if (!in_place) {
-                attr(freqs, "cpp_obj") <- cpp_obj <- new(kgramFreqs, cpp_obj)
-        }       
+        if (!in_place)
+                attr(freqs, "cpp_obj") <- new(kgramFreqs, attr(freqs, "cpp_obj"))
+        cpp_obj <- attr(freqs, "cpp_obj") 
+        
         process <- kgram_process_task(
                 cpp_obj, .preprocess, .tokenize_sentences, open_dictionary
         )
@@ -231,7 +275,7 @@ process_sentences.connection <- function(
 
 kgram_process_task <- function(
         cpp_obj, .preprocess, .tokenize_sentences, open_dictionary
-        )
+)
         function(batch) 
         {
                 batch <- .preprocess(batch)
