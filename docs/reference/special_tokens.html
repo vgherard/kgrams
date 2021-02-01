@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Function reference • kgrams</title>
+<title>Special Tokens — EOS • kgrams</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,8 @@
 
 
 
-<meta property="og:title" content="Function reference" />
+<meta property="og:title" content="Special Tokens — EOS" />
+<meta property="og:description" content="Return Begin-Of-Sentence, End-Of-Sentence and Unknown-Word special tokens." />
 
 
 
@@ -58,7 +59,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-index">
+    <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -100,126 +101,49 @@
       </header>
 
 <div class="row">
-  <div class="contents col-md-9">
+  <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Reference</h1>
+    <h1>Special Tokens</h1>
+    
+    <div class="hidden name"><code>special_tokens.Rd</code></div>
     </div>
 
-    <table class="ref-index">
+    <div class="ref-description">
+    <p>Return Begin-Of-Sentence, End-Of-Sentence and Unknown-Word special tokens.</p>
+    </div>
 
-    <colgroup>
-      
-      <col class="alias" />
-      <col class="title" />
-    </colgroup>
+    <pre class="usage"><span class='fu'>EOS</span><span class='op'>(</span><span class='op'>)</span>
 
-    <tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-all-functions" class="hasAnchor"><a href="#section-all-functions" class="anchor"></a>All functions</h2>
-          <p class="section-desc"></p>
-        </th>
-      </tr>
-      
-      
-    </tbody><tbody>
-      
-      
-      <tr>
-        
-        <td>
-          <p><code><a href="conditional.html">`%|%`</a></code> </p>
-        </td>
-        <td><p>Word-context conditional expression</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="dictionary.html">dictionary()</a></code> <code><a href="dictionary.html">as.dictionary()</a></code> </p>
-        </td>
-        <td><p>Word dictionaries</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="grapes-plus-grapes.html">`%+%`</a></code> </p>
-        </td>
-        <td><p>String concatenation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="kgram_freqs.html">kgram_freqs()</a></code> <code><a href="kgram_freqs.html">process_sentences()</a></code> </p>
-        </td>
-        <td><p>k-gram Frequency Tables</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="language_model.html">language_model()</a></code> </p>
-        </td>
-        <td><p>k-gram Language Models</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="midsummer.html">midsummer</a></code> </p>
-        </td>
-        <td><p>A Midsummer Night's Dream</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="much_ado.html">much_ado</a></code> </p>
-        </td>
-        <td><p>Much Ado About Nothing</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="perplexity.html">perplexity()</a></code> </p>
-        </td>
-        <td><p>Language Model Perplexities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="preprocess.html">preprocess()</a></code> </p>
-        </td>
-        <td><p>Text preprocessing</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="probability.html">probability()</a></code> </p>
-        </td>
-        <td><p>Language Model Probabilities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="query.html">query()</a></code> </p>
-        </td>
-        <td><p>Query k-gram frequency tables or dictionaries</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="sample_sentences.html">sample_sentences()</a></code> </p>
-        </td>
-        <td><p>Random Text Generation</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="smoothers.html">smoothers()</a></code> <code><a href="smoothers.html">smoother_info()</a></code> </p>
-        </td>
-        <td><p>k-gram Probability Smoothers</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="special_tokens.html">EOS()</a></code> <code><a href="special_tokens.html">BOS()</a></code> <code><a href="special_tokens.html">UNK()</a></code> </p>
-        </td>
-        <td><p>Special Tokens</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="tokenize_sentences.html">tokenize_sentences()</a></code> </p>
-        </td>
-        <td><p>Sentence tokenizer</p></td>
-      </tr>
-    </tbody>
-    </table>
+<span class='fu'>BOS</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='fu'>UNK</span><span class='op'>(</span><span class='op'>)</span></pre>
+
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    <p>a string representing the appropriate special token.</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>These functions return the internal representation of BOS, EOS and UNK tokens
+respectively. Their actual returned values are irrelevant and their only
+purpose is to simplify queries of k-gram counts and probabilities involving
+the special tokens, as shown in the examples.</p>
+    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
+
+    <p>Valerio Gherardi</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='st'>"a b b a b"</span>, <span class='fl'>2</span><span class='op'>)</span>
+<span class='fu'><a href='query.html'>query</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'>BOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'>EOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'>UNK</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1 1 0</div><div class='input'><span class='fu'><a href='probability.html'>probability</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span> <span class='op'>%|%</span> <span class='fu'>BOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>f</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 1 0</div><div class='input'><span class='fu'><a href='probability.html'>probability</a></span><span class='op'>(</span><span class='st'>"a b b a"</span> <span class='op'>%+%</span> <span class='fu'>EOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>f</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0</div><div class='input'>
+<span class='co'># The actual values of BOS(), EOS() and UNK() are irrelevant</span>
+<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fu'>BOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'>EOS</span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'>UNK</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "___BOS___" "___EOS___" "___UNK___"</div><div class='input'>
+
+</div></pre>
   </div>
-
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
       <h2 data-toc-skip>Contents</h2>

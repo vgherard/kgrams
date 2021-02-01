@@ -13,16 +13,19 @@ tokenize_sentences <- function(input, EOS = "[.?!:;]+", keep_first = FALSE) {
     .Call(`_kgrams_tokenize_sentences`, input, EOS, keep_first)
 }
 
+#' @rdname special_tokens
 #' @export
 EOS <- function() {
     .Call(`_kgrams_EOS`)
 }
 
+#' @rdname special_tokens
 #' @export
 BOS <- function() {
     .Call(`_kgrams_BOS`)
 }
 
+#' @rdname special_tokens
 #' @export
 UNK <- function() {
     .Call(`_kgrams_UNK`)
