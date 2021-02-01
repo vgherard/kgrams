@@ -1,6 +1,8 @@
 #include "Smoothing.h"
 #include <cmath>
 
+using std::pair;
+
 //--------//----------------Smoother----------------//----------//
 
 
@@ -28,24 +30,31 @@ std::string Smoother::truncate (std::string context) const {
         return context.substr(start);
 }
 
-/// @brief Return sentence probability.
+/// @brief Return sentence probability and number of words in sentence 
+/// (useful for computing cross-entropies and perplexities)
 /// @param sentence A string. Sentence of which the probability is to be
 /// computed.
+/// @param log true or false. If true, returns log-probability, otherwise 
+/// probability.
 /// @return a positive number. Continuation probability of a word.
 /// @details Sentences are automatically padded (i.e. no need to include BOS and
 /// EOS tokens). In any case, any additional BOS and EOS tokens appearing in the
 /// word are automatically ignored.
-double Smoother::operator() (const std::string & sentence) 
+std::pair<double, size_t> Smoother::operator() (
+                const std::string & sentence, bool log
+        ) 
 const {
         std::string context = padding_, word;
         WordStream ws(sentence);
         
         // Use log-prob for safety (avoid numerical underflow)
-        double log_prob = 0.; size_t pos;
+        double log_prob = 0.; size_t n_words = 1; // EOS; 
+        size_t pos; 
         while((word = ws.pop_word()) != EOS_TOK) {
                 // Ignore eventual BOS tokens explicitly included in the user's
                 // input.
                 if (word == BOS_TOK) continue;
+                n_words++;
                 // This will call the correct method when implemented by
                 // actual smoothers
                 log_prob += std::log(this->operator()(word, context));
@@ -62,7 +71,8 @@ const {
         // in which case the iteration breaks.
         log_prob += std::log(this->operator()(EOS_TOK, context));
         
-        return std::exp(log_prob);
+        return pair<double, size_t>
+                {log ? log_prob : std::exp(log_prob), n_words};
 }
 
 //--------//----------------SBOSmoother----------------//--------//
@@ -97,7 +107,7 @@ const {
                 backoff(context);
                 penalization *= lambda_;
                 if (context == "" and f_.query(word) == 0)
-                        return 0;
+                        return 1 / (double)(f_.V() + 2);
         }
         return penalization * kgram_count / f_.query(context);
 }

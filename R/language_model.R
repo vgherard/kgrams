@@ -1,8 +1,31 @@
-new_language_model <- function(cpp_obj, smoother) {
+new_language_model <- function(cpp_obj, 
+                               cpp_freqs, 
+                               .preprocess, 
+                               .tokenize_sentences, 
+                               smoother
+                               ) 
+{
         structure(list(), 
                   cpp_obj = cpp_obj, 
+                  cpp_freqs = cpp_freqs,
+                  .preprocess = .preprocess,
+                  .tokenize_sentences = .tokenize_sentences,
                   class = c("language_model", smoother)
                   )
+}
+
+as.language_model <- function(object) 
+        UseMethod("as.language_model", object)
+
+as.language_model.language_model <- function(object) 
+        return(object)
+
+as.language_model.kgram_freqs <- function(object)
+        return(language_model(object, "ml"))
+
+as.language_model.default <- function(object) {
+        msg <- "Input cannot be coerced to 'language_model'."
+        rlang::abort(message = msg, class = "domain_error")
 }
 
 #' k-gram Language Models
@@ -12,7 +35,7 @@ new_language_model <- function(cpp_obj, smoother) {
 #' @author Valerio Gherardi
 #' @md
 #'
-#' @param object an object which stores the information required to build the
+#' @param freqs an object which stores the information required to build the
 #' k-gram model. At present, necessarily a \code{kgram_freqs} object.
 #' @param smoother a character vector. Indicates the smoothing technique to
 #' be applied to compute k-gram continuation probabilities. A list of 
@@ -26,11 +49,12 @@ new_language_model <- function(cpp_obj, smoother) {
 #' \link[kgrams]{kgrams} supports several k-gram language models, including
 #' Interpolated Kneser-Ney, Stupid Backoff and others 
 #' (see \link[kgrams]{smoothers}). The objects created by 
-#' \code{language_models()} have methods for computing k-gram continuation 
-#' probabilities (see \link[kgrams]{probability}), random text generation
-#' (see \link[kgrams]{sample_sentences}) and other type of language 
-#' modeling tasks such as (\strong{not yet implemented}) computing perplexities
-#' and word prediction accuracies.
+#' \code{language_models()} have methods for computing word continuation and
+#' sentence probabilities (see \link[kgrams]{probability}), 
+#' random text generation (see \link[kgrams]{sample_sentences}) 
+#' and other type of language modeling tasks such as 
+#' (\strong{not yet implemented}) computing perplexities and word 
+#' prediction accuracies.
 #' 
 #' Smoothers have often tuning parameters, which need to be specified by
 #' (exact) name through the \code{...} arguments; otherwise, 
@@ -52,24 +76,29 @@ new_language_model <- function(cpp_obj, smoother) {
 #' @name language_model
 
 #' @export
-language_model <- function(object, smoother = "ml", ...) {
+language_model <- function(freqs, smoother = "ml", ...) {
         validate_smoother(smoother, ...)
-        UseMethod("language_model", object)
+        UseMethod("language_model", freqs)
 }
 
 #' @export
-language_model.kgram_freqs <- function(object, smoother = "ml", ...) {
+language_model.kgram_freqs <- function(freqs, smoother = "ml", ...) {
         args <- list(...)
         for (parameter in parameters(smoother)) 
                 if (is.null(args[[parameter$name]]))
                         args[[parameter$name]] <- parameter$default
-        freqs_obj <- attr(object, "cpp_obj")
-        smoother_obj <- switch(smoother, 
-               sbo = new(SBOSmoother, freqs_obj, args[["lambda"]]),
-               add_k = new(AddkSmoother, freqs_obj, args[["k"]]),
-               laplace = new(AddkSmoother, freqs_obj, 1.0),
-               ml = new(MLSmoother, freqs_obj),
-               kn = new(KNSmoother, freqs_obj, args[["D"]])
+        cpp_freqs <- attr(freqs, "cpp_obj")
+        cpp_obj <- switch(smoother, 
+               sbo = new(SBOSmoother, cpp_freqs, args[["lambda"]]),
+               add_k = new(AddkSmoother, cpp_freqs, args[["k"]]),
+               laplace = new(AddkSmoother, cpp_freqs, 1.0),
+               ml = new(MLSmoother, cpp_freqs),
+               kn = new(KNSmoother, cpp_freqs, args[["D"]])
         )
-        new_language_model(smoother_obj, smoother)
+        new_language_model(cpp_obj, 
+                           cpp_freqs, 
+                           attr(freqs, ".preprocess"), 
+                           attr(freqs, ".tokenize_sentences"),
+                           smoother
+                           )
 }

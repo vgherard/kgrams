@@ -105,72 +105,35 @@ NumericVector probability_generic (Smoother * smoother,
         return res;
 }
 
-NumericVector probability_generic(Smoother * smoother, CharacterVector sentence) 
+NumericVector probability_generic(Smoother * smoother, 
+                                  CharacterVector sentence) 
 {
         size_t len = sentence.length();
         NumericVector res(len);
         std::string tmp;
         for (size_t i = 0; i < len; ++i) {
                 tmp = sentence[i];
-                res[i] = smoother->operator()(tmp);
+                res[i] = smoother->operator()(tmp).first;
                         if (res[i] == -1) res[i] = NA_REAL;
         }
         return res;
 }
 
-
-
-
-//---------------- Models ----------------//
-
-// TODO: Is it possible to avoid the repetition below using a template class? 
-
-class SBOSmootherR : public SBOSmoother {
-public:
-        SBOSmootherR (const kgramFreqsR & f, const double lambda) 
-                : SBOSmoother(f, lambda) {}
-        NumericVector probability (CharacterVector word, std::string context) 
-                { return probability_generic(this, word, context); }
-        NumericVector probability_sentence (CharacterVector sentence) 
-                { return probability_generic(this, sentence); }
-        CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
-                { return sample_generic(this, n, max_length, T); }
-}; // class SBOSmootherR
-
-class AddkSmootherR : public AddkSmoother {
-public:
-        AddkSmootherR (const kgramFreqsR & f, const double k) 
-                : AddkSmoother(f, k) {}
-        NumericVector probability (CharacterVector word, std::string context) 
-                { return probability_generic(this, word, context); }
-        NumericVector probability_sentence (CharacterVector sentence) 
-                { return probability_generic(this, sentence); }
-        CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
-                { return sample_generic(this, n, max_length, T); }
-}; // class AddkSmootherR
-
-class MLSmootherR : public MLSmoother {
-public:
-        MLSmootherR (const kgramFreqsR & f) 
-                : MLSmoother(f) {}
-        NumericVector probability (CharacterVector word, std::string context) 
-                { return probability_generic(this, word, context); }
-        NumericVector probability_sentence (CharacterVector sentence) 
-                { return probability_generic(this, sentence); }
-        CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
-                { return sample_generic(this, n, max_length, T); }
-}; // class AddkSmootherR
-
-class KNSmootherR : public KNSmoother {
-public:
-        KNSmootherR (const kgramFreqsR & f, const double D) 
-                : KNSmoother(f, D) {}
-        NumericVector probability (CharacterVector word, std::string context) 
-                { return probability_generic(this, word, context); }
-        NumericVector probability_sentence (CharacterVector sentence) 
-                { return probability_generic(this, sentence); }
-        CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
-                { return sample_generic(this, n, max_length, T); }
-}; // class KNSmootherR
+List log_prob_generic(Smoother * smoother, CharacterVector sentence) 
+{
+        size_t len = sentence.length();
+        NumericVector log_prob(len);
+        IntegerVector n_words(len);
+        std::string tmp_sent;
+        std::pair<double, size_t> tmp_res;
+        for (size_t i = 0; i < len; ++i) {
+                tmp_sent = sentence[i];
+                tmp_res = smoother->operator()(tmp_sent, true);
+                log_prob[i] = tmp_res.first;
+                n_words[i] = tmp_res.second;
+                if (std::isnan(tmp_res.first)) log_prob[i] = NA_REAL;
+        }
+        return List::create(_["log_prob"] = log_prob, _["n_words"] = n_words);
+}
 
 #endif //SMOOTHING_R_H

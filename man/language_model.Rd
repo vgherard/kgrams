@@ -4,10 +4,10 @@
 \alias{language_model}
 \title{k-gram Language Models}
 \usage{
-language_model(object, smoother = "ml", ...)
+language_model(freqs, smoother = "ml", ...)
 }
 \arguments{
-\item{object}{an object which stores the information required to build the
+\item{freqs}{an object which stores the information required to build the
 k-gram model. At present, necessarily a \code{kgram_freqs} object.}
 
 \item{smoother}{a character vector. Indicates the smoothing technique to
@@ -28,11 +28,12 @@ Create a k-gram language model.
 \link[kgrams]{kgrams} supports several k-gram language models, including
 Interpolated Kneser-Ney, Stupid Backoff and others
 (see \link[kgrams]{smoothers}). The objects created by
-\code{language_models()} have methods for computing k-gram continuation
-probabilities (see \link[kgrams]{probability}), random text generation
-(see \link[kgrams]{sample_sentences}) and other type of language
-modeling tasks such as (\strong{not yet implemented}) computing perplexities
-and word prediction accuracies.
+\code{language_models()} have methods for computing word continuation and
+sentence probabilities (see \link[kgrams]{probability}),
+random text generation (see \link[kgrams]{sample_sentences})
+and other type of language modeling tasks such as
+(\strong{not yet implemented}) computing perplexities and word
+prediction accuracies.
 
 Smoothers have often tuning parameters, which need to be specified by
 (exact) name through the \code{...} arguments; otherwise,

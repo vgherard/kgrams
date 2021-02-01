@@ -39,9 +39,8 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' @param in_place \code{TRUE} or \code{FALSE}. Should the initial 
 #' \code{kgram_freqs} object be modified in place?
 #' @param batch_size a length one positive integer or \code{NULL}.
-#' Size of text batches when reading text from a \code{file} or a generic 
-#' \code{connection}. If \code{NULL}, all input text is processed in a single 
-#' batch.
+#' Size of text batches when reading text from \code{connection}. 
+#' If \code{NULL}, all input text is processed in a single batch.
 #' @param ... further arguments passed to or from other methods.
 #' 
 #' @return A \code{kgram_freqs} class object: k-gram frequency table storing
@@ -57,8 +56,9 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' The returned object is of class \code{kgram_freqs} (a thin wrapper 
 #' around the internal C++ class where all k-gram computations take place). 
 #' \code{kgram_freqs} objects have methods for querying bare k-gram frequencies
-#' (\link[kgrams]{query}) and maximum likelihood estimates of continuation
-#' probabilities \link[kgrams]{probability}). More importantly 
+#' (\link[kgrams]{query}) and maximum likelihood estimates of sentence
+#' probabilities or word continuation probabilities 
+#' (see \link[kgrams]{probability})) . More importantly 
 #' \code{kgram_freqs} objects are used to create \link[kgrams]{language_model} 
 #' objects, which support various probability smoothing techniques.
 #' 

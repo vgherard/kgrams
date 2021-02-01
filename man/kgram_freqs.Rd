@@ -97,9 +97,8 @@ unknown word token.}
 \item{...}{further arguments passed to or from other methods.}
 
 \item{batch_size}{a length one positive integer or \code{NULL}.
-Size of text batches when reading text from a \code{file} or a generic
-\code{connection}. If \code{NULL}, all input text is processed in a single
-batch.}
+Size of text batches when reading text from \code{connection}.
+If \code{NULL}, all input text is processed in a single batch.}
 
 \item{freqs}{a \code{kgram_freqs} object, to which new k-gram counts from
 \code{text} are to be added.}
@@ -126,8 +125,9 @@ different sources such as files, compressed files or URLs.
 The returned object is of class \code{kgram_freqs} (a thin wrapper
 around the internal C++ class where all k-gram computations take place).
 \code{kgram_freqs} objects have methods for querying bare k-gram frequencies
-(\link[kgrams]{query}) and maximum likelihood estimates of continuation
-probabilities \link[kgrams]{probability}). More importantly
+(\link[kgrams]{query}) and maximum likelihood estimates of sentence
+probabilities or word continuation probabilities
+(see \link[kgrams]{probability})) . More importantly
 \code{kgram_freqs} objects are used to create \link[kgrams]{language_model}
 objects, which support various probability smoothing techniques.
 

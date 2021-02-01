@@ -1,3 +1,9 @@
+#' Word-context conditional expression
+#' 
+#' Create word-context conditional expression with the infix notation.
+#'
+#' @name conditional
+#'
 #' @export
 `%|%` <- function(word, context) {
         if (!is.character(word)) {

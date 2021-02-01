@@ -57,7 +57,9 @@ public:
                 { return 1. ;}
         
         /// @brief get smoothed sentence probabilites. 
-        double operator() (const std::string &) const;
+        std::pair<double, size_t> operator() (
+                        const std::string &, bool log = false
+        ) const; // Smoothing.cpp
 };
 
 /// @class SBOSmoother
