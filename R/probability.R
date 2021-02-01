@@ -1,22 +1,24 @@
-
+#' @export
+probability <- function(object, model)
+        UseMethod("probability", object)
 
 #' @export
-probability <- function(freqs, word, context, 
-                        method = c("StupidBackoff", "Add-k", "Laplace", "ML"), 
-                        par
-                        )
-{
-        check_method(method, par)
-        f <- attr(freqs, "cpp_obj")
-        if (method == "StupidBackoff") {
-                res <- probability_sbo(f, word, context, par[["lambda"]])        
-        } else if (method == "Add-k") {
-                res <- probability_addk(f, word, context, par[["k"]])        
-        } else if (method == "Laplace") {
-                res <- probability_addk(f, word, context, 1.0)        
-        } else if (method == "ML") {
-                res <- probability_ml(f, word, context)        
-        }
-        
-        return(res)
+probability.kgrams_word_context <- function(object, model) {
+        if (!inherits(model, "language_model"))
+                if (inherits(model, "kgram_freqs")) {
+                        model <- language_model(model, "ml")
+                } else {
+                        msgs <- "'model' should be either of class" %+%
+                                "'language_model' or 'kgram_freqs'."
+                        rlang::abort(message = msgs, class = "domain_error")
+                }
+        return(attr(model, "cpp_obj")$probability(object$word, object$context))        
 }
+        
+
+#' @export
+probability.character <- function(object, model) {
+        ### ... compute probability of a sentence        
+}
+        
+        
