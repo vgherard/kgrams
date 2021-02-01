@@ -2,3 +2,6 @@
 ^\.Rproj\.user$
 ^ignore$
 ^LICENSE\.md$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
