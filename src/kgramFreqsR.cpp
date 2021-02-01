@@ -9,6 +9,7 @@ IntegerVector kgramFreqsR::queryR(CharacterVector kgram) const
         IntegerVector res(len);
         for (size_t i = 0; i < len; ++i) {
                 res[i] = query(as<std::string>(kgram[i]));
+                if (res[i] == -1) res[i] = NA_INTEGER;
         }
         return res;
 }
@@ -30,10 +31,10 @@ void kgramFreqsR::process_sentencesR(
         add_BOS_counts(sentences.size());
         std::string sentence;
         auto itend = sentences.end();
-        for (auto it = sentences.begin(); it != itend; it++){
+        for (auto it = sentences.begin(); it != itend; ++it) {
                 sentence = *it;
                 process_sentence(sentence, fixed_dictionary);
-        }
+                }
 }
 
 RCPP_EXPOSED_CLASS(Dictionary);
@@ -42,15 +43,12 @@ RCPP_EXPOSED_CLASS(kgramFreqsR);
 
 RCPP_MODULE(kgramFreqs) {
         class_<kgramFreqs>("___kgramFreqs")
-                //.constructor<size_t>()
-                //.constructor<size_t, const Dictionary & >()
                 .const_method("N", &kgramFreqs::N)
                 .const_method("V", &kgramFreqs::V)
         ;
         
         class_<kgramFreqsR>("kgramFreqs")
                 .derives<kgramFreqs>("___kgramFreqs")
-                //.constructor<size_t>()
                 .constructor<size_t, const Dictionary & >()
                 .constructor<const kgramFreqsR & >()
                 .method("process_sentences", &kgramFreqsR::process_sentencesR)
