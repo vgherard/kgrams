@@ -15,7 +15,7 @@ kgram_freqs(
   .preprocess = identity,
   .tokenize_sentences = identity,
   dictionary = NULL,
-  open_dictionary = TRUE,
+  open_dictionary = is.null(dictionary),
   ...
 )
 
@@ -92,7 +92,8 @@ applied to text after preprocessing and before k-gram tokenization. See
 \item{open_dictionary}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, any new
 word encountered during processing not appearing in the original dictionary
 is included into the dictionary. Otherwise, new words are replaced by an
-unknown word token.}
+unknown word token. It is by default \code{TRUE} if \code{dictionary} is
+specified, \code{FALSE} otherwise.}
 
 \item{...}{further arguments passed to or from other methods.}
 

@@ -118,7 +118,7 @@
   .preprocess <span class='op'>=</span> <span class='va'>identity</span>,
   .tokenize_sentences <span class='op'>=</span> <span class='va'>identity</span>,
   dictionary <span class='op'>=</span> <span class='cn'>NULL</span>,
-  open_dictionary <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  open_dictionary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>dictionary</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -213,7 +213,8 @@ applied to text after preprocessing and before k-gram tokenization. See
       <td><p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, any new
 word encountered during processing not appearing in the original dictionary
 is included into the dictionary. Otherwise, new words are replaced by an
-unknown word token.</p></td>
+unknown word token. It is by default <code>TRUE</code> if <code>dictionary</code> is
+specified, <code>FALSE</code> otherwise.</p></td>
     </tr>
     <tr>
       <th>...</th>

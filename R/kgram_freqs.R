@@ -35,7 +35,8 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' @param open_dictionary \code{TRUE} or \code{FALSE}. If \code{TRUE}, any new 
 #' word encountered during processing not appearing in the original dictionary 
 #' is included into the dictionary. Otherwise, new words are replaced by an
-#' unknown word token.
+#' unknown word token. It is by default \code{TRUE} if \code{dictionary} is
+#' specified, \code{FALSE} otherwise.
 #' @param in_place \code{TRUE} or \code{FALSE}. Should the initial 
 #' \code{kgram_freqs} object be modified in place?
 #' @param batch_size a length one positive integer or \code{NULL}.
@@ -76,7 +77,7 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' words. Subsequently, one can either work with such a closed dictionary 
 #' (\code{open_dictionary == FALSE}), or extended the dictionary with all 
 #' new words encountered during k-gram processing 
-#' (\code{open_dictionary == TRUE}) is \code{FALSE}).   
+#' (\code{open_dictionary == TRUE}) is \code{FALSE}).
 #'
 #' The \code{.preprocess} and \code{.tokenize_sentences} functions are applied
 #' \emph{before} k-gram counting takes place, and are in principle 
@@ -150,10 +151,11 @@ kgram_freqs <- function(text,
                         .preprocess = identity,
                         .tokenize_sentences = identity,
                         dictionary = NULL,
-                        open_dictionary = TRUE,
+                        open_dictionary = is.null(dictionary),
                         ...
 ) 
 {
+        force(open_dictionary)
         if (missing(dictionary) || is.null(dictionary))
                 dictionary <- dictionary()
         dictionary <- as.dictionary(dictionary)

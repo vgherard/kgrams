@@ -37,7 +37,7 @@
 #'    
 #' @examples
 #' # Querying a k-gram frequency table
-#' f <- kgram_freqs("a a b a b c d e", N = 2, dictionary = c("a", "b"))
+#' f <- kgram_freqs("a a b a b b a b", N = 2)
 #' query(f, c("a", "b")) # query single words
 #' query(f, c("a b")) # query a 2-gram
 #' identical(query(f, "c"), query(f, "d"))  # TRUE, both "c" and "d" are <UNK>
