@@ -92,17 +92,34 @@ CharacterVector sample_generic (Smoother * smoother,
 NumericVector probability_generic (Smoother * smoother,
                                    CharacterVector word,
                                    std::string context
-                                           ) 
+) 
 {
         size_t len = word.length();
         NumericVector res(len);
         std::string tmp;
         for (size_t i = 0; i < len; ++i) {
                 tmp = word[i];
-                res = smoother->operator()(tmp, context);
+                res[i] = smoother->operator()(tmp, context);
+                if (res[i] == -1) res[i] = NA_REAL;
         }
         return res;
 }
+
+NumericVector probability_generic(Smoother * smoother, CharacterVector sentence) 
+{
+        size_t len = sentence.length();
+        NumericVector res(len);
+        std::string tmp;
+        for (size_t i = 0; i < len; ++i) {
+                tmp = sentence[i];
+                res[i] = smoother->operator()(tmp);
+                        if (res[i] == -1) res[i] = NA_REAL;
+        }
+        return res;
+}
+
+
+
 
 //---------------- Models ----------------//
 
@@ -114,6 +131,8 @@ public:
                 : SBOSmoother(f, lambda) {}
         NumericVector probability (CharacterVector word, std::string context) 
                 { return probability_generic(this, word, context); }
+        NumericVector probability_sentence (CharacterVector sentence) 
+                { return probability_generic(this, sentence); }
         CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
                 { return sample_generic(this, n, max_length, T); }
 }; // class SBOSmootherR
@@ -124,6 +143,8 @@ public:
                 : AddkSmoother(f, k) {}
         NumericVector probability (CharacterVector word, std::string context) 
                 { return probability_generic(this, word, context); }
+        NumericVector probability_sentence (CharacterVector sentence) 
+                { return probability_generic(this, sentence); }
         CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
                 { return sample_generic(this, n, max_length, T); }
 }; // class AddkSmootherR
@@ -134,6 +155,8 @@ public:
                 : MLSmoother(f) {}
         NumericVector probability (CharacterVector word, std::string context) 
                 { return probability_generic(this, word, context); }
+        NumericVector probability_sentence (CharacterVector sentence) 
+                { return probability_generic(this, sentence); }
         CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
                 { return sample_generic(this, n, max_length, T); }
 }; // class AddkSmootherR
@@ -144,6 +167,8 @@ public:
                 : KNSmoother(f, D) {}
         NumericVector probability (CharacterVector word, std::string context) 
                 { return probability_generic(this, word, context); }
+        NumericVector probability_sentence (CharacterVector sentence) 
+                { return probability_generic(this, sentence); }
         CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
                 { return sample_generic(this, n, max_length, T); }
 }; // class KNSmootherR
