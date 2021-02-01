@@ -18,3 +18,5 @@ LinkingTo:
 Imports: 
     Rcpp, rlang
 SystemRequirements: C++11
+Depends: 
+    R (>= 2.10)

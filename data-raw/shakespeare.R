@@ -1,17 +1,30 @@
 .preprocess <- function(x) {
+        # Remove character names and locations (boldfaced in original html)
+        x <- gsub("<b>[A-z]+</b>", "", x)
+        # Remove all other html tags
         x <- gsub("<[^>]+>||<[^>]+$||^[^>]+>$", "", x)
+        # Apply standard preprocessing including lower-case
+        x <- kgrams::preprocess(x)
+        # Tokenize sentences keeping Shakespeare's punctuation
+        x <- kgrams::tokenize_sentences(x, keep_first = TRUE)
+        # Remove empty sentences
         x <- x[x != ""]
-        return(tolower(x))
+        # Collapse everything into a single string
+        x <- paste(x, collapse = " ")
 }
 
-.tokenize_sentences <- function(x) {
-        kgrams::tokenize_sentences(x, keep_first = TRUE)
-}
+local({
 
-much_ado <- readLines(url("http://shakespeare.mit.edu/much_ado/full.html"))
-much_ado <- .tokenize_sentences( .preprocess(much_ado) )
+con <- url("http://shakespeare.mit.edu/much_ado/full.html")
+much_ado <- readLines(con)
+close(con)
+much_ado <- .preprocess(much_ado)
 usethis::use_data(much_ado, overwrite = TRUE)
 
-midsummer <- readLines(url("http://shakespeare.mit.edu/midsummer/full.html"))
-midsummer <- .tokenize_sentences( .preprocess(midsummer) )
+con <- url("http://shakespeare.mit.edu/midsummer/full.html")
+midsummer <- readLines(con)
+close(con)
+midsummer <- .preprocess(midsummer)
 usethis::use_data(midsummer, overwrite = TRUE)
+
+})

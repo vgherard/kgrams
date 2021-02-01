@@ -16,7 +16,7 @@
 #' smoothers()
 #' 
 #' # Get information on smoother "kn", i.e. Interpolated Kneser-Ney
-#' info("kn")
+#' smoother_info("kn")
 #' @name smoothers
 
 #' @rdname smoothers
@@ -30,8 +30,8 @@ smoother_info <- function(code) {
                 msgs <- paste("Unrecognized smoother name:", code)
                 msgs <- c(msgs,
                           i = "You can obtain a list of available" %+%
-                                   "smoothing techniques with `smoothers()`"
-                           )
+                                  "smoothing techniques with `smoothers()`"
+                )
                 rlang::inform(message = msgs, class = "unrecognized_smoother")
         }
         
@@ -41,7 +41,7 @@ smoother_info <- function(code) {
                     "* parameters: lambda (backoff penalization)\n",
                     "* constraints: 0 < lambda < 1\n",
                     "* notes: does not produce normalized probabilities"
-                    )
+                )
         
         if (code == "add_k")
                 cat("Add-k Smoother\n",
@@ -64,7 +64,7 @@ smoother_info <- function(code) {
                     "* parameters: none\n",
                     "* constraints: none\n",
                     "* notes: probabilities are undefined for unseen contexts"
-                    )
+                )
         
         if (code == "kn")
                 cat("Interpolated Kneser-Ney with fixed discount\n",
@@ -73,7 +73,7 @@ smoother_info <- function(code) {
                     "* constraints: 0 < D < 1\n"
                 )
 } 
-        
+
 
 # list of parameters for the various smoothers
 parameters <- function(smoother) 

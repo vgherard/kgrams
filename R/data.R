@@ -1,0 +1,33 @@
+#' Much Ado About Nothing
+#'
+#' The entire play "Much Ado About Nothing" from William Shakespeare. 
+#'
+#' @format A length one character vector, containing the entire text of 
+#' "Much Ado About Nothing" from William Shakespeare. The script used 
+#' for generating this file is available 
+#' \href{https://github.com/vgherard/kgrams/blob/main/data-raw/shakespeare.R}{here}
+#' 
+#' @seealso \link[kgrams]{midsummer}
+#' 
+#' @examples 
+#' substr(much_ado, 840, 840 + 480)
+#' 
+#' @source \url{http://shakespeare.mit.edu/much_ado/}
+"much_ado"
+
+#' A Midsummer Night's Dream
+#'
+#' The entire play "A Midsummer Night's Dream" from William Shakespeare. 
+#'
+#' @format A length one character vector, containing the entire text of 
+#' "A Midsummer Night's Dream" from William Shakespeare. The script used 
+#' for generating this file is available 
+#' \href{https://github.com/vgherard/kgrams/blob/main/data-raw/shakespeare.R}{here}
+#' 
+#' @seealso \link[kgrams]{much_ado}
+#' 
+#' @examples 
+#' substr(midsummer, 840, 840 + 480)
+#' 
+#' @source \url{http://shakespeare.mit.edu/midsummer/}
+"midsummer"

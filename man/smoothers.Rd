@@ -26,7 +26,7 @@ Informations on available k-gram continuation probability smoothers
 smoothers()
 
 # Get information on smoother "kn", i.e. Interpolated Kneser-Ney
-info("kn")
+smoother_info("kn")
 }
 \author{
 Valerio Gherardi

@@ -8,7 +8,7 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
                   .tokenize_sentences = utils::removeSource(.tokenize_sentences),
                   cpp_obj = cpp_obj, 
                   class = "kgram_freqs"
-                  )
+        )
 }
 
 #' k-gram Frequency Tables
@@ -114,16 +114,25 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' ### Shakespeare's "Much Ado About Nothing" (entire play)
 #' con <- url("http://shakespeare.mit.edu/much_ado/full.html")
 #' 
-#' ### Strip-off html tags and put everything to lowercase 
+#' # Apply some basic preprocessing
 #' .preprocess <- function(x) {
+#'         # Remove character names and locations (boldfaced in original html)
+#'         x <- gsub("<b>[A-z]+</b>", "", x)
+#'         # Remove html tags
 #'         x <- gsub("<[^>]+>||<[^>]+$||^[^>]+>$", "", x)
-#'         x <- x[x != ""]
-#'         return(tolower(x))
+#'         # Remove character names (all-caps in original text)
+#'         x <- gsub("[A-Z]{2,}", "", x)
+#'         # Apply standard preprocessing including lower-case
+#'         x <- kgrams::preprocess(x)
+#'         return(x)
 #' }
-#' 
-#' ### Keep Shakespeare's punctuation 
+#'
 #' .tokenize_sentences <- function(x) {
-#'         kgrams::tokenize_sentences(x, keep_first = TRUE)
+#'         # Tokenize sentences keeping Shakespeare's punctuation
+#'         x <- kgrams::tokenize_sentences(x, keep_first = TRUE)
+#'         # Remove empty sentences
+#'         x <- x[x != ""]
+#'         return(x)
 #' }
 #' 
 #' f <- kgram_freqs(con, 3, .preprocess, .tokenize_sentences, batch_size = 1000)

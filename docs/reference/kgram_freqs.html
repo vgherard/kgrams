@@ -312,16 +312,25 @@ usage, this package offers the utilities <a href='preprocess.html'>preprocess</a
 <span class='co'>### Shakespeare's "Much Ado About Nothing" (entire play)</span>
 <span class='va'>con</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/connections.html'>url</a></span><span class='op'>(</span><span class='st'>"http://shakespeare.mit.edu/much_ado/full.html"</span><span class='op'>)</span>
 
-<span class='co'>### Strip-off html tags and put everything to lowercase </span>
+<span class='co'># Apply some basic preprocessing</span>
 <span class='va'>.preprocess</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
+        <span class='co'># Remove character names and locations (boldfaced in original html)</span>
+        <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"&lt;b&gt;[A-z]+&lt;/b&gt;"</span>, <span class='st'>""</span>, <span class='va'>x</span><span class='op'>)</span>
+        <span class='co'># Remove html tags</span>
         <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"&lt;[^&gt;]+&gt;||&lt;[^&gt;]+$||^[^&gt;]+&gt;$"</span>, <span class='st'>""</span>, <span class='va'>x</span><span class='op'>)</span>
-        <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>[</span><span class='va'>x</span> <span class='op'>!=</span> <span class='st'>""</span><span class='op'>]</span>
-        <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/chartr.html'>tolower</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span><span class='op'>)</span>
+        <span class='co'># Remove character names (all-caps in original text)</span>
+        <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/grep.html'>gsub</a></span><span class='op'>(</span><span class='st'>"[A-Z]{2,}"</span>, <span class='st'>""</span>, <span class='va'>x</span><span class='op'>)</span>
+        <span class='co'># Apply standard preprocessing including lower-case</span>
+        <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>kgrams</span><span class='fu'>::</span><span class='fu'><a href='preprocess.html'>preprocess</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
+        <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-<span class='co'>### Keep Shakespeare's punctuation </span>
 <span class='va'>.tokenize_sentences</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
-        <span class='fu'>kgrams</span><span class='fu'>::</span><span class='fu'><a href='tokenize_sentences.html'>tokenize_sentences</a></span><span class='op'>(</span><span class='va'>x</span>, keep_first <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+        <span class='co'># Tokenize sentences keeping Shakespeare's punctuation</span>
+        <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>kgrams</span><span class='fu'>::</span><span class='fu'><a href='tokenize_sentences.html'>tokenize_sentences</a></span><span class='op'>(</span><span class='va'>x</span>, keep_first <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+        <span class='co'># Remove empty sentences</span>
+        <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>[</span><span class='va'>x</span> <span class='op'>!=</span> <span class='st'>""</span><span class='op'>]</span>
+        <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 <span class='op'>}</span>
 
 <span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'>kgram_freqs</span><span class='op'>(</span><span class='va'>con</span>, <span class='fl'>3</span>, <span class='va'>.preprocess</span>, <span class='va'>.tokenize_sentences</span>, batch_size <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>
