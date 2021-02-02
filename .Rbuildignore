@@ -8,3 +8,8 @@
 ^data-raw$
 Doxyfile
 cpp_docs/
+^\.circleci$
+^\.circleci/config\.yml$
+^README\.Rmd$
+^appveyor\.yml$
+^\.github$
