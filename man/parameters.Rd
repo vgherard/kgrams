@@ -3,24 +3,17 @@
 \name{parameters}
 \alias{parameters}
 \alias{param}
-\alias{param.language_model}
 \alias{param.kgram_freqs}
 \alias{param<-}
-\alias{param<-.kgram_freqs}
-\alias{param<-.language_model}
 \title{Language Model Parameters}
 \usage{
 param(object, which)
-
-\method{param}{language_model}(object, which)
 
 \method{param}{kgram_freqs}(object, which)
 
 param(object, which) <- value
 
-\method{param}{kgram_freqs}(object, which) <- value
-
-\method{param}{language_model}(object, which) <- value
+parameters(object)
 }
 \description{
 Get and set parameters of a language model

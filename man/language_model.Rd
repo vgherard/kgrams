@@ -4,7 +4,7 @@
 \alias{language_model}
 \title{k-gram Language Models}
 \usage{
-language_model(freqs, smoother = "ml", ...)
+language_model(freqs, smoother = "ml", N = param(freqs, "N"), ...)
 }
 \arguments{
 \item{freqs}{an object which stores the information required to build the
@@ -15,6 +15,10 @@ be applied to compute k-gram continuation probabilities. A list of
 available smoothers can be obtained with \link[kgrams]{smoothers}, and
 further information on a particular smoother through
 \link[kgrams]{smoother_info}}
+
+\item{N}{an integer. Maximum order of k-grams to use in the language
+model. This muss be less than or equal to the order of the underlying
+\code{kgram_freqs} object.}
 
 \item{...}{possible additional parameters required by the smoother.}
 }

@@ -6,19 +6,27 @@ using std::pair;
 //--------//----------------Smoother----------------//----------//
 
 
-std::string Smoother::generate_padding() {
-        std::string res = "";
+/// @brief model order setter
+void Smoother::set_N (size_t N) 
+{ 
+        if (N > f_.N()) throw std::domain_error(
+                "'N' cannot be larger than the order of the underlying" 
+                " k-gram frequency table."
+        );
+        N_ = N;
+        // Initialize prefix for begin of sentences
+        padding_ = "";
         for (size_t k = 0; k < N_ - 1; ++k) {
-                res += BOS_TOK + " ";
+                padding_ += BOS_TOK + " ";
         }
-        return res;
 }
 
 /// @brief truncate 'context' to last N - 1 words.
 std::string Smoother::truncate (std::string context) const {
+        if (N() == 1) return "";
         size_t n_words = 0;
         size_t start = std::string::npos;
-        while (n_words < N_ - 1) {
+        while (n_words < N() - 1) {
                 start = context.find_last_not_of(" ", start);
                 if (start == std::string::npos or start == 0) 
                         return context;
@@ -59,11 +67,11 @@ const {
                 // actual smoothers
                 log_prob += std::log(this->operator()(word, context));
                 // Update context: remove first word and append last
-                if (f_.N() > 2) {
+                if (N() > 2) {
                         pos = context.find_first_not_of(" ");
                         pos = context.find_first_of(" ", pos);
                         context = context.substr(pos) + " " + word;
-                } else if (f_.N() == 2) {
+                } else if (N() == 2) {
                         context = word;
                 }
         }
@@ -109,7 +117,7 @@ const {
                 backoff(context);
                 penalization *= lambda_;
                 if (context == "" and f_.query(word) == 0)
-                        return 1 / (double)(f_.V() + 2);
+                        return 1 / (double)(V() + 2);
         }
         return penalization * kgram_count / f_.query(context);
 }
@@ -130,7 +138,7 @@ const {
                 return -1;
         context = truncate(context);
         double num = f_.query(context + " " + word) + k_;
-        double den = f_.query(context) + k_ * (f_.V() + 2);
+        double den = f_.query(context) + k_ * (V() + 2);
         return num / den;
 }
 
@@ -164,13 +172,14 @@ double MLSmoother::operator() (const std::string & word, std::string context)
 /// fixed constant 'k'.
 /// @param f a kgramFreqs class object. k-gram frequency table from which
 /// "bare" k-gram counts are read off.
-KNSmoother::KNSmoother (const kgramFreqs & f, const double D) 
-        : Smoother(f), D_(D), 
-          l_continuations_(std::vector<FrequencyTable>(N_)),
-          r_continuations_(std::vector<FrequencyTable>(N_)),
-          lr_continuations_(std::vector<FrequencyTable>(N_ - 1))
+KNSmoother::KNSmoother (const kgramFreqs & f, size_t N, const double D) 
+        : Smoother(f, N), D_(D), 
+          l_continuations_(std::vector<FrequencyTable>(f.N())),
+          r_continuations_(std::vector<FrequencyTable>(f.N())),
+          lr_continuations_(std::vector<FrequencyTable>(f.N() - 1))
 {
-        // Retrieve continuation counts from k-gram counts
+        // Retrieve continuation counts from k-gram counts up to the maximum 
+        // order allowed (f.N())
         std::string kgram_code;
         size_t l_pos, r_pos;
         for (size_t k = 2; k <= f.N(); ++k) {
@@ -241,7 +250,7 @@ double KNSmoother::operator() (const std::string & word, std::string context)
                 // Compute BackoffFac(c)
                 double backoff_fac = den != 0 ? D_ * num / den : 1; 
                 // Compute ProbCont(c) (this is potentially > than num!)
-                double prob_cont = 1 / (double)(f_.V() + 2);
+                double prob_cont = 1 / (double)(V() + 2);
                 return prob_disc + backoff_fac * prob_cont;
         }
         
@@ -304,7 +313,7 @@ double KNSmoother::prob_cont (
         if (context == "") {
                 num = f_[1].size() - 1; // Remove BOS from seen words count.
                 double backoff_fac = den != 0 ? D_ * num / den : 1;
-                double prob_cont_backoff = 1 / (double)(f_.V() + 2);
+                double prob_cont_backoff = 1 / (double)(V() + 2);
                 // den == 0 is a silly case which should be barred from existing
                 return prob_cont_disc + backoff_fac * prob_cont_backoff;
         }

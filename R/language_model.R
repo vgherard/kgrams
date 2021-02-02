@@ -37,6 +37,9 @@ as.language_model.default <- function(object) {
 #'
 #' @param freqs an object which stores the information required to build the
 #' k-gram model. At present, necessarily a \code{kgram_freqs} object.
+#' @param N an integer. Maximum order of k-grams to use in the language
+#' model. This muss be less than or equal to the order of the underlying
+#' \code{kgram_freqs} object.
 #' @param smoother a character vector. Indicates the smoothing technique to
 #' be applied to compute k-gram continuation probabilities. A list of 
 #' available smoothers can be obtained with \link[kgrams]{smoothers}, and 
@@ -76,24 +79,31 @@ as.language_model.default <- function(object) {
 #' @name language_model
 
 #' @export
-language_model <- function(freqs, smoother = "ml", ...) {
+language_model <- function(freqs, smoother = "ml", N = param(freqs, "N"), ...) {
+        if (isFALSE(is.numeric(N) & 0 < N & N <= param(freqs, "N"))) {
+                msgs <- "'N' must be a positive integer less than or equal" %+%
+                        "to 'param(freqs, \"N\")'."
+                rlang::abort(message = msgs, class = "domain_error")
+        }
         validate_smoother(smoother, ...)
         UseMethod("language_model", freqs)
 }
 
 #' @export
-language_model.kgram_freqs <- function(freqs, smoother = "ml", ...) {
+language_model.kgram_freqs <- 
+        function(freqs, smoother = "ml", N = param(freqs, "N"), ...) 
+{
         args <- list(...)
         for (parameter in list_parameters(smoother)) 
                 if (is.null(args[[parameter$name]]))
                         args[[parameter$name]] <- parameter$default
         cpp_freqs <- attr(freqs, "cpp_obj")
         cpp_obj <- switch(smoother, 
-               sbo = new(SBOSmoother, cpp_freqs, args[["lambda"]]),
-               add_k = new(AddkSmoother, cpp_freqs, args[["k"]]),
-               laplace = new(AddkSmoother, cpp_freqs, 1.0),
-               ml = new(MLSmoother, cpp_freqs),
-               kn = new(KNSmoother, cpp_freqs, args[["D"]])
+               sbo = new(SBOSmoother, cpp_freqs, N, args[["lambda"]]),
+               add_k = new(AddkSmoother, cpp_freqs, N, args[["k"]]),
+               laplace = new(AddkSmoother, cpp_freqs, N, 1.0),
+               ml = new(MLSmoother, cpp_freqs, N),
+               kn = new(KNSmoother, cpp_freqs, N, args[["D"]])
         )
         new_language_model(cpp_obj, 
                            cpp_freqs, 

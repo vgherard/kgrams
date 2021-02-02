@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![CircleCI build
 status](https://circleci.com/gh/vgherard/kgrams.svg?style=svg)](https://circleci.com/gh/vgherard/kgrams)
 [![AppVeyor build

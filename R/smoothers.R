@@ -1,22 +1,22 @@
 #' k-gram Probability Smoothers
 #' 
-#' Informations on available k-gram continuation probability smoothers
+#' Information on available k-gram continuation probability smoothers.
 #'
 #' @author Valerio Gherardi
 #' @md
 #' 
-#' @param code a string. Code name of probability smoother.
+#' @param smoother a string. Code name of probability smoother.
 #' 
 #' @return \code{smoothers()} returns a character vector, the list of code names
 #' of probability smoothers available in \link[kgrams]{kgrams}. 
-#' \code{smoother_info(code)} returns \code{NULL} and prints some information on 
+#' \code{info(smoother)} returns \code{NULL} and prints some information on 
 #' the selected smoothing technique.
 #' @examples
 #' # List available smoothers
 #' smoothers()
 #' 
 #' # Get information on smoother "kn", i.e. Interpolated Kneser-Ney
-#' smoother_info("kn")
+#' info("kn")
 #' @name smoothers
 
 #' @rdname smoothers

@@ -16,34 +16,28 @@ class Smoother {
 protected:
         const kgramFreqs & f_; ///< @brief Underlying kgramFreqs object
         size_t N_; ///< @brief order of k-gram model
-        size_t V_; ///< @brief Size of dictionary
-        
-        /// @brief Begin-Of-Sentence padding
-        const std::string padding_;
+        std::string padding_; /// @brief Begin-Of-Sentence padding
         //--------Private methods--------//
         
-        /// @brief Initialize a buffer of prefixes for processing sentences
-        /// N.B. this is not the same as for kgramFreqs, as Smoother work in 
-        /// decoding (i.e. they use actual word tokens)
-        /// Moreover, this includes only the top-level (N-1)-gram prefix
-        std::string generate_padding();
         
         /// @brief truncate 'context' to last N - 1 words.
         std::string truncate (std::string context) const; // Smoothing.cpp
 public:
         /// @brief constructor
-        Smoother (const kgramFreqs & f) 
-                : f_(f), N_(f.N()), V_(f.V()), padding_(generate_padding()) {}
+        Smoother (const kgramFreqs & f, size_t N) : f_(f) { set_N(N); }
         
         /// @brief model order getter
         size_t N () const { return N_; }
         
+        /// @brief model order setter
+        void set_N (size_t); // Smoothing.cpp
+        
         /// @brief dict size getter
-        size_t V () const { return V_; }
+        size_t V () const { return f_.V(); }
         
         /// @brief check if word is in model's dictionary
         bool dict_contains (std::string word) const 
-                { return V_; }
+                { return f_.dict_contains(word); }
         
         /// @brief Return word-code from dictionary.
         /// @param word a string.
@@ -83,8 +77,8 @@ public:
         /// "bare" k-gram counts are read off.
         /// @param lambda positive number. Penalization in Stupid Backoff 
         /// recursion.
-        SBOSmoother (const kgramFreqs & f, const double lambda) 
-                : Smoother(f), lambda_(lambda) {}
+        SBOSmoother (const kgramFreqs & f, size_t N, const double lambda) 
+                : Smoother(f, N), lambda_(lambda) {}
         
         //--------Parameters getters/setters--------//
         double lambda() const { return lambda_; }
@@ -115,7 +109,8 @@ public:
         /// @param f a kgramFreqs class object. k-gram frequency table from which
         /// "bare" k-gram counts are read off.
         /// @param k positive number. Constant weight added to k-gram counts.
-        AddkSmoother (const kgramFreqs & f, const double k) : Smoother(f), k_(k) 
+        AddkSmoother (const kgramFreqs & f, size_t N, const double k) 
+                : Smoother(f, N), k_(k) 
         {}
         
         //--------Parameters getters/setters--------//
@@ -144,7 +139,7 @@ public:
         /// fixed constant 'k'.
         /// @param f a kgramFreqs class object. k-gram frequency table from which
         /// "bare" k-gram counts are read off.
-        MLSmoother (const kgramFreqs & f) : Smoother(f) {}
+        MLSmoother (const kgramFreqs & f, size_t N) : Smoother(f, N) {}
         
         //--------Probabilities--------//
         
@@ -182,7 +177,7 @@ class KNSmoother : public Smoother {
         double prob_cont (const std::string &, std::string, size_t) const;
 public:
         //--------Constructors--------//
-        KNSmoother (const kgramFreqs & f, const double D); // Smoothing.cpp
+        KNSmoother (const kgramFreqs & f, size_t N, const double D); // Smoothing.cpp
         
         //--------Parameters getters/setters--------//
         double D() const { return D_; }

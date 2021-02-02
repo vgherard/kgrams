@@ -10,23 +10,23 @@ smoothers()
 info(smoother)
 }
 \arguments{
-\item{code}{a string. Code name of probability smoother.}
+\item{smoother}{a string. Code name of probability smoother.}
 }
 \value{
 \code{smoothers()} returns a character vector, the list of code names
 of probability smoothers available in \link[kgrams]{kgrams}.
-\code{smoother_info(code)} returns \code{NULL} and prints some information on
+\code{info(smoother)} returns \code{NULL} and prints some information on
 the selected smoothing technique.
 }
 \description{
-Informations on available k-gram continuation probability smoothers
+Information on available k-gram continuation probability smoothers.
 }
 \examples{
 # List available smoothers
 smoothers()
 
 # Get information on smoother "kn", i.e. Interpolated Kneser-Ney
-smoother_info("kn")
+info("kn")
 }
 \author{
 Valerio Gherardi
