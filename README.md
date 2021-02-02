@@ -14,7 +14,9 @@ status](https://ci.appveyor.com/api/projects/status/github/vgherard/kgrams?branc
 coverage](https://codecov.io/gh/vgherard/kgrams/branch/main/graph/badge.svg)](https://codecov.io/gh/vgherard/kgrams?branch=main)
 <!-- badges: end -->
 
-The goal of kgrams is to …
+Efficient tools for training and tuning k-gram language models,
+including several probability smoothing methods, perplexity
+computations, random text generation and more.
 
 ## Installation
 

@@ -116,7 +116,7 @@
   <span class='va'>text</span>,
   <span class='va'>model</span>,
   .preprocess <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".preprocess"</span><span class='op'>)</span>,
-  .tokenize_senteces <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
+  .tokenize_sentences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -125,7 +125,7 @@
   <span class='va'>text</span>,
   <span class='va'>model</span>,
   .preprocess <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".preprocess"</span><span class='op'>)</span>,
-  .tokenize_senteces <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
+  .tokenize_sentences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -134,7 +134,7 @@
   <span class='va'>text</span>,
   <span class='va'>model</span>,
   .preprocess <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".preprocess"</span><span class='op'>)</span>,
-  .tokenize_senteces <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
+  .tokenize_sentences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
   batch_size <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
@@ -160,16 +160,20 @@ returning a character vector as output. Preprocessing transformation
 applied to input before computing perplexity.</p></td>
     </tr>
     <tr>
-      <th>batch_size</th>
-      <td><p>a length one positive integer or <code>NULL</code>.
-Size of text batches when reading text from a <code>connection</code>.
-If <code>NULL</code>, all input text is processed in a single batch.</p></td>
-    </tr>
-    <tr>
       <th>.tokenize_sentences</th>
       <td><p>a function taking a character vector as input and
 returning a character vector as output. Optional sentence tokenization step
 applied before computing perplexity.</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>further arguments passed to or from other methods.</p></td>
+    </tr>
+    <tr>
+      <th>batch_size</th>
+      <td><p>a length one positive integer or <code>NULL</code>.
+Size of text batches when reading text from a <code>connection</code>.
+If <code>NULL</code>, all input text is processed in a single batch.</p></td>
     </tr>
     </table>
 

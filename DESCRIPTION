@@ -1,5 +1,5 @@
 Package: kgrams
-Title: k-grams and k-gram Language Models in R
+Title: k-grams, Language Models, and All That
 Version: 0.0.0.9000
 Authors@R: 
     person(given = "Valerio",
@@ -7,7 +7,8 @@ Authors@R:
            role = c("aut", "cre"),
            email = "vgherard@sissa.it",
            comment = c(ORCID = "0000-0002-8215-3013"))
-Description: Build k-gram language models efficiently with an intuitive interface.
+Description: 
+        Efficient tools for training and tuning k-gram language models, including several probability smoothing methods, perplexity computations, random text generation and more.
 License: GPL (>= 3) + file LICENSE
 Encoding: UTF-8
 LazyData: true
