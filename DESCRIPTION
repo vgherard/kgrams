@@ -20,3 +20,7 @@ Imports:
 SystemRequirements: C++11
 Depends: 
     R (>= 3.5)
+Suggests: 
+    testthat (>= 3.0.0),
+    covr
+Config/testthat/edition: 3

@@ -13,3 +13,4 @@ cpp_docs/
 ^README\.Rmd$
 ^appveyor\.yml$
 ^\.github$
+^codecov\.yml$
