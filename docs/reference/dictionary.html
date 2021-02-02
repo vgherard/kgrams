@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Word dictionaries — dictionary" />
-<meta property="og:description" content="Construct or coerce to a dictionary." />
+<meta property="og:description" content="Construct or coerce to and from a dictionary." />
 
 
 
@@ -109,7 +109,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Construct or coerce to a dictionary.</p>
+    <p>Construct or coerce to and from a dictionary.</p>
     </div>
 
     <pre class="usage"><span class='fu'>dictionary</span><span class='op'>(</span><span class='va'>text</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -141,7 +141,10 @@
 <span class='fu'>as.dictionary</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
 
 <span class='co'># S3 method for character</span>
-<span class='fu'>as.dictionary</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
+<span class='fu'>as.dictionary</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span>
+
+<span class='co'># S3 method for kgrams_dictionary</span>
+<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>x</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,17 +192,26 @@ batch.</p></td>
       <th>object</th>
       <td><p>an object to be coerced to dictionary.</p></td>
     </tr>
+    <tr>
+      <th>x</th>
+      <td><p>a <code>dictionary</code>.</p></td>
+    </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>dictionary</code>.</p>
+    <p>A <code>dictionary</code> for <code>dictionary()</code> and
+<code>as.dictionary()</code>, a character vector for the <code><a href='https://rdrr.io/r/base/character.html'>as.character()</a></code>
+method.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>These generic functions are used to build dictionaries from a text
-source, or to coerce other formats to <code>dictionary</code>. By now, the only
-non-trivial coercible type is <code>character</code>, in which case each entry
-of the input vector is considered as a single word.</p>
+source, or to coerce other formats to <code>dictionary</code>, and from a
+<code>dictionary</code> to a character vector. By now, the only
+non-trivial type coercible to <code>dictionary</code> is <code>character</code>,
+in which case each entry of the input vector is considered as a single word.
+Coercion from <code>dictionary</code> to <code>character</code> returns the list of
+words included in the dictionary as a regular character vector.</p>
 <p>Dictionaries can be <em>built</em> from text coming either directly from a
 character vector, or from a connection. The second option is useful if one
 wants to avoid loading the full text corpus in physical memory,
@@ -221,6 +233,23 @@ raises an error.</p>
 
     <p>Valerio Gherardi</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Building a dictionary from Shakespeare's "Much Ado About Nothing"</span>
+
+<span class='va'>dict</span> <span class='op'>&lt;-</span> <span class='fu'>dictionary</span><span class='op'>(</span><span class='va'>much_ado</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/base/length.html'>length</a></span><span class='op'>(</span><span class='va'>dict</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 3046</div><div class='input'><span class='fu'><a href='query.html'>query</a></span><span class='op'>(</span><span class='va'>dict</span>, <span class='st'>"leonato"</span><span class='op'>)</span> <span class='co'># TRUE</span>
+</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'><a href='query.html'>query</a></span><span class='op'>(</span><span class='va'>dict</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"thy"</span>, <span class='st'>"thou"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># c(TRUE, TRUE)</span>
+</div><div class='output co'>#&gt; [1] TRUE TRUE</div><div class='input'><span class='fu'><a href='query.html'>query</a></span><span class='op'>(</span><span class='va'>dict</span>, <span class='st'>"smartphones"</span><span class='op'>)</span> <span class='co'># FALSE</span>
+</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'>
+<span class='co'># Getting list of words as regular character vector</span>
+<span class='va'>words</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span><span class='op'>(</span><span class='va'>dict</span><span class='op'>)</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span><span class='va'>words</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "___EOS___" "much"      "ado"       "about"     "nothing"   ":"        </div><div class='input'>
+<span class='co'># Building a dictionary from a list of words</span>
+<span class='va'>dict</span> <span class='op'>&lt;-</span> <span class='fu'>as.dictionary</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"i"</span>, <span class='st'>"the"</span>, <span class='st'>"a"</span><span class='op'>)</span><span class='op'>)</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

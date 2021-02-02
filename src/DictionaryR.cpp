@@ -29,6 +29,13 @@ double DictionaryR::make_word_heap(
         return tot_words;
 }
 
+CharacterVector DictionaryR::as_character() const {
+        size_t V = length();
+        CharacterVector res(V);
+        for(size_t i = 0; i < V; ++i)
+                res[i] = word(std::to_string(i));
+        return res;
+}
 
 LogicalVector DictionaryR::query(CharacterVector word) const
 {
@@ -101,6 +108,7 @@ RCPP_MODULE(Dictionary) {
                 .derives<Dictionary>("___Dictionary")
                 .constructor()
                 .constructor<CharacterVector>()
+                .const_method("as_character", &DictionaryR::as_character)
                 .const_method("query", &DictionaryR::query)
                 .method("insert", &DictionaryR::insertR)
                 .method("insert_cover", &DictionaryR::insert_cover)

@@ -5,9 +5,6 @@
 #include <queue>
 #include <algorithm>
 #include <Rcpp.h>
-using namespace Rcpp;
-
-
 
 class DictionaryR : public Dictionary {
         struct WordCount {
@@ -26,13 +23,15 @@ class DictionaryR : public Dictionary {
         
 public:
         DictionaryR () : Dictionary() {}
-        DictionaryR (CharacterVector word_list) 
+        DictionaryR (Rcpp::CharacterVector word_list) 
                 : Dictionary() { insertR(word_list); }
         DictionaryR (const Dictionary & dict) : Dictionary(dict) {}
         
-        LogicalVector query(CharacterVector word) const;
+        Rcpp::CharacterVector as_character() const;
         
-        void insertR (CharacterVector word_list);
+        Rcpp::LogicalVector query(Rcpp::CharacterVector word) const;
+        
+        void insertR (Rcpp::CharacterVector word_list);
         void insert_cover(Rcpp::CharacterVector text, double target);
         void insert_n(Rcpp::CharacterVector text, size_t n);
         void insert_above(Rcpp::CharacterVector text, size_t thresh);

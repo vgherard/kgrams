@@ -4,7 +4,7 @@ new_dictionary <- function(cpp_obj) {
 
 #' Word dictionaries
 #'
-#' Construct or coerce to a dictionary.
+#' Construct or coerce to and from a dictionary.
 #'
 #' @author Valerio Gherardi
 #' @md
@@ -28,12 +28,18 @@ new_dictionary <- function(cpp_obj) {
 #' \code{connection}. If \code{NULL}, all input text is processed in a single 
 #' batch.
 #' @param ... further arguments passed to or from other methods.
+#' @param x a \code{dictionary}.
 #' 
-#' @return A \code{dictionary}.
+#' @return A \code{dictionary} for \code{dictionary()} and 
+#' \code{as.dictionary()}, a character vector for the \code{as.character()}
+#' method.
 #' @details These generic functions are used to build dictionaries from a text
-#' source, or to coerce other formats to \code{dictionary}. By now, the only 
-#' non-trivial coercible type is \code{character}, in which case each entry 
-#' of the input vector is considered as a single word.
+#' source, or to coerce other formats to \code{dictionary}, and from a 
+#' \code{dictionary} to a character vector. By now, the only 
+#' non-trivial type coercible to \code{dictionary} is \code{character}, 
+#' in which case each entry of the input vector is considered as a single word.
+#' Coercion from \code{dictionary} to \code{character} returns the list of
+#' words included in the dictionary as a regular character vector.
 #' 
 #' Dictionaries can be \emph{built} from text coming either directly from a 
 #' character vector, or from a connection. The second option is useful if one 
@@ -54,6 +60,22 @@ new_dictionary <- function(cpp_obj) {
 #' \emph{Only one of these constraints can be applied at a time}, 
 #' so that specifying more than one of \code{size}, \code{cov} or \code{thresh} 
 #' raises an error. 
+#' 
+#' @examples 
+#' # Building a dictionary from Shakespeare's "Much Ado About Nothing"
+#' 
+#' dict <- dictionary(much_ado)
+#' length(dict)
+#' query(dict, "leonato") # TRUE
+#' query(dict, c("thy", "thou")) # c(TRUE, TRUE)
+#' query(dict, "smartphones") # FALSE
+#' 
+#' # Getting list of words as regular character vector
+#' words <- as.character(dict)
+#' head(words)
+#' 
+#' # Building a dictionary from a list of words
+#' dict <- as.dictionary(c("i", "the", "a"))
 #' 
 #' @name dictionary
 NULL
@@ -142,6 +164,11 @@ as.dictionary.character <- function(object) {
         cpp_obj <- new(Dictionary, object)
         return(new_dictionary(cpp_obj))
 }
+
+#' @rdname dictionary
+#' @export
+as.character.kgrams_dictionary <- function(x, ...)
+        return( attr(x, "cpp_obj")$as_character() )
 
 #' @export
 length.kgrams_dictionary <- function(x)

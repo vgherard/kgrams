@@ -7,6 +7,7 @@
 \alias{as.dictionary}
 \alias{as.dictionary.kgrams_dictionary}
 \alias{as.dictionary.character}
+\alias{as.character.kgrams_dictionary}
 \title{Word dictionaries}
 \usage{
 dictionary(text, ...)
@@ -35,6 +36,8 @@ as.dictionary(object)
 \method{as.dictionary}{kgrams_dictionary}(object)
 
 \method{as.dictionary}{character}(object)
+
+\method{as.character}{kgrams_dictionary}(x, ...)
 }
 \arguments{
 \item{text}{a character vector, a connection or missing/\code{NULL}.
@@ -63,18 +66,25 @@ Size of text batches when reading text from a \code{file} or a generic
 batch.}
 
 \item{object}{an object to be coerced to dictionary.}
+
+\item{x}{a \code{dictionary}.}
 }
 \value{
-A \code{dictionary}.
+A \code{dictionary} for \code{dictionary()} and
+\code{as.dictionary()}, a character vector for the \code{as.character()}
+method.
 }
 \description{
-Construct or coerce to a dictionary.
+Construct or coerce to and from a dictionary.
 }
 \details{
 These generic functions are used to build dictionaries from a text
-source, or to coerce other formats to \code{dictionary}. By now, the only
-non-trivial coercible type is \code{character}, in which case each entry
-of the input vector is considered as a single word.
+source, or to coerce other formats to \code{dictionary}, and from a
+\code{dictionary} to a character vector. By now, the only
+non-trivial type coercible to \code{dictionary} is \code{character},
+in which case each entry of the input vector is considered as a single word.
+Coercion from \code{dictionary} to \code{character} returns the list of
+words included in the dictionary as a regular character vector.
 
 Dictionaries can be \emph{built} from text coming either directly from a
 character vector, or from a connection. The second option is useful if one
@@ -95,6 +105,23 @@ argument; or (iii) minimum word count threshold, \code{thresh} argument.
 \emph{Only one of these constraints can be applied at a time},
 so that specifying more than one of \code{size}, \code{cov} or \code{thresh}
 raises an error.
+}
+\examples{
+# Building a dictionary from Shakespeare's "Much Ado About Nothing"
+
+dict <- dictionary(much_ado)
+length(dict)
+query(dict, "leonato") # TRUE
+query(dict, c("thy", "thou")) # c(TRUE, TRUE)
+query(dict, "smartphones") # FALSE
+
+# Getting list of words as regular character vector
+words <- as.character(dict)
+head(words)
+
+# Building a dictionary from a list of words
+dict <- as.dictionary(c("i", "the", "a"))
+
 }
 \author{
 Valerio Gherardi
