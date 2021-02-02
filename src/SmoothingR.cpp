@@ -49,7 +49,7 @@ public:
 
 class KNSmootherR : public KNSmoother {
 public:
-        KNSmootherR (const kgramFreqsR & f, size_t N, const double D) 
+        KNSmootherR (kgramFreqsR & f, size_t N, const double D) 
                 : KNSmoother(f, N, D) {}
         NumericVector probability (CharacterVector word, std::string context) 
         { return probability_generic(this, word, context); }
@@ -108,7 +108,7 @@ RCPP_MODULE (Smoothing) {
         ;
         class_<KNSmootherR>("KNSmoother")
                 .derives<KNSmoother>("___KNSmoother")
-                .constructor<const kgramFreqsR&, size_t, const double>()
+                .constructor<kgramFreqsR&, size_t, const double>()
                 .method("probability", &KNSmootherR::probability)
                 .method("probability_sentence", &KNSmootherR::probability_sentence)
                 .method("log_probability_sentence", &KNSmootherR::log_probability_sentence)

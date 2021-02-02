@@ -94,4 +94,5 @@ void kgramFreqs::process_sentences(
         add_BOS_counts(sentences.size());
         for (const std::string & sentence : sentences) 
                 process_sentence(sentence, fixed_dictionary);
+        update_satellites();
 }

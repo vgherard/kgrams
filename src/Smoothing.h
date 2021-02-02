@@ -6,6 +6,7 @@
 #define SMOOTHING_H
 
 #include "kgramFreqs.h"
+#include "Satellite.h"
 #include <cmath>
 #include <limits>
 #include <stdexcept>
@@ -153,31 +154,48 @@ class KNSmoother : public Smoother {
         //--------Local aliases--------//
         using FrequencyTable = std::unordered_map<std::string, size_t>;
 
-        //--------Private variables--------//
-        double D_; ///< @brief Discount 
+        class KNFreqs : public Satellite {
+                const kgramFreqs & f_;
+                /// @brief Left continuation counts for Kneser-Ney smoothing
+                std::vector<FrequencyTable> l_;
+                /// @brief Right continuation counts for Kneser-Ney smoothing
+                std::vector<FrequencyTable> r_;
+                /// @brief Two-sided continuation counts for Kneser-Ney smoothing
+                std::vector<FrequencyTable> lr_;
+        public:
+                KNFreqs (const kgramFreqs & f) 
+                        : f_(f), l_(f_.N()), r_(f_.N()), lr_(f_.N() - 1) 
+                                { update(); }
+                void update ();
+                
+                const double r(size_t order, std::string kgram) const {
+                        auto it = r_[order].find(kgram);
+                        return it != r_[order].end() ? it->second : 0; 
+                }
+                const double l(size_t order, std::string kgram) const {
+                        auto it = l_[order].find(kgram);
+                        return it != l_[order].end() ? it->second : 0; 
+                }
+                const double lr(size_t order, std::string kgram) const {
+                        auto it = lr_[order].find(kgram);
+                        return it != lr_[order].end() ? it->second : 0; 
+                }
+        };
         
-        /// @brief Left continuation counts for Kneser-Ney smoothing
-        std::vector<FrequencyTable> l_continuations_;
-        /// @brief Right continuation counts for Kneser-Ney smoothing
-        std::vector<FrequencyTable> r_continuations_;
-        /// @brief Two-sided continuation counts for Kneser-Ney smoothing
-        std::vector<FrequencyTable> lr_continuations_;
+        //--------Private variables--------//
+        double D_; ///< @brief Discount
+        KNFreqs knf_; ///< @brief Kneser-Ney continuation counts
         
         //--------Private methods--------//
-        // Remove one word to the left of kgram_code. Defined in Smoothing.cpp
-        std::string pop_l (std::string kgram_code) const;
-        // Remove one word to the right of kgram_code. Defined in Smoothing.cpp
-        std::string pop_r (std::string kgram_code) const;
-        // Remove one word to the left and one to the right of kgram_code. 
-        // Defined in Smoothing.cpp
-        std::string pop_lr (const std::string & kgram_code) const;
+        
         
         // Compute continuation probability of word in given context
         // k-gram order is passed 
         double prob_cont (const std::string &, std::string, size_t) const;
 public:
         //--------Constructors--------//
-        KNSmoother (const kgramFreqs & f, size_t N, const double D); // Smoothing.cpp
+        KNSmoother (kgramFreqs & f, size_t N, const double D) 
+                : Smoother(f, N), D_(D), knf_(f) { f.add_satellite(&knf_); }
         
         //--------Parameters getters/setters--------//
         double D() const { return D_; }

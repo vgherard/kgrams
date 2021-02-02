@@ -13,6 +13,7 @@
 #include "WordStream.h"
 #include "CircularBuffer.h"
 #include "special_tokens.h"
+#include "Satellite.h"
 
 /// @class kgramFreqs
 /// @brief Store k-gram frequency counts in hash tables 
@@ -45,6 +46,11 @@ class kgramFreqs {
         const CircularBuffer<std::string> padding_;
         //--------Private methods--------//
         
+        /// @brief k-gram frequency satellites
+        /// @details Objects which should be updated after new sentences are
+        /// processed (e.g. continuation counts of Kneser-Ney smoother)
+        std::vector<Satellite *> satellites_;
+        
         /// @brief Initialize a buffer of prefixes for processing sentences
         CircularBuffer<std::string> generate_padding();
         
@@ -59,6 +65,9 @@ protected:
         void process_sentence (const std::string &, 
                                bool fixed_dictionary = false
         ); // kgramFreqs.cpp
+        
+        void update_satellites() 
+        { for (auto satellite : satellites_) satellite->update();}
         
 public:
         //--------Constructors--------//
@@ -84,6 +93,16 @@ public:
         /// @param dict  a Dictionary.
         kgramFreqs(size_t N, const Dictionary & dict)
                 : kgramFreqs(N) { dict_ = Dictionary(dict); }
+        
+        /// @brief Copy constructor dropping satellites
+        /// @param other a kgramFreqs object
+        kgramFreqs(const kgramFreqs & other)
+                : N_(other.N_), 
+                  freqs_(other.freqs_), 
+                  dict_(other.dict_),
+                  padding_(other.padding_), 
+                  satellites_(0)
+        {}
         
         //--------Process k-gram counts--------//
         /// @brief store k-gram counts from a list of sentences.
@@ -137,6 +156,8 @@ public:
         size_t V() const { return dict_.length(); }
         
         const FrequencyTable & operator[] (size_t k) const { return freqs_[k]; }
+        
+        void add_satellite(Satellite * s) { satellites_.push_back(s); }
         
         /// @brief Return Dictionary.
         Dictionary dictionary() const { return dict_; };

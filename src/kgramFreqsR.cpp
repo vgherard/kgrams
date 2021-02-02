@@ -35,6 +35,7 @@ void kgramFreqsR::process_sentencesR(
                 sentence = *it;
                 process_sentence(sentence, fixed_dictionary);
                 }
+        update_satellites();
 }
 
 RCPP_EXPOSED_CLASS(Dictionary);

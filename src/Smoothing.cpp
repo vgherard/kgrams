@@ -172,18 +172,20 @@ double MLSmoother::operator() (const std::string & word, std::string context)
 /// fixed constant 'k'.
 /// @param f a kgramFreqs class object. k-gram frequency table from which
 /// "bare" k-gram counts are read off.
-KNSmoother::KNSmoother (const kgramFreqs & f, size_t N, const double D) 
-        : Smoother(f, N), D_(D), 
-          l_continuations_(std::vector<FrequencyTable>(f.N())),
-          r_continuations_(std::vector<FrequencyTable>(f.N())),
-          lr_continuations_(std::vector<FrequencyTable>(f.N() - 1))
+void KNSmoother::KNFreqs::update () 
 {
+        // Reinitialize l_, r_, and lr_... is it possible to do something more
+        // clever?
+        l_ = std::vector<FrequencyTable>(f_.N());
+        r_ = std::vector<FrequencyTable>(f_.N());
+        lr_ = std::vector<FrequencyTable>(f_.N());
+        
         // Retrieve continuation counts from k-gram counts up to the maximum 
         // order allowed (f.N())
         std::string kgram_code;
         size_t l_pos, r_pos;
-        for (size_t k = 2; k <= f.N(); ++k) {
-                const FrequencyTable & kgram_codes(f[k]);
+        for (size_t k = 2; k <= f_.N(); ++k) {
+                const FrequencyTable & kgram_codes(f_[k]);
                 auto itend = kgram_codes.end();
                 for (auto it = kgram_codes.begin(); it != itend; it++) {
                         // kgram_code is always of the form "n_1 n_2 ... n_k"
@@ -195,16 +197,15 @@ KNSmoother::KNSmoother (const kgramFreqs & f, size_t N, const double D)
                         if (kgram_code.substr(r_pos + 1) == BOS_IND)
                                 continue;
                         l_pos = kgram_code.find_first_of(" ") + 1;
-                        l_continuations_[k - 1][kgram_code.substr(l_pos)]++;
+                        l_[k - 1][kgram_code.substr(l_pos)]++;
                         
-                        r_continuations_[k - 1][kgram_code.substr(0, r_pos)]++;
-                        if (k == 2) { lr_continuations_[0][""]++; continue; }
-                        lr_continuations_[k - 2][ 
+                        r_[k - 1][kgram_code.substr(0, r_pos)]++;
+                        if (k == 2) { lr_[0][""]++; continue; }
+                        lr_[k - 2][ 
                         kgram_code.substr(l_pos, r_pos - l_pos)
                         ]++;
                 }
         }
-        
 }
 
 /// @brief Return Kneser-Ney continuation probability of a word
@@ -257,9 +258,8 @@ double KNSmoother::operator() (const std::string & word, std::string context)
         // Compute BackoffFac(c)
         // overwrite num which is no longer necessary
         auto p = f_.kgram_code(context); // this is a pair {order, code}
-        auto it = r_continuations_[p.first].find(p.second);
-        num = it != r_continuations_[p.first].end() ? it->second : 0; 
-        double backoff = den != 0 ? D_ * num / den : 1;
+        double backoff = den != 0 ? 
+                D_ * knf_.r(p.first, p.second) / den : 1;
         
         // Backoff directly on the k-gram code (stored in p.second)
         // overwrite 'context' with backed off context CODE
@@ -294,16 +294,11 @@ double KNSmoother::prob_cont (
         // where V is the number of words in the dictionary (without <BOS>)
         
         // Compute denominator of ProbContDisc(w|c)
-        auto it = lr_continuations_[order - 1].find(context);
-        auto itend = lr_continuations_[order - 1].end();
-        double den = it != itend ? it->second : 0;
+        double den = knf_.lr(order - 1, context);
         
         // Compute numerator of ProbContDisc(w|c)
-        it = l_continuations_[order].find(
-                context != "" ? context + " " + word : word
-        );
-        itend = l_continuations_[order].end();
-        double num = it != itend ? it->second - D_ : 0;
+        double num = 
+                knf_.l(order, context != "" ? context + " " + word : word) - D_;
         num = num > 0 ? num : 0;
         
         // Compute ProbContDisc(w|c)
@@ -319,10 +314,8 @@ double KNSmoother::prob_cont (
         }
         
         // Compute BackoffFac(c)
-        it = r_continuations_[order - 1].find(context);
-        itend = r_continuations_[order - 1].end();
-        num = it != itend ? it->second : 0; 
-        double backoff_fac = den != 0 ? D_ * num / den : 1;
+        double backoff_fac = den != 0 ? 
+                D_ * knf_.r(order - 1, context) / den : 1;
         
         // Backoff the k-gram code
         size_t pos = context.find_first_of(" ");
