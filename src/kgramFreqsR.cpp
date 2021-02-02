@@ -43,8 +43,8 @@ RCPP_EXPOSED_CLASS(kgramFreqsR);
 
 RCPP_MODULE(kgramFreqs) {
         class_<kgramFreqs>("___kgramFreqs")
-                .const_method("N", &kgramFreqs::N)
-                .const_method("V", &kgramFreqs::V)
+                .property("N", &kgramFreqs::N)
+                .property("V", &kgramFreqs::V)
         ;
         
         class_<kgramFreqsR>("kgramFreqs")

@@ -185,8 +185,8 @@ public:
         KNSmoother (const kgramFreqs & f, const double D); // Smoothing.cpp
         
         //--------Parameters getters/setters--------//
-        double discount() const { return D_; }
-        void set_discount(double D) {
+        double D() const { return D_; }
+        void set_D (double D) {
                 if (D < 0 or D > 1)
                         throw std::domain_error(
                                         "Discount must be between 0 and 1."

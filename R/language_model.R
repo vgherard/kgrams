@@ -84,7 +84,7 @@ language_model <- function(freqs, smoother = "ml", ...) {
 #' @export
 language_model.kgram_freqs <- function(freqs, smoother = "ml", ...) {
         args <- list(...)
-        for (parameter in parameters(smoother)) 
+        for (parameter in list_parameters(smoother)) 
                 if (is.null(args[[parameter$name]]))
                         args[[parameter$name]] <- parameter$default
         cpp_freqs <- attr(freqs, "cpp_obj")

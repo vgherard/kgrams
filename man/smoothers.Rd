@@ -2,12 +2,12 @@
 % Please edit documentation in R/smoothers.R
 \name{smoothers}
 \alias{smoothers}
-\alias{smoother_info}
+\alias{info}
 \title{k-gram Probability Smoothers}
 \usage{
 smoothers()
 
-smoother_info(code)
+info(smoother)
 }
 \arguments{
 \item{code}{a string. Code name of probability smoother.}

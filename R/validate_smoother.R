@@ -1,5 +1,4 @@
-# check if k-gram probability smoother is correctly specified
-validate_smoother <- function(smoother, ...) {
+assert_exists_smoother <- function(smoother) {
         # Check that smoother is valid
         if (isFALSE(is.character(smoother) & smoother %in% smoothers()))
                 rlang::abort(
@@ -8,10 +7,14 @@ validate_smoother <- function(smoother, ...) {
                                     i = "List of available smoothers:",
                                     paste(smoothers(), collapse = ", "))
                 )
-        
+}
+
+# check if k-gram probability smoother is correctly specified
+validate_smoother <- function(smoother, ...) {
+        assert_exists_smoother(smoother)
         args <- list(...)
         # Retrieve smoother parameters
-        parameters <- parameters(smoother)
+        parameters <- list_parameters(smoother)
         
         # Check presence or validity of various arguments
         for (parameter in parameters) {
@@ -50,4 +53,36 @@ smoother_domain_error <- function(sm, name, expected) {
                         paste0(name, ": ", expected)
                         )
                 )
+}
+
+# list of parameters for the various smoothers
+list_parameters <- function(smoother) {
+        switch(smoother,
+               sbo = list(
+                       list(name = "lambda",
+                            expected = "a number between zero and one",
+                            default = 0.4,
+                            validator = function(x)
+                                    isTRUE(is.numeric(x) & 0 < x & x < 1)
+                       )
+               ),
+               add_k = list(
+                       list(name = "k",
+                            expected = "a positive number",
+                            default = 1.0,  
+                            validator = function(x)
+                                    isTRUE(is.numeric(x) & 0 < x)
+                       )
+               ),
+               laplace = list(),
+               ml = list(),
+               kn = list(
+                       list(name = "D",
+                            expected = "a number between zero and one",
+                            default = 0.75,
+                            validator = function(x)
+                                    isTRUE(is.numeric(x) & 0 < x & x < 1)
+                       )
+               )
+        )
 }

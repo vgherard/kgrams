@@ -64,6 +64,8 @@ public:
 RCPP_EXPOSED_CLASS(kgramFreqsR)
 RCPP_MODULE (Smoothing) {
         class_<Smoother>("___Smoother")
+                .property("N", &Smoother::N)
+                .property("V", &Smoother::V)
         ;
         class_<SBOSmoother>("___SBOSmoother")
                 .derives<Smoother>("___Smoother")
@@ -78,7 +80,7 @@ RCPP_MODULE (Smoothing) {
         ;
         class_<KNSmoother>("___KNSmoother")
                 .derives<Smoother>("___Smoother")
-                .property("discount", &KNSmoother::discount, &KNSmoother::set_discount)
+                .property("D", &KNSmoother::D, &KNSmoother::set_D)
         ;
         class_<SBOSmootherR>("SBOSmoother")
                 .derives<SBOSmoother>("___SBOSmoother")
