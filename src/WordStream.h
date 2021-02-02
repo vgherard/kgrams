@@ -18,8 +18,9 @@ public:
                 : str_(str),
                   len_(str.length()),
                   start_(first_not(" ")),
-                  eos_(start_ >= len_),
-                  end_(eos_ ? len_ : 0)
+                  //eos_(start_ >= len_),
+                  eos_(false),
+                  end_(start_ >= len_ ? len_ : 0)
         {}
         // Disallow initialization by rvalue reference!
         WordStream(const std::string &&) = delete;

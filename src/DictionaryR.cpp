@@ -32,8 +32,8 @@ double DictionaryR::make_word_heap(
 CharacterVector DictionaryR::as_character() const {
         size_t V = length();
         CharacterVector res(V);
-        for(size_t i = 0; i < V; ++i)
-                res[i] = word(std::to_string(i));
+        for(size_t i = 1; i <= V; ++i)
+                res[i - 1] = word(std::to_string(i));
         return res;
 }
 
