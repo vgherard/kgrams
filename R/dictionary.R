@@ -48,7 +48,7 @@ str.dictionary <- function(object, ...) summary(object)
 #' @param x a \code{dictionary}.
 #' 
 #' @return A \code{dictionary} for \code{dictionary()} and 
-#' \code{as.dictionary()}, a character vector for the \code{as.character()}
+#' \code{as_dictionary()}, a character vector for the \code{as.character()}
 #' method.
 #' @details These generic functions are used to build dictionaries from a text
 #' source, or to coerce other formats to \code{dictionary}, and from a 
@@ -92,7 +92,7 @@ str.dictionary <- function(object, ...) summary(object)
 #' head(words)
 #' 
 #' # Building a dictionary from a list of words
-#' dict <- as.dictionary(c("i", "the", "a"))
+#' dict <- as_dictionary(c("i", "the", "a"))
 #' 
 #' @name dictionary
 NULL
@@ -169,15 +169,15 @@ dict_insert_task <- function(cpp_obj, .preprocess, size, cov, thresh) {
 
 #' @rdname dictionary
 #' @export       
-as.dictionary <- function(object) UseMethod("as.dictionary", object)
+as_dictionary <- function(object) UseMethod("as_dictionary", object)
 
 #' @rdname dictionary
 #' @export
-as.dictionary.kgrams_dictionary <- function(object) return(object)
+as_dictionary.kgrams_dictionary <- function(object) return(object)
 
 #' @rdname dictionary
 #' @export
-as.dictionary.character <- function(object) {
+as_dictionary.character <- function(object) {
         cpp_obj <- new(Dictionary, object)
         return(new_dictionary(cpp_obj))
 }

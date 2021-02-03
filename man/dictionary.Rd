@@ -4,9 +4,9 @@
 \alias{dictionary}
 \alias{dictionary.character}
 \alias{dictionary.connection}
-\alias{as.dictionary}
-\alias{as.dictionary.kgrams_dictionary}
-\alias{as.dictionary.character}
+\alias{as_dictionary}
+\alias{as_dictionary.kgrams_dictionary}
+\alias{as_dictionary.character}
 \alias{as.character.kgrams_dictionary}
 \title{Word dictionaries}
 \usage{
@@ -31,11 +31,11 @@ dictionary(text, ...)
   ...
 )
 
-as.dictionary(object)
+as_dictionary(object)
 
-\method{as.dictionary}{kgrams_dictionary}(object)
+\method{as_dictionary}{kgrams_dictionary}(object)
 
-\method{as.dictionary}{character}(object)
+\method{as_dictionary}{character}(object)
 
 \method{as.character}{kgrams_dictionary}(x, ...)
 }
@@ -71,7 +71,7 @@ batch.}
 }
 \value{
 A \code{dictionary} for \code{dictionary()} and
-\code{as.dictionary()}, a character vector for the \code{as.character()}
+\code{as_dictionary()}, a character vector for the \code{as.character()}
 method.
 }
 \description{
@@ -120,7 +120,7 @@ words <- as.character(dict)
 head(words)
 
 # Building a dictionary from a list of words
-dict <- as.dictionary(c("i", "the", "a"))
+dict <- as_dictionary(c("i", "the", "a"))
 
 }
 \author{

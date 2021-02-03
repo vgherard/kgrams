@@ -11,7 +11,7 @@ test_that("probabilities sum to one in simple case", {
                 args <- sapply(pars, function(x) x$default)
                 names(args) <- sapply(pars, function(x) x$name)
                 FUN <- function(...) language_model(f, smoother, ...)
-                model <- do.call(FUN, as.list(args))
+                model <- do.call(FUN, as_list(args))
                 for (context in contexts) {
                         p <- probability(all_words %|% context, model)
                         sum_prob <- sum(p)
@@ -45,7 +45,7 @@ test_that("probabilities sum to one in complex case", {
                 args <- sapply(pars, function(x) x$default)
                 names(args) <- sapply(pars, function(x) x$name)
                 FUN <- function(...) language_model(f, smoother, ...)
-                model <- do.call(FUN, as.list(args))
+                model <- do.call(FUN, as_list(args))
                 for (i in 1:N) {
                         param(model, "N") <- i
                         for (context in contexts) {

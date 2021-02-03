@@ -377,7 +377,7 @@ kgram_freqs_init <- function(
 {
         if (is.null(dictionary))
                 dictionary <- dictionary()
-        dictionary <- as.dictionary(dictionary)
+        dictionary <- as_dictionary(dictionary)
         cpp_obj <- new(kgramFreqs, N, attr(dictionary, "cpp_obj"))
         new_kgram_freqs(cpp_obj, .preprocess, .tokenize_sentences)
 }

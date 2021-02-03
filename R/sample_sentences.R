@@ -55,7 +55,7 @@
 #' @export
 sample_sentences <- function(model, n, max_length, t = 1.0) 
 {
-        model <- as.language_model(model)
+        model <- as_language_model(model)
         cpp_obj <- attr(model, "cpp_obj")
         cpp_obj$sample(n, max_length, t)
 }

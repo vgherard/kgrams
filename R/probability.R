@@ -104,7 +104,7 @@ probability.kgrams_word_context <- function(
         
 ) {
         # If 'model' is not a language model, try to coerce it to language model
-        model <- as.language_model(model)
+        model <- as_language_model(model)
         object$word <- .preprocess(object$word)
         object$context <- .preprocess(object$context)
         attr(model, "cpp_obj")$probability(object$word, object$context) # return        
@@ -120,7 +120,7 @@ probability.character <- function(
         ...
 ) {
         # If 'model' is not a language model, try to coerce it to language model
-        model <- as.language_model(model)
+        model <- as_language_model(model)
         object <- .preprocess(object)
         object <- .tokenize_sentences(object)
         attr(model, "cpp_obj")$probability_sentence(object) # return

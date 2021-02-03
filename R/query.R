@@ -45,7 +45,7 @@
 #' query(f, EOS()) # 1, since text is a single sentence
 #' 
 #' # Querying a dictionary
-#' d <- as.dictionary(c("a", "b"))
+#' d <- as_dictionary(c("a", "b"))
 #' query(d, c("a", "b", "c")) # query some words
 #' query(f, c(BOS(), EOS(), UNK())) # c(TRUE, TRUE, FALSE)
 #' @name query

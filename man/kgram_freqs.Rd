@@ -7,6 +7,8 @@
 \alias{process_sentences}
 \alias{process_sentences.character}
 \alias{process_sentences.connection}
+\alias{as_kgram_freqs}
+\alias{as_kgram_freqs.language_model}
 \title{k-gram Frequency Tables}
 \usage{
 kgram_freqs(
@@ -79,6 +81,10 @@ process_sentences(
   batch_size = max_lines,
   ...
 )
+
+as_kgram_freqs(object, ...)
+
+\method{as_kgram_freqs}{language_model}(object, ...)
 }
 \arguments{
 \item{text}{a character vector or a connection. Source of text from which

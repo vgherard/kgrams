@@ -81,7 +81,7 @@ perplexity <- function(text,
                        )
 {
         # If 'model' is not a language model, try to coerce it to language model
-        model <- as.language_model(model)
+        model <- as_language_model(model)
         check_model_perplexity(model)
         UseMethod("perplexity", text)
 }

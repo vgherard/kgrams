@@ -14,16 +14,16 @@ new_language_model <- function(cpp_obj,
                   )
 }
 
-as.language_model <- function(object) 
-        UseMethod("as.language_model", object)
+as_language_model <- function(object) 
+        UseMethod("as_language_model", object)
 
-as.language_model.language_model <- function(object) 
+as_language_model.language_model <- function(object) 
         return(object)
 
-as.language_model.kgram_freqs <- function(object)
+as_language_model.kgram_freqs <- function(object)
         return(language_model(object, "ml"))
 
-as.language_model.default <- function(object) {
+as_language_model.default <- function(object) {
         msg <- "Input cannot be coerced to 'language_model'."
         rlang::abort(message = msg, class = "domain_error")
 }
