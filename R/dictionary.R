@@ -102,7 +102,6 @@ NULL
 dictionary <- function(text, ...) {
         if (missing(text) || is.null(text))
                 return(dictionary_missing())
-        cpp_obj <- new(Dictionary)
         UseMethod("dictionary", text)
 }
         
@@ -116,6 +115,7 @@ dictionary.character <- function(text,
                                  ...
                                  )
 {
+        cpp_obj <- new(Dictionary)
         process <- dict_insert_task(cpp_obj, .preprocess, size, cov, thresh)
         process(text)
         new_dictionary(cpp_obj)
@@ -132,6 +132,7 @@ dictionary.connection <- function(text,
                                   ...
                                   )
 {
+        cpp_obj <- new(Dictionary)
         process <- dict_insert_task(cpp_obj, .preprocess, size, cov, thresh)
         if (is.null(batch_size)) 
                 batch_size <- -1L

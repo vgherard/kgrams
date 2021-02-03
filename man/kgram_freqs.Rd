@@ -55,7 +55,6 @@ process_sentences(
   open_dictionary = TRUE,
   in_place = TRUE,
   verbose = TRUE,
-  visibly = !in_place,
   ...
 )
 
