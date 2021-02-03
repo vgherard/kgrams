@@ -74,8 +74,14 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' \code{kgram_freqs} object, \code{freqs}. In this second case, the initial 
 #' object \code{freqs} can either be modified in place
 #' (for \code{in_place == TRUE}, the default) or by making a copy 
-#' (\code{in_place == FALSE}). The final object is returned invisibly when 
-#' modifying in place, visibly in the second case. 
+#' (\code{in_place == FALSE}), see the examples below. 
+#' The final object is returned invisibly when modifying in place, 
+#' visibly in the second case. It is worth to mention that modifying in place
+#' a \code{kgram_freqs} object \code{freqs} will also affect 
+#' \code{language_model} objects created from \code{freqs} with 
+#' \code{language_model()}, which will also be updated with the new information.
+#' If one wants to avoid this behaviour, one has to make a copy using 
+#' \code{in_place = FALSE}.
 #'
 #' The \code{dictionary} argument allows to provide an initial set of known 
 #' words. Subsequently, one can either work with such a closed dictionary 
@@ -105,7 +111,15 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' query(f, c("a b", "a" %+% EOS(), BOS() %+% "a b")) # c(1, 1, 1)
 #' query(f, "a b b a") # NA (counts for k-grams of order k > 3 are not known)
 #' 
+#' process_sentences("b", f)
+#' query(f, c("a", "b")) # c(3, 3): 'f' is updated in place
 #' 
+#' f1 <- process_sentences("b", f, in_place = FALSE)
+#' query(f, c("a", "b")) # c(3, 3): 'f' is copied
+#' query(f1, c("a", "b")) # c(3, 4): the new 'f1' stores the updated counts
+#'
+#'
+#'
 #'
 #' # Build a k-gram frequency table from a file connection
 #' 
@@ -179,14 +193,15 @@ kgram_freqs.character <- function(
         freqs <- kgram_freqs_init(
                 N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
         ) 
-        process_sentences.character(
+        res <- process_sentences.character(
                 text, 
                 freqs, 
                 open_dictionary = open_dictionary, 
                 in_place = TRUE,
                 verbose = verbose,
                 ...
-        ) # return
+        )
+        return(res) # Constructor returns visibly
 }
 
 # Constructor from connection
@@ -208,7 +223,7 @@ kgram_freqs.connection <- function(
         freqs <- kgram_freqs_init(
                 N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
         ) 
-        process_sentences.connection(
+        res <- process_sentences.connection(
                 text,
                 freqs,
                 open_dictionary = open_dictionary,
@@ -218,6 +233,7 @@ kgram_freqs.connection <- function(
                 verbose = TRUE,
                 ...
         )
+        return(res) # Constructor returns visibly
 }
 
 # Process sentences generic
@@ -231,6 +247,7 @@ process_sentences <- function(
         open_dictionary = TRUE,
         in_place = TRUE,
         verbose = TRUE,
+        visibly = !in_place,
         ...
 ) 
         UseMethod("process_sentences", text)
@@ -253,7 +270,9 @@ process_sentences.character <- function(
         freqs <- process_sentences_init(freqs, in_place)
         process <- kgram_process_task(freqs, open_dictionary, verbose)
         process(text)
-        return(invisible(freqs))
+        if (in_place)
+                return(invisible(freqs))
+        return(freqs)
 }
 
 # Process sentences from connection
@@ -292,7 +311,9 @@ process_sentences.connection <- function(
         if (verbose) progress$terminate()
         close(text)
         
-        return(invisible(freqs))
+        if (in_place)
+                return(invisible(freqs))
+        return(freqs)
 }
 
 kgram_freqs_init <- function(

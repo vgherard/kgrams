@@ -52,6 +52,7 @@ process_sentences(
   open_dictionary = TRUE,
   in_place = TRUE,
   verbose = TRUE,
+  visibly = !in_place,
   ...
 )
 
@@ -153,8 +154,14 @@ add k-gram counts from a new \code{text} to an \emph{existing}
 \code{kgram_freqs} object, \code{freqs}. In this second case, the initial
 object \code{freqs} can either be modified in place
 (for \code{in_place == TRUE}, the default) or by making a copy
-(\code{in_place == FALSE}). The final object is returned invisibly when
-modifying in place, visibly in the second case.
+(\code{in_place == FALSE}), see the examples below.
+The final object is returned invisibly when modifying in place,
+visibly in the second case. It is worth to mention that modifying in place
+a \code{kgram_freqs} object \code{freqs} will also affect
+\code{language_model} objects created from \code{freqs} with
+\code{language_model()}, which will also be updated with the new information.
+If one wants to avoid this behaviour, one has to make a copy using
+\code{in_place = FALSE}.
 
 The \code{dictionary} argument allows to provide an initial set of known
 words. Subsequently, one can either work with such a closed dictionary
@@ -180,6 +187,14 @@ f <- kgram_freqs("a b b a a", 3)
 query(f, c("a", "b")) # c(3, 2)
 query(f, c("a b", "a" \%+\% EOS(), BOS() \%+\% "a b")) # c(1, 1, 1)
 query(f, "a b b a") # NA (counts for k-grams of order k > 3 are not known)
+
+process_sentences("b", f)
+query(f, c("a", "b")) # c(3, 3): 'f' is updated in place
+
+f1 <- process_sentences("b", f, in_place = FALSE)
+query(f, c("a", "b")) # c(3, 3): 'f' is copied
+query(f1, c("a", "b")) # c(3, 4): the new 'f1' stores the updated counts
+
 
 
 

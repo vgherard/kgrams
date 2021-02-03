@@ -157,6 +157,7 @@
   open_dictionary <span class='op'>=</span> <span class='cn'>TRUE</span>,
   in_place <span class='op'>=</span> <span class='cn'>TRUE</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  visibly <span class='op'>=</span> <span class='op'>!</span><span class='va'>in_place</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -284,8 +285,14 @@ add k-gram counts from a new <code>text</code> to an <em>existing</em>
 <code>kgram_freqs</code> object, <code>freqs</code>. In this second case, the initial
 object <code>freqs</code> can either be modified in place
 (for <code>in_place == TRUE</code>, the default) or by making a copy
-(<code>in_place == FALSE</code>). The final object is returned invisibly when
-modifying in place, visibly in the second case.</p>
+(<code>in_place == FALSE</code>), see the examples below.
+The final object is returned invisibly when modifying in place,
+visibly in the second case. It is worth to mention that modifying in place
+a <code>kgram_freqs</code> object <code>freqs</code> will also affect
+<code>language_model</code> objects created from <code>freqs</code> with
+<code><a href='language_model.html'>language_model()</a></code>, which will also be updated with the new information.
+If one wants to avoid this behaviour, one has to make a copy using
+<code>in_place = FALSE</code>.</p>
 <p>The <code>dictionary</code> argument allows to provide an initial set of known
 words. Subsequently, one can either work with such a closed dictionary
 (<code>open_dictionary == FALSE</code>), or extended the dictionary with all
@@ -317,6 +324,14 @@ usage, this package offers the utilities <a href='preprocess.html'>preprocess</a
 </div><div class='output co'>#&gt; [1] 3 2</div><div class='input'><span class='fu'><a href='query.html'>query</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a b"</span>, <span class='st'>"a"</span> <span class='op'>%+%</span> <span class='fu'><a href='EOS.html'>EOS</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'><a href='EOS.html'>BOS</a></span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%+%</span> <span class='st'>"a b"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># c(1, 1, 1)</span>
 </div><div class='output co'>#&gt; [1] 1 1 1</div><div class='input'><span class='fu'><a href='query.html'>query</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"a b b a"</span><span class='op'>)</span> <span class='co'># NA (counts for k-grams of order k &gt; 3 are not known)</span>
 </div><div class='output co'>#&gt; [1] NA</div><div class='input'>
+<span class='fu'>process_sentences</span><span class='op'>(</span><span class='st'>"b"</span>, <span class='va'>f</span><span class='op'>)</span>
+<span class='fu'><a href='query.html'>query</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># c(3, 3): 'f' is updated in place</span>
+</div><div class='output co'>#&gt; [1] 3 3</div><div class='input'>
+<span class='va'>f1</span> <span class='op'>&lt;-</span> <span class='fu'>process_sentences</span><span class='op'>(</span><span class='st'>"b"</span>, <span class='va'>f</span>, in_place <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span>
+<span class='fu'><a href='query.html'>query</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># c(3, 3): 'f' is copied</span>
+</div><div class='output co'>#&gt; [1] 3 3</div><div class='input'><span class='fu'><a href='query.html'>query</a></span><span class='op'>(</span><span class='va'>f1</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># c(3, 4): the new 'f1' stores the updated counts</span>
+</div><div class='output co'>#&gt; [1] 3 4</div><div class='input'>
+
 
 
 <span class='co'># Build a k-gram frequency table from a file connection</span>
