@@ -112,33 +112,40 @@
     <p>Create a k-gram language model.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>language_model</span><span class='op'>(</span><span class='va'>freqs</span>, smoother <span class='op'>=</span> <span class='st'>"ml"</span>, N <span class='op'>=</span> <span class='fu'><a href='parameters.html'>param</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>"N"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>language_model</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for language_model</span>
+<span class='fu'>language_model</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for kgram_freqs</span>
+<span class='fu'>language_model</span><span class='op'>(</span><span class='va'>object</span>, smoother <span class='op'>=</span> <span class='st'>"ml"</span>, N <span class='op'>=</span> <span class='fu'><a href='parameters.html'>param</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='st'>"N"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>freqs</th>
+      <th>object</th>
       <td><p>an object which stores the information required to build the
-k-gram model. At present, necessarily a <code>kgram_freqs</code> object.</p></td>
+k-gram model. At present, necessarily a <code>kgram_freqs</code> object, or a
+<code>language_model</code> object of which a copy is desired (see Details).</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>possible additional parameters required by the smoother.</p></td>
     </tr>
     <tr>
       <th>smoother</th>
       <td><p>a character vector. Indicates the smoothing technique to
 be applied to compute k-gram continuation probabilities. A list of
-available smoothers can be obtained with <a href='smoothers.html'>smoothers</a>, and
+available smoothers can be obtained with <code><a href='smoothers.html'>smoothers()</a></code>, and
 further information on a particular smoother through
-info</p></td>
+<code><a href='smoothers.html'>info()</a></code>.</p></td>
     </tr>
     <tr>
       <th>N</th>
       <td><p>an integer. Maximum order of k-grams to use in the language
 model. This muss be less than or equal to the order of the underlying
 <code>kgram_freqs</code> object.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>possible additional parameters required by the smoother.</p></td>
     </tr>
     </table>
 
@@ -147,7 +154,13 @@ model. This muss be less than or equal to the order of the underlying
     <p>A <code>language_model</code> object.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p><a href='kgrams-package.html'>kgrams</a> supports several k-gram language models, including
+    <p>These generics are used to construct objects of class <code>language_model</code>.
+The <code>language_model</code> method isonly needed to create copies of
+<code>language_model</code> objects (that is to say, new copies which are not
+altered by methods which modify the original object in place,
+see e.g. <a href='parameters.html'>parameters</a>). The discussion below focuses on
+language models and the <code>kgram_freqs</code> method.</p>
+<p><a href='kgrams-package.html'>kgrams</a> supports several k-gram language models, including
 Interpolated Kneser-Ney, Stupid Backoff and others
 (see <a href='smoothers.html'>smoothers</a>). The objects created by
 <code>language_models()</code> have methods for computing word continuation and
@@ -159,7 +172,7 @@ prediction accuracies.</p>
 <p>Smoothers have often tuning parameters, which need to be specified by
 (exact) name through the <code>...</code> arguments; otherwise,
 <code>language_model()</code> will use default values and, once per session, throw
-a warning. <code>info(smoother)</code> lists all parameters needed by a
+a warning. <code><a href='smoothers.html'>info(smoother)</a></code> lists all parameters needed by a
 specific smoother, together with their allowed parameter space.</p>
 <p>The run-time of <code>language_model()</code> may vary substantially for different
 smoothing methods, depending on whether or not a method requires the

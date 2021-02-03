@@ -38,9 +38,9 @@ kgram_freqs(
   .tokenize_sentences = identity,
   dictionary = NULL,
   open_dictionary = is.null(dictionary),
+  verbose = TRUE,
   max_lines = max_lines,
   batch_size = NULL,
-  verbose = TRUE,
   ...
 )
 
@@ -73,9 +73,9 @@ process_sentences(
   .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
   open_dictionary = TRUE,
   in_place = TRUE,
+  verbose = TRUE,
   max_lines = Inf,
   batch_size = max_lines,
-  verbose = TRUE,
   ...
 )
 }
@@ -103,11 +103,17 @@ is included into the dictionary. Otherwise, new words are replaced by an
 unknown word token. It is by default \code{TRUE} if \code{dictionary} is
 specified, \code{FALSE} otherwise.}
 
+\item{verbose}{Print current progress to the console.}
+
 \item{...}{further arguments passed to or from other methods.}
 
-\item{batch_size}{a length one positive integer or \code{NULL}.
-Size of text batches when reading text from \code{connection}.
-If \code{NULL}, all input text is processed in a single batch.}
+\item{max_lines}{a length one positive integer or \code{Inf}.
+Maximum number of lines to be read from the \code{connection}.
+If \code{Inf}, keeps reading until the End-Of-File.}
+
+\item{batch_size}{a length one positive integer less than or equal to
+\code{max_lines}.Size of text batches when reading text from
+\code{connection}.}
 
 \item{freqs}{a \code{kgram_freqs} object, to which new k-gram counts from
 \code{text} are to be added.}

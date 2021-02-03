@@ -39,10 +39,14 @@ new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
 #' specified, \code{FALSE} otherwise.
 #' @param in_place \code{TRUE} or \code{FALSE}. Should the initial 
 #' \code{kgram_freqs} object be modified in place?
-#' @param batch_size a length one positive integer or \code{NULL}.
-#' Size of text batches when reading text from \code{connection}. 
-#' If \code{NULL}, all input text is processed in a single batch.
+#' @param verbose Print current progress to the console.
 #' @param ... further arguments passed to or from other methods.
+#' @param max_lines a length one positive integer or \code{Inf}.
+#' Maximum number of lines to be read from the \code{connection}. 
+#' If \code{Inf}, keeps reading until the End-Of-File.
+#' @param batch_size a length one positive integer less than or equal to
+#' \code{max_lines}.Size of text batches when reading text from 
+#' \code{connection}.
 #' 
 #' @return A \code{kgram_freqs} class object: k-gram frequency table storing
 #' k-gram counts from text. For \code{process_sentences()}, the updated 
@@ -155,7 +159,7 @@ kgram_freqs <- function(
         open_dictionary = is.null(dictionary),
         verbose = TRUE,
         ...
-        ) 
+) 
         UseMethod("kgram_freqs", text)
 
 # Constructor from character vector
@@ -170,11 +174,11 @@ kgram_freqs.character <- function(
         open_dictionary = is.null(dictionary),
         verbose = TRUE,
         ...
-        )
+)
 {
         freqs <- kgram_freqs_init(
                 N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
-                ) 
+        ) 
         process_sentences.character(
                 text, 
                 freqs, 
@@ -182,7 +186,7 @@ kgram_freqs.character <- function(
                 in_place = TRUE,
                 verbose = verbose,
                 ...
-                ) # return
+        ) # return
 }
 
 # Constructor from connection
@@ -195,11 +199,11 @@ kgram_freqs.connection <- function(
         .tokenize_sentences = identity,
         dictionary = NULL,
         open_dictionary = is.null(dictionary),
+        verbose = TRUE,
         max_lines = max_lines,
         batch_size = NULL,
-        verbose = TRUE,
         ...
-        )
+)
 {
         freqs <- kgram_freqs_init(
                 N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
@@ -228,9 +232,9 @@ process_sentences <- function(
         in_place = TRUE,
         verbose = TRUE,
         ...
-        ) 
+) 
         UseMethod("process_sentences", text)
-        
+
 
 # Process sentences from character vector
 #' @rdname kgram_freqs
@@ -244,7 +248,7 @@ process_sentences.character <- function(
         in_place = TRUE,
         verbose = TRUE,
         ...
-        )
+)
 {
         freqs <- process_sentences_init(freqs, in_place)
         process <- kgram_process_task(freqs, open_dictionary, verbose)
@@ -262,14 +266,15 @@ process_sentences.connection <- function(
         .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
         open_dictionary = TRUE,
         in_place = TRUE,
+        verbose = TRUE,
         max_lines = Inf,
         batch_size = max_lines,
-        verbose = TRUE,
         ...
 )
 {
         freqs <- process_sentences_init(freqs, in_place)
-        process <- kgram_process_task(freqs, open_dictionary, verbose)
+        # Progress is printed directly from R
+        process <- kgram_process_task(freqs, open_dictionary, verbose = F)
         
         open(text, "r")
         if (batch_size == Inf) 
@@ -292,7 +297,7 @@ process_sentences.connection <- function(
 
 kgram_freqs_init <- function(
         N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
-        ) 
+) 
 {
         if (is.null(dictionary))
                 dictionary <- dictionary()
@@ -319,4 +324,3 @@ kgram_process_task <- function(freqs, open_dictionary, verbose) {
                 cpp_obj$process_sentences(batch, !open_dictionary, verbose)
         } # return
 }
-        

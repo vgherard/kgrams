@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Language Model Parameters — parameters" />
-<meta property="og:description" content="Get and set parameters of a language model" />
+<meta property="og:description" content="Get and set parameters of a language model." />
 
 
 
@@ -109,7 +109,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Get and set parameters of a language model</p>
+    <p>Get and set parameters of a language model.</p>
     </div>
 
     <pre class="usage"><span class='fu'>param</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>which</span><span class='op'>)</span>
@@ -121,8 +121,91 @@
 
 <span class='fu'>parameters</span><span class='op'>(</span><span class='va'>object</span><span class='op'>)</span></pre>
 
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>object</th>
+      <td><p>a <code>language_model</code> or <code>kgram_freqs</code> class object.</p></td>
+    </tr>
+    <tr>
+      <th>which</th>
+      <td><p>a string. Name of the parameter to get or set.</p></td>
+    </tr>
+    <tr>
+      <th>value</th>
+      <td><p>new value for the parameter specified by <code>which</code>. Typically
+a length one numeric.</p></td>
+    </tr>
+    </table>
 
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
+    <p>a list for <code>parameters()</code>, a single value, typically numeric,
+for <code>param()</code> and <code>param()&lt;-</code> (the new value, in this last case).</p>
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>These functions are used to retrieve or modify the parameters of a
+<code>language_model</code> or a <code>kgram_freqs</code> object. Any object of,
+or inheriting from, any of these two classes has at least two parameters:</p><ul>
+<li><p><code>N</code>: higher order of k-grams considered in the model for
+<code>language_model</code>, or stored in memory for <code>kgram_freqs</code>.</p></li>
+<li><p><code>V</code>: size of the dictionary (excluding the special tokens
+<code><a href='EOS.html'>BOS()</a></code>, <code><a href='EOS.html'>EOS()</a></code>, <code><a href='EOS.html'>UNK()</a></code>).</p></li>
+</ul>
+
+<p>For an object of class <code>kgram_freqs</code>, these are the only parameters,
+and they are read-only. <code>language_model</code>s allow to set <code>N</code> less
+than or equal to the order of the underlying <code>kgram_freqs</code> object.</p>
+<p>In addition to these, <code>language_model</code>s can have additional parameters,
+e.g. discount values or interpolation constants, depending on the particular
+smoother employed by the model. A list of parameters available for a given
+smoother can be obtained through <code><a href='smoothers.html'>info()</a></code>
+(see <a href='smoothers.html'>smoothers</a>).</p>
+<p>It is important to mention that setting a parameter is an in-place operation.
+This implies that if, say, object <code>m</code> is a <code>language_model</code> object,
+the code <code>m1 &lt;- m ; param(m1, which) &lt;- value</code> will set the parameter
+<code>which</code> to <code>value</code> both for <code>m1</code> <em>and</em> <code>m</code>. The
+reason for this is that, behind the scenes, both <code>m</code> and <code>m1</code> are
+pointers to the same C++ object. In order to create a true copy, one can use
+the copy constructor <code><a href='language_model.html'>language_model()</a></code>, see
+<a href='language_model.html'>language_model</a>.</p>
+
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Get and set k-gram model parameters</span>
+
+<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='st'>"a a b a b"</span>, <span class='fl'>3</span><span class='op'>)</span>
+<span class='fu'>param</span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"N"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 3</div><div class='input'><span class='fu'>parameters</span><span class='op'>(</span><span class='va'>f</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; $N
+#&gt; [1] 3
+#&gt; 
+#&gt; $V
+#&gt; [1] 2
+#&gt; </div><div class='input'>
+<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"sbo"</span>, lambda <span class='op'>=</span> <span class='fl'>0.2</span><span class='op'>)</span>
+<span class='fu'>param</span><span class='op'>(</span><span class='va'>m</span>, <span class='st'>"V"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 2</div><div class='input'><span class='fu'>param</span><span class='op'>(</span><span class='va'>m</span>, <span class='st'>"lambda"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.2</div><div class='input'><span class='fu'>param</span><span class='op'>(</span><span class='va'>m</span>, <span class='st'>"N"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fl'>2</span>
+<span class='fu'>param</span><span class='op'>(</span><span class='va'>m</span>, <span class='st'>"lambda"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fl'>0.4</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+        <span class='fu'>param</span><span class='op'>(</span><span class='va'>m</span>, <span class='st'>"V"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fl'>5</span> <span class='co'># Error: dictionary size cannot be set.  </span>
+<span class='op'>}</span>
+
+<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+        <span class='fu'>param</span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"N"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fl'>4</span> <span class='co'># Error: parameters of 'kgram_freqs' cannot be set  </span>
+<span class='op'>}</span>
+
+<span class='va'>m1</span> <span class='op'>&lt;-</span> <span class='va'>m</span>
+<span class='fu'>param</span><span class='op'>(</span><span class='va'>m1</span>, <span class='st'>"lambda"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fl'>0.5</span>
+<span class='fu'>param</span><span class='op'>(</span><span class='va'>m</span>, <span class='st'>"lambda"</span><span class='op'>)</span> <span class='co'># 0.5 ; param() modifies 'm' by reference!</span>
+</div><div class='output co'>#&gt; [1] 0.5</div><div class='input'>
+<span class='va'>m2</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>m</span><span class='op'>)</span> <span class='co'># This creates a true copy</span>
+<span class='fu'>param</span><span class='op'>(</span><span class='va'>m2</span>, <span class='st'>"lambda"</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fl'>0.6</span>
+<span class='fu'>param</span><span class='op'>(</span><span class='va'>m</span>, <span class='st'>"lambda"</span><span class='op'>)</span> <span class='co'># 0.5</span>
+</div><div class='output co'>#&gt; [1] 0.5</div><div class='input'>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

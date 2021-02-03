@@ -119,6 +119,7 @@
   .tokenize_sentences <span class='op'>=</span> <span class='va'>identity</span>,
   dictionary <span class='op'>=</span> <span class='cn'>NULL</span>,
   open_dictionary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>dictionary</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -129,7 +130,8 @@
   .preprocess <span class='op'>=</span> <span class='va'>identity</span>,
   .tokenize_sentences <span class='op'>=</span> <span class='va'>identity</span>,
   dictionary <span class='op'>=</span> <span class='cn'>NULL</span>,
-  open_dictionary <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  open_dictionary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>dictionary</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -140,7 +142,9 @@
   .preprocess <span class='op'>=</span> <span class='va'>identity</span>,
   .tokenize_sentences <span class='op'>=</span> <span class='va'>identity</span>,
   dictionary <span class='op'>=</span> <span class='cn'>NULL</span>,
-  open_dictionary <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  open_dictionary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>dictionary</span><span class='op'>)</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  max_lines <span class='op'>=</span> <span class='va'>max_lines</span>,
   batch_size <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
@@ -152,6 +156,7 @@
   .tokenize_sentences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
   open_dictionary <span class='op'>=</span> <span class='cn'>TRUE</span>,
   in_place <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -163,6 +168,7 @@
   .tokenize_sentences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
   open_dictionary <span class='op'>=</span> <span class='cn'>TRUE</span>,
   in_place <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
@@ -174,7 +180,9 @@
   .tokenize_sentences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
   open_dictionary <span class='op'>=</span> <span class='cn'>TRUE</span>,
   in_place <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  batch_size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  max_lines <span class='op'>=</span> <span class='cn'>Inf</span>,
+  batch_size <span class='op'>=</span> <span class='va'>max_lines</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -217,14 +225,24 @@ unknown word token. It is by default <code>TRUE</code> if <code>dictionary</code
 specified, <code>FALSE</code> otherwise.</p></td>
     </tr>
     <tr>
+      <th>verbose</th>
+      <td><p>Print current progress to the console.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>further arguments passed to or from other methods.</p></td>
     </tr>
     <tr>
+      <th>max_lines</th>
+      <td><p>a length one positive integer or <code>Inf</code>.
+Maximum number of lines to be read from the <code>connection</code>.
+If <code>Inf</code>, keeps reading until the End-Of-File.</p></td>
+    </tr>
+    <tr>
       <th>batch_size</th>
-      <td><p>a length one positive integer or <code>NULL</code>.
-Size of text batches when reading text from <code>connection</code>.
-If <code>NULL</code>, all input text is processed in a single batch.</p></td>
+      <td><p>a length one positive integer less than or equal to
+<code>max_lines</code>.Size of text batches when reading text from
+<code>connection</code>.</p></td>
     </tr>
     <tr>
       <th>freqs</th>

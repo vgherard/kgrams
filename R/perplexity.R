@@ -54,19 +54,20 @@
 #' # Train 4-, 6-, and 8-gram models on Shakespeare's "Much Ado About Nothing",
 #' # compute their perplexities on the training and test corpora.
 #' # We use Shakespeare's "A Midsummer Night's Dream" as test. 
-#' 
 #' train <- much_ado
 #' test <- midsummer
 #' 
+#' tknz <- function(text) tokenize_sentences(text, keep_first = TRUE)
+#' f <- kgram_freqs(train, 8, .tokenize_sentences = tknz)
+#' m <- language_model(f, "kn", D = 0.75)
+#' 
 #' FUN <- function(N) {
-#'         tknz <- tokenize_sentences
-#'         f <- kgram_freqs(train, N, .tokenize_sentences = tknz)
-#'         m <- language_model(f, "kn", D = 0.75)
+#'         param(m, "N") <- N
 #'         c(train = perplexity(train, m), test = perplexity(test, m))
 #'         }
 #' 
 #' # Demonstrate overfitting of the higher order models
-#' sapply(c("N = 4" = 4, "N = 6" = 6, "N = 8" = 8), FUN) 
+#' sapply(c("N = 4" = 4, "N = 6" = 6, "N = 8" = 8), FUN)
 #' 
 #' @name perplexity
 
