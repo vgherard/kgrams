@@ -11,7 +11,7 @@
 #' @param object object to be coerced to \code{kgram_freqs}.
 #' @param ... further argument passed to or from other methods.
 #' @return a \code{kgram_freqs} object. 
-#' @example 
+#' @examples
 #' model <- language_model( kgram_freqs("a b b a b", 3) )
 #' freqs <- as_kgram_freqs(model)
 #' @name as_kgram_freqs

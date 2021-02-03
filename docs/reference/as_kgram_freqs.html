@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>k-gram Language Models — language_model • kgrams</title>
+<title>Coerce to k-gram frequency table — as_kgram_freqs • kgrams</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,9 @@
 
 
 
-<meta property="og:title" content="k-gram Language Models — language_model" />
-<meta property="og:description" content="Create a k-gram language model." />
+<meta property="og:title" content="Coerce to k-gram frequency table — as_kgram_freqs" />
+<meta property="og:description" content="At present, this is just an utility for recovering a kgram_freqs
+object from a language_model." />
 
 
 
@@ -103,93 +104,42 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>k-gram Language Models</h1>
+    <h1>Coerce to k-gram frequency table</h1>
     
-    <div class="hidden name"><code>language_model.Rd</code></div>
+    <div class="hidden name"><code>as_kgram_freqs.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create a k-gram language model.</p>
+    <p>At present, this is just an utility for recovering a <code>kgram_freqs</code>
+object from a <a href='language_model.html'>language_model</a>.</p>
     </div>
 
-    <pre class="usage"><span class='fu'>language_model</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for language_model</span>
-<span class='fu'>language_model</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for kgram_freqs</span>
-<span class='fu'>language_model</span><span class='op'>(</span><span class='va'>object</span>, smoother <span class='op'>=</span> <span class='st'>"ml"</span>, N <span class='op'>=</span> <span class='fu'><a href='parameters.html'>param</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='st'>"N"</span><span class='op'>)</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+    <pre class="usage"><span class='fu'>as_kgram_freqs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>object</th>
-      <td><p>an object which stores the information required to build the
-k-gram model. At present, necessarily a <code>kgram_freqs</code> object, or a
-<code>language_model</code> object of which a copy is desired (see Details).</p></td>
+      <td><p>object to be coerced to <code>kgram_freqs</code>.</p></td>
     </tr>
     <tr>
       <th>...</th>
-      <td><p>possible additional parameters required by the smoother.</p></td>
-    </tr>
-    <tr>
-      <th>smoother</th>
-      <td><p>a character vector. Indicates the smoothing technique to
-be applied to compute k-gram continuation probabilities. A list of
-available smoothers can be obtained with <code><a href='smoothers.html'>smoothers()</a></code>, and
-further information on a particular smoother through
-<code><a href='smoothers.html'>info()</a></code>.</p></td>
-    </tr>
-    <tr>
-      <th>N</th>
-      <td><p>an integer. Maximum order of k-grams to use in the language
-model. This muss be less than or equal to the order of the underlying
-<code>kgram_freqs</code> object.</p></td>
+      <td><p>further argument passed to or from other methods.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>A <code>language_model</code> object.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>These generics are used to construct objects of class <code>language_model</code>.
-The <code>language_model</code> method isonly needed to create copies of
-<code>language_model</code> objects (that is to say, new copies which are not
-altered by methods which modify the original object in place,
-see e.g. <a href='parameters.html'>parameters</a>). The discussion below focuses on
-language models and the <code>kgram_freqs</code> method.</p>
-<p><a href='kgrams-package.html'>kgrams</a> supports several k-gram language models, including
-Interpolated Kneser-Ney, Stupid Backoff and others
-(see <a href='smoothers.html'>smoothers</a>). The objects created by
-<code>language_models()</code> have methods for computing word continuation and
-sentence probabilities (see <a href='probability.html'>probability</a>),
-random text generation (see <a href='sample_sentences.html'>sample_sentences</a>)
-and other type of language modeling tasks such as
-(<strong>not yet implemented</strong>) computing perplexities and word
-prediction accuracies.</p>
-<p>Smoothers have often tuning parameters, which need to be specified by
-(exact) name through the <code>...</code> arguments; otherwise,
-<code>language_model()</code> will use default values and, once per session, throw
-a warning. <code><a href='smoothers.html'>info(smoother)</a></code> lists all parameters needed by a
-specific smoother, together with their allowed parameter space.</p>
-<p>The run-time of <code>language_model()</code> may vary substantially for different
-smoothing methods, depending on whether or not a method requires the
-computation of additional quantities (that is to say, beyond k-gram counts)
-for its operativity (this is, for instance, the case for the Kneser-Ney
-smoother).</p>
+    <p>a <code>kgram_freqs</code> object.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Valerio Gherardi</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Create an interpolated Kneser-Ney 2-gram language model</span>
- 
-<span class='va'>freqs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='as_kgram_freqs.language_model.html'>kgram_freqs</a></span><span class='op'>(</span><span class='st'>"a a b a a b a b a b a b"</span>, <span class='fl'>2</span><span class='op'>)</span>
-<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>language_model</span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-<span class='fu'><a href='probability.html'>probability</a></span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'>%|%</span> <span class='st'>"b"</span>, <span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.815</div></pre>
+    <pre class="examples"><div class='input'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span> <span class='fu'><a href='as_kgram_freqs.language_model.html'>kgram_freqs</a></span><span class='op'>(</span><span class='st'>"a b b a b"</span>, <span class='fl'>3</span><span class='op'>)</span> <span class='op'>)</span>
+<span class='va'>freqs</span> <span class='op'>&lt;-</span> <span class='fu'>as_kgram_freqs</span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

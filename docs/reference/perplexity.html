@@ -197,7 +197,7 @@ word count.</p>
 <p>The custom .preprocess and .tokenize_sentences arguments allow to apply
 transformations to the text corpus before the perplexity computation takes
 place. By default, the same functions used during model building are
-employed, c.f. <a href='kgram_freqs.html'>kgram_freqs</a> and <a href='language_model.html'>language_model</a>.</p>
+employed, c.f. <a href='as_kgram_freqs.language_model.html'>kgram_freqs</a> and <a href='language_model.html'>language_model</a>.</p>
 <p>A note of caution is in order. Perplexity is not defined for all language
 models available in <a href='kgrams-package.html'>kgrams</a>. For instance, smoother
 <code>"sbo"</code> (i.e. Stupid Backoff) does not produce normalized probabilities,
@@ -218,7 +218,7 @@ parameters), even if their probabilistic interpretation does no longer hold.</p>
 <span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>midsummer</span>
 
 <span class='va'>tknz</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>text</span><span class='op'>)</span> <span class='fu'><a href='tokenize_sentences.html'>tokenize_sentences</a></span><span class='op'>(</span><span class='va'>text</span>, keep_first <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>train</span>, <span class='fl'>8</span>, .tokenize_sentences <span class='op'>=</span> <span class='va'>tknz</span><span class='op'>)</span>
+<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='as_kgram_freqs.language_model.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>train</span>, <span class='fl'>8</span>, .tokenize_sentences <span class='op'>=</span> <span class='va'>tknz</span><span class='op'>)</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span>
 
 <span class='va'>FUN</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span> <span class='op'>{</span>

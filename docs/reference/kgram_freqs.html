@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>k-gram Frequency Tables — kgram_freqs • kgrams</title>
+<title>k-gram Frequency Tables — as_kgram_freqs.language_model • kgrams</title>
 
 
 <!-- jquery -->
@@ -39,7 +39,7 @@
 
 
 
-<meta property="og:title" content="k-gram Frequency Tables — kgram_freqs" />
+<meta property="og:title" content="k-gram Frequency Tables — as_kgram_freqs.language_model" />
 <meta property="og:description" content="Extract k-gram frequency counts from a text or a connection.Principal methods supported by objects of class kgram_freqs
 
 
@@ -134,7 +134,10 @@ probability smoothing techniques. See <a href='language_model.html'>language_mod
 
     </div>
 
-    <pre class="usage"><span class='fu'>kgram_freqs</span><span class='op'>(</span>
+    <pre class="usage"><span class='co'># S3 method for language_model</span>
+<span class='fu'><a href='as_kgram_freqs.html'>as_kgram_freqs</a></span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='fu'>kgram_freqs</span><span class='op'>(</span>
   <span class='va'>text</span>,
   <span class='va'>N</span>,
   .preprocess <span class='op'>=</span> <span class='va'>identity</span>,
@@ -207,16 +210,15 @@ probability smoothing techniques. See <a href='language_model.html'>language_mod
   max_lines <span class='op'>=</span> <span class='cn'>Inf</span>,
   batch_size <span class='op'>=</span> <span class='va'>max_lines</span>,
   <span class='va'>...</span>
-<span class='op'>)</span>
-
-<span class='fu'>as_kgram_freqs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
-
-<span class='co'># S3 method for language_model</span>
-<span class='fu'>as_kgram_freqs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span></pre>
+<span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>...</th>
+      <td><p>further arguments passed to or from other methods.</p></td>
+    </tr>
     <tr>
       <th>text</th>
       <td><p>a character vector or a connection. Source of text from which
@@ -255,10 +257,6 @@ specified, <code>FALSE</code> otherwise.</p></td>
     <tr>
       <th>verbose</th>
       <td><p>Print current progress to the console.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>further arguments passed to or from other methods.</p></td>
     </tr>
     <tr>
       <th>max_lines</th>
