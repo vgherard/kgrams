@@ -1,7 +1,12 @@
 #include <Rcpp.h>
+// [[Rcpp::depends(RcppProgress)]]
+#include <progress.hpp>
+#include <progress_bar.hpp>
 #include "kgramFreqsR.h"
 #include "Dictionary.h"
 using namespace Rcpp;
+
+
 
 IntegerVector kgramFreqsR::queryR(CharacterVector kgram) const
 {
@@ -24,6 +29,7 @@ IntegerVector kgramFreqsR::queryR(CharacterVector kgram) const
 /// @details Each entry of 'sentences' is considered a single sentence. 
 /// For each sentence, anything separated by one or more space 
 /// characters is considered a word.
+
 void kgramFreqsR::process_sentencesR(
         CharacterVector & sentences, bool fixed_dictionary, bool verbose
         ) 
@@ -31,21 +37,13 @@ void kgramFreqsR::process_sentencesR(
         add_BOS_counts(sentences.size());
         std::string sentence;
         
-        size_t each = sentences.size() / 10, left = each, progress = 0;
-        if (verbose) 
-                Rprintf("0 / 10\n");
+        Progress p(sentences.size(), verbose);
         auto itend = sentences.end();
         for (auto it = sentences.begin(); it != itend; ++it) {
-                if (verbose and left-- == 0) {
-                        left = each;
-                        progress += 1;
-                        Rprintf("%d / 10\n", progress);
-                }
                 sentence = *it;
                 process_sentence(sentence, fixed_dictionary);
+                p.increment();
         }
-        if (verbose) 
-                Rprintf("10 / 10\n");
         update_satellites();
 }
 
