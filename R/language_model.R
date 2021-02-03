@@ -35,7 +35,7 @@ print.language_model <- function(x, ...) {
 }
 
 #' @export
-summary.kgram_freqs <- function(object, ...) {
+summary.language_model <- function(object, ...) {
         cat("A k-gram language model.\n\n")
         
         cat("Smoother:\n")
@@ -58,7 +58,7 @@ summary.kgram_freqs <- function(object, ...) {
 }
 
 #' @export
-str.kgram_freqs <- function(object, ...) summary(object)
+str.language_model <- function(object, ...) summary(object)
 
 #' k-gram Language Models
 #' 
