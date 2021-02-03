@@ -302,12 +302,25 @@ new words encountered during k-gram processing
 <em>before</em> k-gram counting takes place, and are in principle
 arbitrary transformations of the original text.
 <em>After</em> preprocessing and sentence tokenization, each line of the
-transformed input is presented to the tokenization algorithm as separate
+transformed input is presented to the k-gram counting algorithm as a separate
 sentence (these sentences are implicitly padded
 with <code>N - 1</code> Begin-Of-Sentence (BOS) and one End-Of-Sentence (EOS)
 tokens, respectively. This is illustrated in the examples). For basic
 usage, this package offers the utilities <a href='preprocess.html'>preprocess</a> and
-<a href='tokenize_sentences.html'>tokenize_sentences</a>.</p>
+<a href='tokenize_sentences.html'>tokenize_sentences</a>. Notice that, strictly speaking, there is
+some redundancy in these two arguments, as the processed input to the k-gram
+counting algorithm is <code>.tokenize_sentences(.preprocess(text))</code>.
+They appear explicitly as separate arguments for two main reasons:</p><ul>
+<li><p>The presence of <code>.tokenize_sentences</code> is a reminder of the
+fact that sentences have to be explicitly separeted in different entries
+of the processed input, in order for <code>kgram_freqs()</code> to append the
+correct Begin-Of-Sentence and End-Of-Sentence paddings to each sentence.</p></li>
+<li><p>At prediction time (e.g. with <a href='probability.html'>probability</a>), by default only
+<code>.preprocess</code> is applied when computing conditional probabilities,
+whereas both <code>.preprocess()</code> and <code>.tokenize_sentences()</code> are
+applied when computing sentence absolute probabilities.</p></li>
+</ul>
+
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='dictionary.html'>dictionary</a> <a href='language_model.html'>language_model</a>

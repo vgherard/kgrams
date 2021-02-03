@@ -167,18 +167,31 @@ The \code{dictionary} argument allows to provide an initial set of known
 words. Subsequently, one can either work with such a closed dictionary
 (\code{open_dictionary == FALSE}), or extended the dictionary with all
 new words encountered during k-gram processing
-(\code{open_dictionary == TRUE}) is \code{FALSE}).
+(\code{open_dictionary == TRUE}).
 
 The \code{.preprocess} and \code{.tokenize_sentences} functions are applied
 \emph{before} k-gram counting takes place, and are in principle
 arbitrary transformations of the original text.
 \emph{After} preprocessing and sentence tokenization, each line of the
-transformed input is presented to the tokenization algorithm as separate
+transformed input is presented to the k-gram counting algorithm as a separate
 sentence (these sentences are implicitly padded
 with \code{N - 1} Begin-Of-Sentence (BOS) and one End-Of-Sentence (EOS)
 tokens, respectively. This is illustrated in the examples). For basic
 usage, this package offers the utilities \link[kgrams]{preprocess} and
-\link[kgrams]{tokenize_sentences}.
+\link[kgrams]{tokenize_sentences}. Notice that, strictly speaking, there is
+some redundancy in these two arguments, as the processed input to the k-gram
+counting algorithm is \code{.tokenize_sentences(.preprocess(text))}.
+They appear explicitly as separate arguments for two main reasons:
+\itemize{
+\item The presence of \code{.tokenize_sentences} is a reminder of the
+fact that sentences have to be explicitly separeted in different entries
+of the processed input, in order for \code{kgram_freqs()} to append the
+correct Begin-Of-Sentence and End-Of-Sentence paddings to each sentence.
+\item At prediction time (e.g. with \link[kgrams]{probability}), by default only
+\code{.preprocess} is applied when computing conditional probabilities,
+whereas both \code{.preprocess()} and \code{.tokenize_sentences()} are
+applied when computing sentence absolute probabilities.
+}
 }
 \examples{
 # Build a k-gram frequency table from a character vector
