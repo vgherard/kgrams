@@ -28,9 +28,56 @@ as_language_model.default <- function(object) {
         rlang::abort(message = msg, class = "domain_error")
 }
 
+#' @export
+print.language_model <- function(x, ...) {
+        cat("A k-gram language model.\n")
+        return(invisible(x))
+}
+
+#' @export
+summary.kgram_freqs <- function(object, ...) {
+        cat("A k-gram language model.\n\n")
+        
+        cat("Smoother:\n")
+        cat("* '", class(object)[[2]], "'.\n", sep = "")
+        cat("\n")
+        
+        cat("Parameters:\n")
+        for (name in names(parameters(object)))
+                cat("* ", name, ": ", param(object, name), "\n", sep = "")
+        cat("\n")
+        
+        cat("Number of words in training corpus:\n")
+        cat("* W: ", attr(object, "cpp_freqs")$tot_words(), "\n", sep = "")
+        cat("\n")
+        cat("Number of distinct k-grams with positive counts:\n")
+        for (k in 1:param(object, "N"))
+                cat("* ", k, "-grams:", attr(object, "cpp_freqs")$unique(k), 
+                    "\n", sep = "")
+        return(invisible(object))
+}
+
+#' @export
+str.kgram_freqs <- function(object, ...) summary(object)
+
 #' k-gram Language Models
+#' 
+#' @description 
 #'
-#' Create a k-gram language model.
+#' Build a k-gram language model. 
+#' 
+#' ### Principal methods supported by objects of class \code{language_model}
+#' 
+#' - \code{probability()}: compute word continuation and sentence probabilities.
+#' See \link[kgrams]{probability}.
+#' 
+#' - \code{sample_sentences()}: generate random text by sampling from the 
+#' language model probability distribution at arbitary temperature. See 
+#' \link[kgrams]{sample_sentences}.
+#' 
+#' - \code{perplexity()}: Compute the language model perplexity on a test
+#' corpus. See \link[kgrams]{perplexity}.
+#'
 #'
 #' @author Valerio Gherardi
 #' @md
@@ -80,10 +127,15 @@ as_language_model.default <- function(object) {
 #' smoother).  
 #' @examples 
 #' # Create an interpolated Kneser-Ney 2-gram language model
-#'  
+#' 
 #' freqs <- kgram_freqs("a a b a a b a b a b a b", 2)
 #' model <- language_model(freqs, "kn", D = 0.5)
+#' model
+#' summary(model)
 #' probability("a" %|% "b", model)
+#' 
+#' # For more examples, see ?probability, ?sample_sentences and ?perplexity.
+#' 
 #' @name language_model
 
 #' @rdname language_model

@@ -40,7 +40,19 @@
 
 
 <meta property="og:title" content="k-gram Language Models — language_model" />
-<meta property="og:description" content="Create a k-gram language model." />
+<meta property="og:description" content="Build a k-gram language model.Principal methods supported by objects of class language_model
+
+
+probability(): compute word continuation and sentence probabilities.
+See probability.
+sample_sentences(): generate random text by sampling from the
+language model probability distribution at arbitary temperature. See
+sample_sentences.
+perplexity(): Compute the language model perplexity on a test
+corpus. See perplexity.
+
+
+" />
 
 
 
@@ -109,7 +121,19 @@
     </div>
 
     <div class="ref-description">
-    <p>Create a k-gram language model.</p>
+    <p>Build a k-gram language model.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>Principal methods supported by objects of class <code>language_model</code></h3>
+
+<ul>
+<li><p><code><a href='probability.html'>probability()</a></code>: compute word continuation and sentence probabilities.
+See <a href='probability.html'>probability</a>.</p></li>
+<li><p><code><a href='sample_sentences.html'>sample_sentences()</a></code>: generate random text by sampling from the
+language model probability distribution at arbitary temperature. See
+<a href='sample_sentences.html'>sample_sentences</a>.</p></li>
+<li><p><code><a href='perplexity.html'>perplexity()</a></code>: Compute the language model perplexity on a test
+corpus. See <a href='perplexity.html'>perplexity</a>.</p></li>
+</ul>
+
+
     </div>
 
     <pre class="usage"><span class='fu'>language_model</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
@@ -185,11 +209,17 @@ smoother).</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># Create an interpolated Kneser-Ney 2-gram language model</span>
- 
+
 <span class='va'>freqs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='as_kgram_freqs.language_model.html'>kgram_freqs</a></span><span class='op'>(</span><span class='st'>"a a b a a b a b a b a b"</span>, <span class='fl'>2</span><span class='op'>)</span>
 <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>language_model</span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-<span class='fu'><a href='probability.html'>probability</a></span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'>%|%</span> <span class='st'>"b"</span>, <span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.815</div></pre>
+<span class='va'>model</span>
+</div><div class='output co'>#&gt; A k-gram language model.</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
+</div><div class='output co'>#&gt;         Length         Class1         Class2           Mode 
+#&gt;              0 language_model             kn           list </div><div class='input'><span class='fu'><a href='probability.html'>probability</a></span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'>%|%</span> <span class='st'>"b"</span>, <span class='va'>model</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] 0.815</div><div class='input'>
+<span class='co'># For more examples, see ?probability, ?sample_sentences and ?perplexity.</span>
+
+</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

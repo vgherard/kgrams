@@ -33,7 +33,18 @@ model. This muss be less than or equal to the order of the underlying
 A \code{language_model} object.
 }
 \description{
-Create a k-gram language model.
+Build a k-gram language model.
+\subsection{Principal methods supported by objects of class \code{language_model}}{
+\itemize{
+\item \code{probability()}: compute word continuation and sentence probabilities.
+See \link[kgrams]{probability}.
+\item \code{sample_sentences()}: generate random text by sampling from the
+language model probability distribution at arbitary temperature. See
+\link[kgrams]{sample_sentences}.
+\item \code{perplexity()}: Compute the language model perplexity on a test
+corpus. See \link[kgrams]{perplexity}.
+}
+}
 }
 \details{
 These generics are used to construct objects of class \code{language_model}.
@@ -67,10 +78,15 @@ smoother).
 }
 \examples{
 # Create an interpolated Kneser-Ney 2-gram language model
- 
+
 freqs <- kgram_freqs("a a b a a b a b a b a b", 2)
 model <- language_model(freqs, "kn", D = 0.5)
+model
+summary(model)
 probability("a" \%|\% "b", model)
+
+# For more examples, see ?probability, ?sample_sentences and ?perplexity.
+
 }
 \author{
 Valerio Gherardi
