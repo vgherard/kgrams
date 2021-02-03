@@ -1,6 +1,19 @@
 #' k-gram Probability Smoothers
 #' 
+#' @description
+#' 
 #' Information on available k-gram continuation probability smoothers.
+#' 
+#' ### List of smoothers currently supported by \code{kgrams}
+#' 
+#' - \code{"ml"}: Maximum Likelihood estimate 
+#' \insertCite{markov1913essai}{kgrams}.
+#' - \code{"add_k"}: Add-k smoothing \insertCite{jeffreys1998theory}{kgrams}.
+#' - \code{"laplace"}: Laplace (a.k.a. Add-one) smoothing 
+#' \insertCite{jeffreys1998theory}{kgrams}.
+#' - \code{"kn"}: Interpolated Kneser-Ney with fixed discount. 
+#' \insertCite{Kneser1995ImprovedBF,chen1999empirical}{kgrams}.
+#' - \code{"sbo"}: Stupid Backoff \insertCite{brants-etal-2007-large}{kgrams}.
 #'
 #' @author Valerio Gherardi
 #' @md
@@ -17,6 +30,10 @@
 #' 
 #' # Get information on smoother "kn", i.e. Interpolated Kneser-Ney
 #' info("kn")
+#' 
+#' @references 
+#' \insertAllCited{}
+#' 
 #' @name smoothers
 
 #' @rdname smoothers

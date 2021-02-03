@@ -20,6 +20,18 @@ the selected smoothing technique.
 }
 \description{
 Information on available k-gram continuation probability smoothers.
+\subsection{List of smoothers currently supported by \code{kgrams}}{
+\itemize{
+\item \code{"ml"}: Maximum Likelihood estimate
+\insertCite{markov1913essai}{kgrams}.
+\item \code{"add_k"}: Add-k smoothing \insertCite{jeffreys1998theory}{kgrams}.
+\item \code{"laplace"}: Laplace (a.k.a. Add-one) smoothing
+\insertCite{jeffreys1998theory}{kgrams}.
+\item \code{"kn"}: Interpolated Kneser-Ney with fixed discount.
+\insertCite{Kneser1995ImprovedBF,chen1999empirical}{kgrams}.
+\item \code{"sbo"}: Stupid Backoff \insertCite{brants-etal-2007-large}{kgrams}.
+}
+}
 }
 \examples{
 # List available smoothers
@@ -27,6 +39,10 @@ smoothers()
 
 # Get information on smoother "kn", i.e. Interpolated Kneser-Ney
 info("kn")
+
+}
+\references{
+\insertAllCited{}
 }
 \author{
 Valerio Gherardi

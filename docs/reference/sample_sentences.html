@@ -170,7 +170,7 @@ chosen uniformly at random from the model's dictionary.</p>
 
 
 <span class='co'>### Prepare the model and set seed</span>
-<span class='va'>freqs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='as_kgram_freqs.language_model.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>much_ado</span>, <span class='fl'>8</span>, .tokenize_sentences <span class='op'>=</span> <span class='va'>tokenize_sentences</span><span class='op'>)</span>
+<span class='va'>freqs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>much_ado</span>, <span class='fl'>8</span>, .tokenize_sentences <span class='op'>=</span> <span class='va'>tokenize_sentences</span><span class='op'>)</span>
 <span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>840</span><span class='op'>)</span>
 

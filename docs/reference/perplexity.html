@@ -188,8 +188,9 @@ of text, or a connection from which text can be read in batches.
 The second option is useful if one wants to avoid loading
 the full text in physical memory, and allows to process text from
 different sources such as files, compressed files or URLs.</p>
-<p>"Perplexity" is defined here, following Chen and Goodman (99)
-<strong>add this and other references</strong>, as the exponential of the normalized
+<p>"Perplexity" is defined here, following Ref.
+(Chen and Goodman 1999)
+, as the exponential of the normalized
 language model cross-entropy with the test corpus. Cross-entropy is
 normalized by the total number of words in the corpus, where we include
 the End-Of-Sentence tokens, but not the Begin-Of-Sentence tokens, in the
@@ -197,15 +198,25 @@ word count.</p>
 <p>The custom .preprocess and .tokenize_sentences arguments allow to apply
 transformations to the text corpus before the perplexity computation takes
 place. By default, the same functions used during model building are
-employed, c.f. <a href='as_kgram_freqs.language_model.html'>kgram_freqs</a> and <a href='language_model.html'>language_model</a>.</p>
+employed, c.f. <a href='kgram_freqs.html'>kgram_freqs</a> and <a href='language_model.html'>language_model</a>.</p>
 <p>A note of caution is in order. Perplexity is not defined for all language
 models available in <a href='kgrams-package.html'>kgrams</a>. For instance, smoother
-<code>"sbo"</code> (i.e. Stupid Backoff) does not produce normalized probabilities,
+<code>"sbo"</code> (i.e. Stupid Backoff (Brants et al. 2007)
+)
+does not produce normalized probabilities,
 and this is signaled by a warning (shown once per session) if the user
 attempts to compute the perplexity for such a model.
 In these cases, when possible, perplexity computations are performed
 anyway case, as the results might still be useful (e.g. to tune the model's
 parameters), even if their probabilistic interpretation does no longer hold.</p>
+    <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
+
+    <p>Brants T, Popat AC, Xu P, Och FJ, Dean J (2007).
+&#8220;Large Language Models in Machine Translation.&#8221;
+In <em>Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)</em>, 858--867.
+<a href='https://www.aclweb.org/anthology/D07-1090'>https://www.aclweb.org/anthology/D07-1090</a>.<br /><br /> Chen SF, Goodman J (1999).
+&#8220;An empirical study of smoothing techniques for language modeling.&#8221;
+<em>Computer Speech \&amp; Language</em>, <b>13</b>(4), 359--394.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Valerio Gherardi</p>
@@ -218,7 +229,7 @@ parameters), even if their probabilistic interpretation does no longer hold.</p>
 <span class='va'>test</span> <span class='op'>&lt;-</span> <span class='va'>midsummer</span>
 
 <span class='va'>tknz</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>text</span><span class='op'>)</span> <span class='fu'><a href='tokenize_sentences.html'>tokenize_sentences</a></span><span class='op'>(</span><span class='va'>text</span>, keep_first <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='as_kgram_freqs.language_model.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>train</span>, <span class='fl'>8</span>, .tokenize_sentences <span class='op'>=</span> <span class='va'>tknz</span><span class='op'>)</span>
+<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>train</span>, <span class='fl'>8</span>, .tokenize_sentences <span class='op'>=</span> <span class='va'>tknz</span><span class='op'>)</span>
 <span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.75</span><span class='op'>)</span>
 
 <span class='va'>FUN</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>N</span><span class='op'>)</span> <span class='op'>{</span>

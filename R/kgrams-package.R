@@ -8,5 +8,6 @@
 #' @import methods
 #' @importFrom Rcpp sourceCpp loadModule
 #' @importFrom utils head
+#' @importFrom Rdpack reprompt
 ## usethis namespace: end
 NULL

@@ -14,14 +14,15 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.1.1
+SystemRequirements: C++11
 LinkingTo: 
     Rcpp, RcppProgress
 Imports: 
-    Rcpp, rlang, methods, utils,  RcppProgress (>= 0.1)
-SystemRequirements: C++11
+    Rcpp, rlang, methods, utils,  RcppProgress (>= 0.1), Rdpack
 Depends: 
     R (>= 3.5)
 Suggests: 
     testthat (>= 3.0.0),
     covr
 Config/testthat/edition: 3
+RdMacros: Rdpack

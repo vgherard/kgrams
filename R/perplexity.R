@@ -30,8 +30,8 @@
 #' the full text in physical memory, and allows to process text from 
 #' different sources such as files, compressed files or URLs.
 #' 
-#' "Perplexity" is defined here, following Chen and Goodman (99) 
-#' \strong{add this and other references}, as the exponential of the normalized 
+#' "Perplexity" is defined here, following Ref. 
+#' \insertCite{chen1999empirical}{kgrams}, as the exponential of the normalized 
 #' language model cross-entropy with the test corpus. Cross-entropy is
 #' normalized by the total number of words in the corpus, where we include
 #' the End-Of-Sentence tokens, but not the Begin-Of-Sentence tokens, in the
@@ -44,7 +44,8 @@
 #' 
 #' A note of caution is in order. Perplexity is not defined for all language
 #' models available in \link[kgrams]{kgrams}. For instance, smoother 
-#' \code{"sbo"} (i.e. Stupid Backoff) does not produce normalized probabilities,
+#' \code{"sbo"} (i.e. Stupid Backoff \insertCite{brants-etal-2007-large}{kgrams}) 
+#' does not produce normalized probabilities,
 #' and this is signaled by a warning (shown once per session) if the user 
 #' attempts to compute the perplexity for such a model. 
 #' In these cases, when possible, perplexity computations are performed 
@@ -68,6 +69,9 @@
 #' 
 #' # Demonstrate overfitting of the higher order models
 #' sapply(c("N = 4" = 4, "N = 6" = 6, "N = 8" = 8), FUN)
+#' 
+#' @references 
+#' \insertAllCited{}
 #' 
 #' @name perplexity
 

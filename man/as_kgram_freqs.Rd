@@ -2,9 +2,12 @@
 % Please edit documentation in R/as_kgram_freqs.R
 \name{as_kgram_freqs}
 \alias{as_kgram_freqs}
+\alias{as_kgram_freqs.language_model}
 \title{Coerce to k-gram frequency table}
 \usage{
 as_kgram_freqs(object, ...)
+
+\method{as_kgram_freqs}{language_model}(object, ...)
 }
 \arguments{
 \item{object}{object to be coerced to \code{kgram_freqs}.}

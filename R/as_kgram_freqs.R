@@ -20,9 +20,9 @@ NULL
 #' @rdname as_kgram_freqs
 #' @export
 as_kgram_freqs <- function(object, ...)
-        UseMethod("as_kgram_freqs")
+        UseMethod("as_kgram_freqs", object)
 
-#' @rdname kgram_freqs
+#' @rdname as_kgram_freqs
 #' @export
 as_kgram_freqs.language_model <- function(object, ...) {
         cpp_obj <- attr(object, "cpp_freqs")
