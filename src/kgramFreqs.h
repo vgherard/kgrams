@@ -9,6 +9,7 @@
 #include <vector>
 #include <unordered_map>
 #include <utility>
+#include <stdexcept>
 #include "Dictionary.h"
 #include "WordStream.h"
 #include "CircularBuffer.h"
@@ -77,7 +78,8 @@ public:
         /// @details Constructs a kgramFreqs object of order N with an empty 
         /// dictionary.
         kgramFreqs(size_t N)
-                : N_(N), freqs_(N + 1), padding_(generate_padding()) {}
+                : N_(N), freqs_(N + 1), padding_(generate_padding()) 
+                { freqs_[0][""] = 0; }
         
         /// @brief Constructor with predefined dictionary
         /// @param N     Positive integer. Maximum order of k-grams to be 
@@ -154,6 +156,20 @@ public:
         /// excluding the Begin-Of-Sentence, End-Of-Sentence and Unknown word
         /// tokens.
         size_t V() const { return dict_.length(); }
+        
+        /// @brief total words seen in training
+        size_t tot_words() const { return freqs_[0].at(""); }
+        
+        /// @brief return number of unique k-grams
+        /// @param k a positive integer
+        size_t unique(size_t k) const  { 
+                if (k > N_) {
+                        throw std::domain_error(
+                                "'k' must be less than or equal to the maximum "
+                                "order of k-grams considered.");               
+                }
+                return freqs_[k].size(); 
+        }
         
         const FrequencyTable & operator[] (size_t k) const { return freqs_[k]; }
         

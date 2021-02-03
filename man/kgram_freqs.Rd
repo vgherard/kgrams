@@ -130,6 +130,16 @@ k-gram counts from text. For \code{process_sentences()}, the updated
 }
 \description{
 Extract k-gram frequency counts from a text or a connection.
+\subsection{Principal methods supported by objects of class \code{kgram_freqs}}{
+\itemize{
+\item \code{query()}: query k-gram counts from the table.
+See \link[kgrams]{query}
+\item \code{probability()}: compute word continuation and sentence probabilities
+using Maximum Likelihood estimates. See \link[kgrams]{probability}.
+\item \code{language_model()}: build a k-gram language model using various
+probability smoothing techniques. See \link[kgrams]{language_model}.
+}
+}
 }
 \details{
 These generic functions extract k-gram
@@ -167,7 +177,7 @@ The \code{dictionary} argument allows to provide an initial set of known
 words. Subsequently, one can either work with such a closed dictionary
 (\code{open_dictionary == FALSE}), or extended the dictionary with all
 new words encountered during k-gram processing
-(\code{open_dictionary == TRUE}).
+(\code{open_dictionary == TRUE})  .
 
 The \code{.preprocess} and \code{.tokenize_sentences} functions are applied
 \emph{before} k-gram counting takes place, and are in principle
@@ -197,6 +207,8 @@ applied when computing sentence absolute probabilities.
 # Build a k-gram frequency table from a character vector
 
 f <- kgram_freqs("a b b a a", 3)
+f
+summary(f)
 query(f, c("a", "b")) # c(3, 2)
 query(f, c("a b", "a" \%+\% EOS(), BOS() \%+\% "a b")) # c(1, 1, 1)
 query(f, "a b b a") # NA (counts for k-grams of order k > 3 are not known)
@@ -227,10 +239,8 @@ con <- url("http://shakespeare.mit.edu/much_ado/full.html")
 .preprocess <- function(x) {
         # Remove character names and locations (boldfaced in original html)
         x <- gsub("<b>[A-z]+</b>", "", x)
-        # Remove html tags
+        # Remove other html tags
         x <- gsub("<[^>]+>||<[^>]+$||^[^>]+>$", "", x)
-        # Remove character names (all-caps in original text)
-        x <- gsub("[A-Z]{2,}", "", x)
         # Apply standard preprocessing including lower-case
         x <- kgrams::preprocess(x)
         return(x)
@@ -245,13 +255,14 @@ con <- url("http://shakespeare.mit.edu/much_ado/full.html")
 }
 
 f <- kgram_freqs(con, 3, .preprocess, .tokenize_sentences, batch_size = 1000)
+summary(f)
 
 query(f, c("leonato", "thy", "smartphones")) # c(145, 52, 0)
 }
 }
 \seealso{
-\link[kgrams]{dictionary} \link[kgrams]{language_model}
-\link[kgrams]{preprocess} \link[kgrams]{tokenize_sentences}
+\link[kgrams]{query}, \link[kgrams]{probability}
+\link[kgrams]{language_model}, \link[kgrams]{dictionary}
 }
 \author{
 Valerio Gherardi

@@ -4,7 +4,6 @@
 #include <Rcpp.h>
 #include "kgramFreqs.h"
 #include "DictionaryR.h"
-using namespace Rcpp;
 
 class kgramFreqsR : public kgramFreqs {
 public:
@@ -23,12 +22,11 @@ public:
         /// For each sentence, anything separated by one or more space 
         /// characters is considered a word.
         void process_sentencesR(
-                CharacterVector & sentences, 
+                Rcpp::CharacterVector & sentences, 
                 bool fixed_dictionary = false,
                 bool verbose = false
         );
-        
-        IntegerVector queryR (CharacterVector) const;
+        Rcpp::IntegerVector queryR (Rcpp::CharacterVector) const;
         DictionaryR dictionaryR() const { return DictionaryR(dictionary()); };
 };
 

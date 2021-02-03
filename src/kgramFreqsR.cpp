@@ -55,6 +55,8 @@ RCPP_MODULE(kgramFreqs) {
         class_<kgramFreqs>("___kgramFreqs")
                 .property("N", &kgramFreqs::N)
                 .property("V", &kgramFreqs::V)
+                .const_method("unique", &kgramFreqs::unique)
+                .const_method("tot_words", &kgramFreqs::tot_words)
         ;
         
         class_<kgramFreqsR>("kgramFreqs")

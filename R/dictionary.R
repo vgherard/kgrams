@@ -2,6 +2,23 @@ new_dictionary <- function(cpp_obj) {
         structure(list(), cpp_obj = cpp_obj, class = "kgrams_dictionary")
 }
 
+#' @export
+print.dictionary <- function(x, ...) {
+        cat("A dictionary.\n")
+        return(invisible(x))
+}
+        
+
+#' @export
+summary.dictionary <- function(object, ...) {
+        cat("A dictionary of size ", length(dictionary), ".\n")
+        return(invisible(object))
+}
+
+#' @export
+str.dictionary <- function(object, ...) summary(object)
+
+
 #' Word dictionaries
 #'
 #' Construct or coerce to and from a dictionary.
