@@ -146,68 +146,74 @@ NULL
 # Generic constructor
 #' @rdname kgram_freqs
 #' @export
-kgram_freqs <- function(text,
-                        N,
-                        .preprocess = identity,
-                        .tokenize_sentences = identity,
-                        dictionary = NULL,
-                        open_dictionary = is.null(dictionary),
-                        verbose = FALSE,
-                        ...
-) 
-{
-        force(open_dictionary)
-        if (missing(dictionary) || is.null(dictionary))
-                dictionary <- dictionary()
-        dictionary <- as.dictionary(dictionary)
-        
-        cpp_obj <- new(kgramFreqs, N, attr(dictionary, "cpp_obj"))
-        
-        process <- kgram_process_task(
-                cpp_obj, .preprocess, .tokenize_sentences, open_dictionary, verbose
-        )
-        
+kgram_freqs <- function(
+        text,
+        N,
+        .preprocess = identity,
+        .tokenize_sentences = identity,
+        dictionary = NULL,
+        open_dictionary = is.null(dictionary),
+        verbose = TRUE,
+        ...
+        ) 
         UseMethod("kgram_freqs", text)
-}
 
 # Constructor from character vector
 #' @rdname kgram_freqs
 #' @export
-kgram_freqs.character <- function(text, 
-                                  N,
-                                  .preprocess = identity, 
-                                  .tokenize_sentences = identity,
-                                  dictionary = NULL,
-                                  open_dictionary = TRUE,
-                                  ...
-)
+kgram_freqs.character <- function(
+        text, 
+        N,
+        .preprocess = identity, 
+        .tokenize_sentences = identity,
+        dictionary = NULL,
+        open_dictionary = is.null(dictionary),
+        verbose = TRUE,
+        ...
+        )
 {
-        process(text)
-        new_kgram_freqs(cpp_obj, .preprocess, .tokenize_sentences)
+        freqs <- kgram_freqs_init(
+                N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
+                ) 
+        process_sentences.character(
+                text, 
+                freqs, 
+                open_dictionary = open_dictionary, 
+                in_place = TRUE,
+                verbose = verbose,
+                ...
+                ) # return
 }
 
 # Constructor from connection
 #' @rdname kgram_freqs
 #' @export
-kgram_freqs.connection <- function(text,
-                                   N,
-                                   .preprocess = identity,
-                                   .tokenize_sentences = identity,
-                                   dictionary = NULL,
-                                   open_dictionary = TRUE,
-                                   batch_size = NULL,
-                                   ...
-)
+kgram_freqs.connection <- function(
+        text,
+        N,
+        .preprocess = identity,
+        .tokenize_sentences = identity,
+        dictionary = NULL,
+        open_dictionary = is.null(dictionary),
+        max_lines = max_lines,
+        batch_size = NULL,
+        verbose = TRUE,
+        ...
+        )
 {
-        if (is.null(batch_size)) 
-                batch_size <- -1L
-        
-        open(text, "r")
-        while (length(batch <- readLines(text, batch_size)))
-                process(batch)
-        close(text)
-        
-        new_kgram_freqs(cpp_obj, .preprocess, .tokenize_sentences)
+        freqs <- kgram_freqs_init(
+                N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
+        ) 
+        process_sentences.connection(
+                text,
+                freqs,
+                open_dictionary = open_dictionary,
+                in_place = TRUE,
+                max_lines = max_lines,
+                batch_size = batch_size,
+                verbose = TRUE,
+                ...
+        )
 }
 
 # Process sentences generic
@@ -220,11 +226,11 @@ process_sentences <- function(
         .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
         open_dictionary = TRUE,
         in_place = TRUE,
+        verbose = TRUE,
         ...
-) 
-{
+        ) 
         UseMethod("process_sentences", text)
-}
+        
 
 # Process sentences from character vector
 #' @rdname kgram_freqs
@@ -236,16 +242,12 @@ process_sentences.character <- function(
         .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
         open_dictionary = TRUE,
         in_place = TRUE,
+        verbose = TRUE,
         ...
-)
-{
-        if (!in_place)
-                attr(freqs, "cpp_obj") <- new(kgramFreqs, attr(freqs, "cpp_obj"))
-        cpp_obj <- attr(freqs, "cpp_obj")
-        process <- kgram_process_task(
-                cpp_obj, .preprocess, .tokenize_sentences, open_dictionary
         )
-        
+{
+        freqs <- process_sentences_init(freqs, in_place)
+        process <- kgram_process_task(freqs, open_dictionary, verbose)
         process(text)
         return(invisible(freqs))
 }
@@ -260,36 +262,61 @@ process_sentences.connection <- function(
         .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
         open_dictionary = TRUE,
         in_place = TRUE,
-        batch_size = NULL,
+        max_lines = Inf,
+        batch_size = max_lines,
+        verbose = TRUE,
         ...
 )
 {
-        if (!in_place)
-                attr(freqs, "cpp_obj") <- new(kgramFreqs, attr(freqs, "cpp_obj"))
-        cpp_obj <- attr(freqs, "cpp_obj") 
-        
-        process <- kgram_process_task(
-                cpp_obj, .preprocess, .tokenize_sentences, open_dictionary
-        )
-        
-        if (is.null(batch_size)) 
-                batch_size <- -1L
+        freqs <- process_sentences_init(freqs, in_place)
+        process <- kgram_process_task(freqs, open_dictionary, verbose)
         
         open(text, "r")
-        while (length(batch <- readLines(text, batch_size)))
+        if (batch_size == Inf) 
+                batch_size <- -1L
+        left <- max_lines
+        if (verbose) progress <- new_progress()
+        while (left > 0) {
+                batch <- readLines(text, min(left, batch_size))
+                left <- left - batch_size
+                if (length(batch) == 0) 
+                        break # Reached EOF
                 process(batch)
+                if (verbose) progress$show()
+        }
+        if (verbose) progress$terminate()
         close(text)
         
         return(invisible(freqs))
 }
 
+kgram_freqs_init <- function(
+        N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
+        ) 
+{
+        if (is.null(dictionary))
+                dictionary <- dictionary()
+        dictionary <- as.dictionary(dictionary)
+        cpp_obj <- new(kgramFreqs, N, attr(dictionary, "cpp_obj"))
+        new_kgram_freqs(cpp_obj, .preprocess, .tokenize_sentences)
+}
 
-kgram_process_task <- function(
-        cpp_obj, .preprocess, .tokenize_sentences, open_dictionary, verbose
-)
-        function(batch) 
-        {
+process_sentences_init <- function(freqs, in_place) {
+        if (!in_place) {
+                old <- attr(freqs, "cpp_obj")
+                attr(freqs, "cpp_obj") <- new(kgramFreqs, old)
+        }
+        return(freqs)
+}
+
+kgram_process_task <- function(freqs, open_dictionary, verbose) {
+        cpp_obj <- attr(freqs, "cpp_obj")
+        .preprocess <- attr(freqs, ".preprocess")
+        .tokenize_sentences <- attr(freqs, ".tokenize_sentences")
+        function(batch) {
                 batch <- .preprocess(batch)
                 batch <- .tokenize_sentences(batch)
                 cpp_obj$process_sentences(batch, !open_dictionary, verbose)
-        }
+        } # return
+}
+        

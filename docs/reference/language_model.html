@@ -128,7 +128,7 @@ k-gram model. At present, necessarily a <code>kgram_freqs</code> object.</p></td
 be applied to compute k-gram continuation probabilities. A list of
 available smoothers can be obtained with <a href='smoothers.html'>smoothers</a>, and
 further information on a particular smoother through
-smoother_info</p></td>
+info</p></td>
     </tr>
     <tr>
       <th>N</th>
@@ -159,7 +159,7 @@ prediction accuracies.</p>
 <p>Smoothers have often tuning parameters, which need to be specified by
 (exact) name through the <code>...</code> arguments; otherwise,
 <code>language_model()</code> will use default values and, once per session, throw
-a warning. <code>smoother_info(smoother)</code> lists all parameters needed by a
+a warning. <code>info(smoother)</code> lists all parameters needed by a
 specific smoother, together with their allowed parameter space.</p>
 <p>The run-time of <code>language_model()</code> may vary substantially for different
 smoothing methods, depending on whether or not a method requires the

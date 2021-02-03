@@ -21,9 +21,9 @@ k-gram model. At present, necessarily a \code{kgram_freqs} object, or a
 
 \item{smoother}{a character vector. Indicates the smoothing technique to
 be applied to compute k-gram continuation probabilities. A list of
-available smoothers can be obtained with \link[kgrams]{smoothers}, and
+available smoothers can be obtained with \code{smoothers()}, and
 further information on a particular smoother through
-\link[kgrams]{smoother_info}}
+\code{info()}.}
 
 \item{N}{an integer. Maximum order of k-grams to use in the language
 model. This muss be less than or equal to the order of the underlying
@@ -56,7 +56,7 @@ prediction accuracies.
 Smoothers have often tuning parameters, which need to be specified by
 (exact) name through the \code{...} arguments; otherwise,
 \code{language_model()} will use default values and, once per session, throw
-a warning. \code{smoother_info(smoother)} lists all parameters needed by a
+a warning. \code{info(smoother)} lists all parameters needed by a
 specific smoother, together with their allowed parameter space.
 
 The run-time of \code{language_model()} may vary substantially for different

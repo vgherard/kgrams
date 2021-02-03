@@ -43,9 +43,9 @@ as.language_model.default <- function(object) {
 #' \code{kgram_freqs} object.
 #' @param smoother a character vector. Indicates the smoothing technique to
 #' be applied to compute k-gram continuation probabilities. A list of 
-#' available smoothers can be obtained with \link[kgrams]{smoothers}, and 
+#' available smoothers can be obtained with \code{smoothers()}, and 
 #' further information on a particular smoother through 
-#' \link[kgrams]{smoother_info}
+#' \code{info()}.
 #' @param ... possible additional parameters required by the smoother.
 #' 
 #' @return A \code{language_model} object.
@@ -70,7 +70,7 @@ as.language_model.default <- function(object) {
 #' Smoothers have often tuning parameters, which need to be specified by
 #' (exact) name through the \code{...} arguments; otherwise, 
 #' \code{language_model()} will use default values and, once per session, throw 
-#' a warning. \code{smoother_info(smoother)} lists all parameters needed by a 
+#' a warning. \code{info(smoother)} lists all parameters needed by a 
 #' specific smoother, together with their allowed parameter space.
 #' 
 #' The run-time of \code{language_model()} may vary substantially for different

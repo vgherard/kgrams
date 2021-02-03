@@ -16,7 +16,7 @@ kgram_freqs(
   .tokenize_sentences = identity,
   dictionary = NULL,
   open_dictionary = is.null(dictionary),
-  verbose = FALSE,
+  verbose = TRUE,
   ...
 )
 
@@ -26,7 +26,8 @@ kgram_freqs(
   .preprocess = identity,
   .tokenize_sentences = identity,
   dictionary = NULL,
-  open_dictionary = TRUE,
+  open_dictionary = is.null(dictionary),
+  verbose = TRUE,
   ...
 )
 
@@ -36,8 +37,10 @@ kgram_freqs(
   .preprocess = identity,
   .tokenize_sentences = identity,
   dictionary = NULL,
-  open_dictionary = TRUE,
+  open_dictionary = is.null(dictionary),
+  max_lines = max_lines,
   batch_size = NULL,
+  verbose = TRUE,
   ...
 )
 
@@ -48,6 +51,7 @@ process_sentences(
   .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
   open_dictionary = TRUE,
   in_place = TRUE,
+  verbose = TRUE,
   ...
 )
 
@@ -58,6 +62,7 @@ process_sentences(
   .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
   open_dictionary = TRUE,
   in_place = TRUE,
+  verbose = TRUE,
   ...
 )
 
@@ -68,7 +73,9 @@ process_sentences(
   .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
   open_dictionary = TRUE,
   in_place = TRUE,
-  batch_size = NULL,
+  max_lines = Inf,
+  batch_size = max_lines,
+  verbose = TRUE,
   ...
 )
 }
