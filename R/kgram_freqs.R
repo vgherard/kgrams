@@ -152,6 +152,7 @@ kgram_freqs <- function(text,
                         .tokenize_sentences = identity,
                         dictionary = NULL,
                         open_dictionary = is.null(dictionary),
+                        verbose = FALSE,
                         ...
 ) 
 {
@@ -163,7 +164,7 @@ kgram_freqs <- function(text,
         cpp_obj <- new(kgramFreqs, N, attr(dictionary, "cpp_obj"))
         
         process <- kgram_process_task(
-                cpp_obj, .preprocess, .tokenize_sentences, open_dictionary
+                cpp_obj, .preprocess, .tokenize_sentences, open_dictionary, verbose
         )
         
         UseMethod("kgram_freqs", text)
@@ -284,11 +285,11 @@ process_sentences.connection <- function(
 
 
 kgram_process_task <- function(
-        cpp_obj, .preprocess, .tokenize_sentences, open_dictionary
+        cpp_obj, .preprocess, .tokenize_sentences, open_dictionary, verbose
 )
         function(batch) 
         {
                 batch <- .preprocess(batch)
                 batch <- .tokenize_sentences(batch)
-                cpp_obj$process_sentences(batch, !open_dictionary)
+                cpp_obj$process_sentences(batch, !open_dictionary, verbose)
         }

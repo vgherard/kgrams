@@ -15,6 +15,78 @@ param(object, which) <- value
 
 parameters(object)
 }
+\arguments{
+\item{object}{a \code{language_model} or \code{kgram_freqs} class object.}
+
+\item{which}{a string. Name of the parameter to get or set.}
+
+\item{value}{new value for the parameter specified by \code{which}. Typically
+a length one numeric.}
+}
+\value{
+a list for \code{parameters()}, a single value, typically numeric,
+for \code{param()} and \code{param()<-} (the new value, in this last case).
+}
 \description{
-Get and set parameters of a language model
+Get and set parameters of a language model.
+}
+\details{
+These functions are used to retrieve or modify the parameters of a
+\code{language_model} or a \code{kgram_freqs} object. Any object of,
+or inheriting from, any of these two classes has at least two parameters:
+\itemize{
+\item \code{N}: higher order of k-grams considered in the model for
+\code{language_model}, or stored in memory for \code{kgram_freqs}.
+\item \code{V}: size of the dictionary (excluding the special tokens
+\code{BOS()}, \code{EOS()}, \code{UNK()}).
+}
+
+For an object of class \code{kgram_freqs}, these are the only parameters,
+and they are read-only. \code{language_model}s allow to set \code{N} less
+than or equal to the order of the underlying \code{kgram_freqs} object.
+
+In addition to these, \code{language_model}s can have additional parameters,
+e.g. discount values or interpolation constants, depending on the particular
+smoother employed by the model. A list of parameters available for a given
+smoother can be obtained through \code{info()}
+(see \link[kgrams]{smoothers}).
+
+It is important to mention that setting a parameter is an in-place operation.
+This implies that if, say, object \code{m} is a \code{language_model} object,
+the code \code{m1 <- m ; param(m1, which) <- value} will set the parameter
+\code{which} to \code{value} both for \code{m1} \emph{and} \code{m}. The
+reason for this is that, behind the scenes, both \code{m} and \code{m1} are
+pointers to the same C++ object. In order to create a true copy, one can use
+the copy constructor \code{language_model()}, see
+\link[kgrams]{language_model}.
+}
+\examples{
+# Get and set k-gram model parameters
+
+f <- kgram_freqs("a a b a b", 3)
+param(f, "N")
+parameters(f)
+
+m <- language_model(f, "sbo", lambda = 0.2)
+param(m, "V")
+param(m, "lambda")
+param(m, "N") <- 2
+param(m, "lambda") <- 0.4
+
+if (FALSE) {
+        param(m, "V") <- 5 # Error: dictionary size cannot be set.  
+}
+
+if (FALSE) {
+        param(f, "N") <- 4 # Error: parameters of 'kgram_freqs' cannot be set  
+}
+
+m1 <- m
+param(m1, "lambda") <- 0.5
+param(m, "lambda") # 0.5 ; param() modifies 'm' by reference!
+
+m2 <- language_model(m) # This creates a true copy
+param(m2, "lambda") <- 0.6
+param(m, "lambda") # 0.5
+
 }

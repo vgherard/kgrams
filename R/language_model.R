@@ -35,8 +35,9 @@ as.language_model.default <- function(object) {
 #' @author Valerio Gherardi
 #' @md
 #'
-#' @param freqs an object which stores the information required to build the
-#' k-gram model. At present, necessarily a \code{kgram_freqs} object.
+#' @param object an object which stores the information required to build the
+#' k-gram model. At present, necessarily a \code{kgram_freqs} object, or a 
+#' \code{language_model} object of which a copy is desired (see Details).
 #' @param N an integer. Maximum order of k-grams to use in the language
 #' model. This muss be less than or equal to the order of the underlying
 #' \code{kgram_freqs} object.
@@ -49,6 +50,13 @@ as.language_model.default <- function(object) {
 #' 
 #' @return A \code{language_model} object.
 #' @details
+#' These generics are used to construct objects of class \code{language_model}.
+#' The \code{language_model} method isonly needed to create copies of 
+#' \code{language_model} objects (that is to say, new copies which are not 
+#' altered by methods which modify the original object in place, 
+#' see e.g. \link[kgrams]{parameters}). The discussion below focuses on 
+#' language models and the \code{kgram_freqs} method.
+#' 
 #' \link[kgrams]{kgrams} supports several k-gram language models, including
 #' Interpolated Kneser-Ney, Stupid Backoff and others 
 #' (see \link[kgrams]{smoothers}). The objects created by 
@@ -78,26 +86,49 @@ as.language_model.default <- function(object) {
 #' probability("a" %|% "b", model)
 #' @name language_model
 
+#' @rdname language_model
 #' @export
-language_model <- function(freqs, smoother = "ml", N = param(freqs, "N"), ...) {
-        if (isFALSE(is.numeric(N) & 0 < N & N <= param(freqs, "N"))) {
+language_model <- function(object, ...)
+        UseMethod("language_model", object)
+
+#' @rdname language_model
+#' @export
+language_model.language_model <- function(object, ...) {
+        cpp_freqs <- attr(object, "cpp_freqs")
+        smoother <- class(object)[[2]]
+        args <- parameters(object)
+        N <- args[["N"]]
+        cpp_obj <- switch(smoother, 
+                sbo = new(SBOSmoother, cpp_freqs, N, args[["lambda"]]),
+                add_k = new(AddkSmoother, cpp_freqs, N, args[["k"]]),
+                laplace = new(AddkSmoother, cpp_freqs, N, 1.0),
+                ml = new(MLSmoother, cpp_freqs, N),
+                kn = new(KNSmoother, cpp_freqs, N, args[["D"]])
+        )
+        new_language_model(cpp_obj, 
+                           cpp_freqs, 
+                           attr(object, ".preprocess"), 
+                           attr(object, ".tokenize_sentences"),
+                           smoother
+        )
+}
+
+#' @rdname language_model
+#' @export
+language_model.kgram_freqs <- 
+        function(object, smoother = "ml", N = param(object, "N"), ...) 
+{
+        if (isFALSE(is.numeric(N) & 0 < N & N <= param(object, "N"))) {
                 msgs <- "'N' must be a positive integer less than or equal" %+%
-                        "to 'param(freqs, \"N\")'."
+                        "to 'param(object, \"N\")'."
                 rlang::abort(message = msgs, class = "domain_error")
         }
         validate_smoother(smoother, ...)
-        UseMethod("language_model", freqs)
-}
-
-#' @export
-language_model.kgram_freqs <- 
-        function(freqs, smoother = "ml", N = param(freqs, "N"), ...) 
-{
         args <- list(...)
         for (parameter in list_parameters(smoother)) 
                 if (is.null(args[[parameter$name]]))
                         args[[parameter$name]] <- parameter$default
-        cpp_freqs <- attr(freqs, "cpp_obj")
+        cpp_freqs <- attr(object, "cpp_obj")
         cpp_obj <- switch(smoother, 
                sbo = new(SBOSmoother, cpp_freqs, N, args[["lambda"]]),
                add_k = new(AddkSmoother, cpp_freqs, N, args[["k"]]),
@@ -107,8 +138,8 @@ language_model.kgram_freqs <-
         )
         new_language_model(cpp_obj, 
                            cpp_freqs, 
-                           attr(freqs, ".preprocess"), 
-                           attr(freqs, ".tokenize_sentences"),
+                           attr(object, ".preprocess"), 
+                           attr(object, ".tokenize_sentences"),
                            smoother
                            )
 }

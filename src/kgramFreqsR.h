@@ -23,7 +23,9 @@ public:
         /// For each sentence, anything separated by one or more space 
         /// characters is considered a word.
         void process_sentencesR(
-                CharacterVector & sentences, bool fixed_dictionary = false
+                CharacterVector & sentences, 
+                bool fixed_dictionary = false,
+                bool verbose = false
         );
         
         IntegerVector queryR (CharacterVector) const;

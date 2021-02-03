@@ -16,6 +16,7 @@ kgram_freqs(
   .tokenize_sentences = identity,
   dictionary = NULL,
   open_dictionary = is.null(dictionary),
+  verbose = FALSE,
   ...
 )
 

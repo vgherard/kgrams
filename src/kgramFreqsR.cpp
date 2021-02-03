@@ -25,16 +25,27 @@ IntegerVector kgramFreqsR::queryR(CharacterVector kgram) const
 /// For each sentence, anything separated by one or more space 
 /// characters is considered a word.
 void kgramFreqsR::process_sentencesR(
-        CharacterVector & sentences, bool fixed_dictionary
+        CharacterVector & sentences, bool fixed_dictionary, bool verbose
         ) 
 {
         add_BOS_counts(sentences.size());
         std::string sentence;
+        
+        size_t each = sentences.size() / 10, left = each, progress = 0;
+        if (verbose) 
+                Rprintf("0 / 10\n");
         auto itend = sentences.end();
         for (auto it = sentences.begin(); it != itend; ++it) {
+                if (verbose and left-- == 0) {
+                        left = each;
+                        progress += 1;
+                        Rprintf("%d / 10\n", progress);
+                }
                 sentence = *it;
                 process_sentence(sentence, fixed_dictionary);
-                }
+        }
+        if (verbose) 
+                Rprintf("10 / 10\n");
         update_satellites();
 }
 

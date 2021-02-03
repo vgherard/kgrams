@@ -2,13 +2,22 @@
 % Please edit documentation in R/language_model.R
 \name{language_model}
 \alias{language_model}
+\alias{language_model.language_model}
+\alias{language_model.kgram_freqs}
 \title{k-gram Language Models}
 \usage{
-language_model(freqs, smoother = "ml", N = param(freqs, "N"), ...)
+language_model(object, ...)
+
+\method{language_model}{language_model}(object, ...)
+
+\method{language_model}{kgram_freqs}(object, smoother = "ml", N = param(object, "N"), ...)
 }
 \arguments{
-\item{freqs}{an object which stores the information required to build the
-k-gram model. At present, necessarily a \code{kgram_freqs} object.}
+\item{object}{an object which stores the information required to build the
+k-gram model. At present, necessarily a \code{kgram_freqs} object, or a
+\code{language_model} object of which a copy is desired (see Details).}
+
+\item{...}{possible additional parameters required by the smoother.}
 
 \item{smoother}{a character vector. Indicates the smoothing technique to
 be applied to compute k-gram continuation probabilities. A list of
@@ -19,8 +28,6 @@ further information on a particular smoother through
 \item{N}{an integer. Maximum order of k-grams to use in the language
 model. This muss be less than or equal to the order of the underlying
 \code{kgram_freqs} object.}
-
-\item{...}{possible additional parameters required by the smoother.}
 }
 \value{
 A \code{language_model} object.
@@ -29,6 +36,13 @@ A \code{language_model} object.
 Create a k-gram language model.
 }
 \details{
+These generics are used to construct objects of class \code{language_model}.
+The \code{language_model} method isonly needed to create copies of
+\code{language_model} objects (that is to say, new copies which are not
+altered by methods which modify the original object in place,
+see e.g. \link[kgrams]{parameters}). The discussion below focuses on
+language models and the \code{kgram_freqs} method.
+
 \link[kgrams]{kgrams} supports several k-gram language models, including
 Interpolated Kneser-Ney, Stupid Backoff and others
 (see \link[kgrams]{smoothers}). The objects created by
