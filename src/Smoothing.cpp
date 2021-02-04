@@ -21,12 +21,12 @@ void Smoother::set_N (size_t N)
         }
 }
 
-/// @brief truncate 'context' to last N - 1 words.
-std::string Smoother::truncate (std::string context) const {
-        if (N() == 1) return "";
+/// @brief truncate 'context' to last k - 1 words.
+std::string Smoother::truncate (std::string context, size_t k) const {
+        if (k == 1) return "";
         size_t n_words = 0;
         size_t start = std::string::npos;
-        while (n_words < N() - 1) {
+        while (n_words < k - 1) {
                 start = context.find_last_not_of(" ", start);
                 if (start == std::string::npos or start == 0) 
                         return context;
@@ -111,7 +111,7 @@ double SBOSmoother::operator() (const std::string & word, std::string context)
 const {
         if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
                 return -1;
-        context = truncate(context);
+        context = truncate(context, N_);
         double kgram_count, penalization = 1.;
         while ((kgram_count = f_.query(context + " " + word)) == 0) {
                 backoff(context);
@@ -136,7 +136,7 @@ double AddkSmoother::operator() (const std::string & word, std::string context)
 const {
         if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
                 return -1;
-        context = truncate(context);
+        context = truncate(context, N_);
         double num = f_.query(context + " " + word) + k_;
         double den = f_.query(context) + k_ * (V() + 2);
         return num / den;
@@ -156,7 +156,7 @@ double MLSmoother::operator() (const std::string & word, std::string context)
         const {
         if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
                 return -1;
-        context = truncate(context);
+        context = truncate(context, N_);
         double den = f_.query(context);
         if (den == 0)
                 return -1;
@@ -173,16 +173,17 @@ void KNFreqs::update ()
 {
         // Reinitialize l_, r_, and lr_... is it possible to do something more
         // clever?
-        l_ = std::vector<FrequencyTable>(f_.N());
-        r_ = std::vector<FrequencyTable>(f_.N());
-        lr_ = std::vector<FrequencyTable>(f_.N());
+        l_ = FreqTablesVec(f_.N());
+        r_ = FreqTablesVec(f_.N());
+        lr_ = FreqTablesVec(f_.N() - 1);
         
         // Retrieve continuation counts from k-gram counts up to the maximum 
         // order allowed (f.N())
         std::string kgram_code;
         size_t l_pos, r_pos;
-        for (size_t k = 2; k <= f_.N(); ++k) {
-                const FrequencyTable & kgram_codes(f_[k]);
+        for (size_t k = 1; k <= f_.N(); ++k) {
+                const std::unordered_map<std::string, size_t> & 
+                        kgram_codes(f_[k]);
                 auto itend = kgram_codes.end();
                 for (auto it = kgram_codes.begin(); it != itend; it++) {
                         // kgram_code is always of the form "n_1 n_2 ... n_k"
@@ -195,9 +196,9 @@ void KNFreqs::update ()
                                 continue;
                         l_pos = kgram_code.find_first_of(" ") + 1;
                         l_[k - 1][kgram_code.substr(l_pos)]++;
-                        
                         r_[k - 1][kgram_code.substr(0, r_pos)]++;
-                        if (k == 2) { lr_[0][""]++; continue; }
+                        if (k == 1) continue;
+                        else if (k == 2) { lr_[0][""]++; continue; }
                         lr_[k - 2][ 
                         kgram_code.substr(l_pos, r_pos - l_pos)
                         ]++;
@@ -234,7 +235,7 @@ double KNSmoother::operator() (const std::string & word, std::string context)
         
         if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
                 return -1;
-        context = truncate(context); // keep at most N - 1 words
+        context = truncate(context, N_); // keep at most N - 1 words
         double den = f_.query(context);
         double num = f_.query(context + " " + word) - D_;
         num = num > 0 ? num : 0;
@@ -256,7 +257,7 @@ double KNSmoother::operator() (const std::string & word, std::string context)
         // overwrite num which is no longer necessary
         auto p = f_.kgram_code(context); // this is a pair {order, code}
         double backoff_fac = den != 0 ? 
-                D_ * knf_.r(p.first, p.second) / den : 1;
+                D_ * knf_.r().query(p.first, p.second) / den : 1;
         
         // Backoff directly on the k-gram code (stored in p.second)
         // overwrite 'context' with backed off context CODE
@@ -291,11 +292,12 @@ double KNSmoother::prob_cont (
         // where V is the number of words in the dictionary (without <BOS>)
         
         // Compute denominator of ProbContDisc(w|c)
-        double den = knf_.lr(order - 1, context);
+        double den = knf_.lr().query(order - 1, context);
         
         // Compute numerator of ProbContDisc(w|c)
-        double num = 
-                knf_.l(order, context != "" ? context + " " + word : word) - D_;
+        double num = knf_.l().query(
+                order, context != "" ? context + " " + word : word
+                ) - D_;
         num = num > 0 ? num : 0;
         
         // Compute ProbContDisc(w|c)
@@ -312,7 +314,7 @@ double KNSmoother::prob_cont (
         
         // Compute BackoffFac(c)
         double backoff_fac = den != 0 ? 
-                D_ * knf_.r(order - 1, context) / den : 1;
+                D_ * knf_.r().query(order - 1, context) / den : 1;
         
         // Backoff the k-gram code
         size_t pos = context.find_first_of(" ");
@@ -323,6 +325,197 @@ double KNSmoother::prob_cont (
         
         return prob_cont_disc + backoff_fac * prob_cont_backoff;
 }
+
+//--------//----------------mKNSmoother----------------//--------//
+
+/// @brief update satellite values of KNSmoother
+void mKNFreqs::update () 
+{
+        // Reinitialize l_, r_, and lr_... is it possible to do something more
+        // clever?
+        l_ = FreqTablesVec(f_.N());
+        r1_ = FreqTablesVec(f_.N());
+        r2_ = FreqTablesVec(f_.N());
+        r3p_ = FreqTablesVec(f_.N());
+        lr_ = FreqTablesVec(f_.N() - 1);
+        
+        // Retrieve continuation counts from k-gram counts up to the maximum 
+        // order allowed (f.N())
+        std::string kgram_code;
+        size_t l_pos, r_pos;
+        for (size_t k = 1; k <= f_.N(); ++k) {
+                const std::unordered_map<std::string, size_t> & 
+                        kgram_codes(f_[k]);
+                auto itend = kgram_codes.end();
+                for (auto it = kgram_codes.begin(); it != itend; it++) {
+                        // kgram_code is always of the form "n_1 n_2 ... n_k"
+                        // with exactly one space between word codes
+                        kgram_code = it->first;
+                        if (k > 1) {
+                                r_pos = kgram_code.find_last_of(" ");
+                                l_pos = kgram_code.find_first_of(" ") + 1;
+                        } else {
+                                r_pos = 0;
+                                l_pos = kgram_code.length();
+                        }
+                        // Reject kgrams ending in BOS
+                        // In this way sum(prob(w|...)) = 1, where w != BOS
+                        if (kgram_code.substr(r_pos + (k > 1)) == BOS_IND)
+                                continue;
+                        // Add right continuation counts
+                        switch(it->second) 
+                        {
+                        case 1: 
+                                r1_[k - 1][kgram_code.substr(0, r_pos)]++;
+                                break;
+                        case 2: 
+                                r2_[k - 1][kgram_code.substr(0, r_pos)]++;
+                                break;
+                        default: 
+                                r3p_[k - 1][kgram_code.substr(0, r_pos)]++;
+                                break;
+                        }
+                        // Add left continuation counts
+                        l_[k - 1][kgram_code.substr(l_pos)]++;
+                        // Add left right continuation counts if k >= 2
+                        if (k == 1) continue;
+                        else if (k == 2) { lr_[0][""]++; continue; }
+                        lr_[k - 2][ 
+                        kgram_code.substr(l_pos, r_pos - l_pos)
+                        ]++;
+                }
+        }
+}
+
+/// @brief Return Modified Kneser-Ney continuation probability of a word
+/// given a context.
+/// @param word A string. Word for which the continuation probability
+/// is to be computed.
+/// @param context A string. Context conditioning the probability of
+/// 'word'.
+/// @return a positive number. Modified Kneser-Ney continuation
+/// probability of 'word' given 'context'.
+double mKNSmoother::operator() (const std::string & word, std::string context) 
+const {
+        // The probability of word 'w' in context 'c' is given by:
+        //
+        //      Prob(w|c) = ProbDisc(w|c) + BackoffFac(c) * ProbCont(w|c--)
+        //
+        // where c-- is the backed-off context (remove first word from 'c') and:
+        //
+        //      ProbDisc(w|c) = [Count(c,w)-D]+ / Count(c)
+        //      BackoffFac(c) = 1 - sum_w(ProbDisc(w|c))
+        //                    = D * N1+(c,*) / Count(c)
+        //      ProbCont(w|c--) = Continuation probability of 'w|c--' 
+        //
+        // Here N1+(c,*) = (# different words following context 'c') is the
+        // continuation count; []+ denotes positive part; the continuation 
+        // probability is defined below. For the base case, we replace
+        //      ProbCont(w|) = 1 / V,
+        // where V is the number of words in the dictionary (without <BOS>)
+        
+        // Handle n.d. cases
+        if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
+                return -1;
+        // keep at most N - 1 words
+        context = truncate(context, N_); 
+        
+        // Temporary variable needed below; this is a pair {order, code} 
+        auto p = f_.kgram_code(context);
+        
+        // Compute ProbDisc(w|c)
+        double prob_disc;
+        double den = f_.query(context);
+        if (den == 0)
+                prob_disc = 0.;
+        else {
+                double num = f_.query(context + " " + word);
+                num += -D_(num);
+                num = num > 0 ? num : 0;
+                prob_disc = num / den;
+        }
+        
+        // Compute BackoffFac(c)
+        double backoff_fac;
+        if (den == 0)
+                backoff_fac = 1.;
+        else {
+                double N1 = mknf_.r1().query(p.first, p.second);
+                double N2 = mknf_.r2().query(p.first, p.second);
+                double N3p = mknf_.r3p().query(p.first, p.second);
+                backoff_fac = (D1_ * N1 + D2_ * N2 + D3_ * N3p) / den;
+        }
+        
+        // Compute ProbCont(w|c--)
+        double prob_cont;
+        std::string word_index = f_.index(word);
+        size_t pos = p.second.find_first_of(" ");
+        p.second = (pos != std::string::npos) ? p.second.substr(pos + 1) : "";
+        prob_cont = this->prob_cont(word_index, p.second, p.first);  
+        
+        // Final result
+        return prob_disc + backoff_fac * prob_cont;
+}
+
+
+// Compute continuation probability of word in a given context. 'order' is the
+// k-gram order of context, passed for efficiency.
+double mKNSmoother::prob_cont (
+                const std::string & word, std::string context, size_t order
+) const {
+        // The continuation probability of word 'w' in context 'c' is given by:
+        //
+        //      ProbCont(w|c) = ProbContDisc(w|c) + 
+        //                              BackoffFac(c) * ProbCont(w|c--)
+        //
+        // where c-- is the backed-off context (remove first word from 'c') and:
+        //
+        //      ProbContDisc(w|c) = [N1+(*,c,w)-D]+ / N1+(*,c,*)
+        //      BackoffFac(c) = 1 - sum_w(ProbContDisc(w|c))
+        //                    = D * N1+(c,*) / N1+(*,c,*)
+        //      ProbCont(w|c--) = Continuation probability of 'w|c--'
+        // For the base case, we replace
+        //      ProbCont(w|) = 1 / V,
+        // where V is the number of words in the dictionary (without <BOS>)
+        if (order == 0)
+                return 1 / (double)(V() + 2);
+        
+        // Compute ProbContDisc(w|c)
+        double prob_cont_disc;
+        double den = mknf_.lr().query(order - 1, context);
+        if (den == 0)
+                prob_cont_disc = 0;
+        else {
+                double num = mknf_.l().query(
+                        order, context != "" ? context + " " + word : word
+                );
+                num += -D_(num);
+                num = num > 0 ? num : 0;
+                prob_cont_disc = num / den;
+        }
+        
+        // Compute BackoffFac(c)
+        double backoff_fac;
+        if (den == 0)
+                backoff_fac = 1.;
+        else {
+                double N1 = mknf_.r1().query(order - 1, context);
+                double N2 = mknf_.r2().query(order - 1, context);
+                double N3p = mknf_.r3p().query(order - 1, context);
+                backoff_fac = (D1_ * N1 + D2_ * N2 + D3_ * N3p) / den;
+        }
+        
+        // Compute ProbCont(w|c--)
+        double prob_cont_backoff;
+        size_t pos = context.find_first_of(" ");
+        context = (pos != std::string::npos) ? context.substr(pos + 1) : "";
+        prob_cont_backoff = this->prob_cont(word, context, order - 1);  
+        
+        // Final result
+        return prob_cont_disc + backoff_fac * prob_cont_backoff;
+}
+
+
 
 //--------//----------------AbsSmoother----------------//--------//
 
@@ -337,7 +530,7 @@ void RFreqs::update ()
         // order allowed (f.N())
         std::string kgram_code;
         size_t r_pos;
-        for (size_t k = 2; k <= f_.N(); ++k) {
+        for (size_t k = 1; k <= f_.N(); ++k) {
                 const FrequencyTable & kgram_codes(f_[k]);
                 auto itend = kgram_codes.end();
                 for (auto it = kgram_codes.begin(); it != itend; it++) {
@@ -383,7 +576,7 @@ double AbsSmoother::operator() (const std::string & word, std::string context)
         
         if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
                 return -1;
-        context = truncate(context); // keep at most N - 1 words
+        context = truncate(context, N_); // keep at most N - 1 words
         double den = f_.query(context);
         double num = f_.query(context + " " + word) - D_;
         num = num > 0 ? num : 0;
@@ -441,7 +634,7 @@ double WBSmoother::operator() (const std::string & word, std::string context)
         
         if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
                 return -1;
-        context = truncate(context); // keep at most N - 1 words
+        context = truncate(context, N_); // keep at most N - 1 words
         double c_context = f_.query(context);
         double N1p_context = wbf_.query(context);
         double c_kgram = f_.query(context + " " + word);
@@ -459,4 +652,36 @@ double WBSmoother::operator() (const std::string & word, std::string context)
                 / (c_context + N1p_context);
                 
         return res;
+}
+
+
+///// 
+
+int main () {
+        std::vector<std::string> text = {"a a b a b a !",
+                           " b c b a b a .",
+                           "a c b b b a",
+                           " c a b b a ! a !",
+                           "b b b b b b b b", "a ."};
+        kgramFreqs f(2);
+        f.process_sentences(text);
+        mKNSmoother m(f, 2, 0.75, 0.75, 0.75);
+        double prob_a = m("a", "a");
+        double prob_b = m("b", "a");
+        double prob_excl = m("!", "a");
+        double prob_eos = m("___EOS___", "a");
+        double prob_unk = m("___UNK___", "a");
+        double sum = prob_a + prob_b + prob_excl + prob_eos + prob_unk;
+        prob_a = m("a", "a b");
+        prob_b = m("b", "a b");
+        prob_excl = m("!", "a b");
+        prob_eos = m("___EOS___", "a b");
+        prob_unk = m("___UNK___", "a b");
+        prob_a = m("a", "___BOS___ ___BOS___");
+        prob_b = m("b", "___BOS___ ___BOS___");
+        prob_excl = m("!", "___BOS___ ___BOS___");
+        prob_eos = m("___EOS___", "___BOS___ ___BOS___");
+        prob_unk = m("___UNK___", "___BOS___ ___BOS___");
+        sum = prob_a + prob_b + prob_excl + prob_eos + prob_unk;
+        return 0;
 }

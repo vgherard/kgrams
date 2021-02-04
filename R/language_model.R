@@ -191,6 +191,8 @@ cpp_smoother_constructor <- function(smoother, cpp_freqs, N, args) {
                laplace = new(AddkSmoother, cpp_freqs, N, 1.0),
                ml = new(MLSmoother, cpp_freqs, N),
                kn = new(KNSmoother, cpp_freqs, N, args[["D"]]),
+               mkn = new(mKNSmoother, cpp_freqs, N, 
+                         args[["D1"]], args[["D2"]], args[["D3"]]),
                abs = new(AbsSmoother, cpp_freqs, N, args[["D"]]),
                wb = new(WBSmoother, cpp_freqs, N)
         )

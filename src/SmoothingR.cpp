@@ -61,6 +61,20 @@ public:
         { return sample_generic(this, n, max_length, T); }
 }; // class KNSmootherR
 
+class mKNSmootherR : public mKNSmoother {
+public:
+        mKNSmootherR (kgramFreqsR & f, size_t N, double D1, double D2, double D3) 
+                : mKNSmoother(f, N, D1, D2, D3) {}
+        NumericVector probability (CharacterVector word, std::string context) 
+        { return probability_generic(this, word, context); }
+        NumericVector probability_sentence (CharacterVector sentence) 
+        { return probability_generic(this, sentence); }
+        List log_probability_sentence (CharacterVector sentence) 
+        { return log_prob_generic(this, sentence); }
+        CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
+        { return sample_generic(this, n, max_length, T); }
+}; // class KNSmootherR
+
 class AbsSmootherR : public AbsSmoother {
 public:
         AbsSmootherR (kgramFreqsR & f, size_t N, const double D) 
@@ -110,6 +124,12 @@ RCPP_MODULE (Smoothing) {
                 .derives<Smoother>("___Smoother")
                 .property("D", &KNSmoother::D, &KNSmoother::set_D)
         ;
+        class_<mKNSmoother>("___mKNSmoother")
+                .derives<Smoother>("___Smoother")
+                .property("D1", &mKNSmoother::D1, &mKNSmoother::set_D1)
+                .property("D2", &mKNSmoother::D2, &mKNSmoother::set_D2)
+                .property("D3", &mKNSmoother::D3, &mKNSmoother::set_D3)
+        ;
         class_<AbsSmoother>("___AbsSmoother")
                 .derives<Smoother>("___Smoother")
                 .property("D", &AbsSmoother::D, &AbsSmoother::set_D)
@@ -148,6 +168,14 @@ RCPP_MODULE (Smoothing) {
                 .method("probability_sentence", &KNSmootherR::probability_sentence)
                 .method("log_probability_sentence", &KNSmootherR::log_probability_sentence)
                 .method("sample", &KNSmootherR::sample)
+        ;
+        class_<mKNSmootherR>("mKNSmoother")
+                .derives<mKNSmoother>("___mKNSmoother")
+                .constructor<kgramFreqsR&, size_t, double, double, double>()
+                .method("probability", &mKNSmootherR::probability)
+                .method("probability_sentence", &mKNSmootherR::probability_sentence)
+                .method("log_probability_sentence", &mKNSmootherR::log_probability_sentence)
+                .method("sample", &mKNSmootherR::sample)
         ;
         class_<AbsSmootherR>("AbsSmoother")
                 .derives<AbsSmoother>("___AbsSmoother")

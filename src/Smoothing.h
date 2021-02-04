@@ -22,7 +22,7 @@ protected:
         
         
         /// @brief truncate 'context' to last N - 1 words.
-        std::string truncate (std::string context) const; // Smoothing.cpp
+        std::string truncate (std::string context, size_t k) const; // Smoothing.cpp
         
         /// @brief Remove first word from context
         void backoff (std::string & context) const; // Smoothing.cpp
@@ -144,49 +144,41 @@ public:
         double operator() (const std::string & word, std::string context) const;
 }; // class MLSmoother
 
-class KNFreqs : public Satellite {
+class FreqTablesVec {
         using FrequencyTable = std::unordered_map<std::string, size_t>;
+        std::vector<FrequencyTable> f_;
+public:
+        FreqTablesVec(size_t N) : f_(N) {}
+        double query(size_t order, std::string kgram) const {
+                auto it = f_[order].find(kgram);
+                return it != f_[order].end() ? it->second : 0; 
+        }
+        FrequencyTable& operator[] (size_t k) { return f_[k]; }
+};
+
+class KNFreqs : public Satellite {
         const kgramFreqs & f_;
         /// @brief Left continuation counts for Kneser-Ney smoothing
-        std::vector<FrequencyTable> l_;
+        FreqTablesVec l_;
         /// @brief Right continuation counts for Kneser-Ney smoothing
-        std::vector<FrequencyTable> r_;
+        FreqTablesVec r_;
         /// @brief Two-sided continuation counts for Kneser-Ney smoothing
-        std::vector<FrequencyTable> lr_;
+        FreqTablesVec lr_;
 public:
         KNFreqs (const kgramFreqs & f) 
-                : f_(f), l_(f_.N()), r_(f_.N()), lr_(f_.N() - 1) 
-        { update(); }
+                : f_(f), l_(f_.N()), r_(f_.N()), lr_(f_.N() - 1) { update(); } 
         void update ();
-        
-        const double r(size_t order, std::string kgram) const {
-                auto it = r_[order].find(kgram);
-                return it != r_[order].end() ? it->second : 0; 
-        }
-        const double l(size_t order, std::string kgram) const {
-                auto it = l_[order].find(kgram);
-                return it != l_[order].end() ? it->second : 0; 
-        }
-        const double lr(size_t order, std::string kgram) const {
-                auto it = lr_[order].find(kgram);
-                return it != lr_[order].end() ? it->second : 0; 
-        }
+        const FreqTablesVec & r() const { return r_; }
+        const FreqTablesVec & l() const { return l_; }
+        const FreqTablesVec & lr() const { return lr_; }
 };
 
 /// @class KneserNeySmoother
 /// @brief Kneser-Ney continuation probability smoother
 class KNSmoother : public Smoother {
-        //--------Local aliases--------//
-        
-
-        
-        
         //--------Private variables--------//
         double D_; ///< @brief Discount
         KNFreqs knf_; ///< @brief Kneser-Ney continuation counts
-        
-        //--------Private methods--------//
-        
         
         // Compute continuation probability of word in given context
         // k-gram order is passed 
@@ -210,6 +202,92 @@ public:
         // KN probabilities. Defined in Smoothing.cpp
         double operator() (const std::string & word, std::string context) const;
 }; // class KneserNeySmoother
+
+class mKNFreqs : public Satellite {
+        using FrequencyTable = std::unordered_map<std::string, size_t>;
+        const kgramFreqs & f_;
+        
+        /// @brief Left continuation counts for Kneser-Ney smoothing
+        FreqTablesVec l_;
+        /// @brief Right continuation counts for Kneser-Ney smoothing
+        FreqTablesVec r1_;
+        FreqTablesVec r2_;
+        FreqTablesVec r3p_;
+        /// @brief Two-sided continuation counts for Kneser-Ney smoothing
+        FreqTablesVec lr_;
+public:
+        mKNFreqs (const kgramFreqs & f) 
+                : f_(f), 
+                  l_(f_.N()), 
+                  r1_(f_.N()), r2_(f_.N()), r3p_(f_.N()),
+                  lr_(f_.N() - 1) 
+                { update(); }
+        void update ();
+        const FreqTablesVec & r1() const { return r1_; }
+        const FreqTablesVec & r2() const { return r2_; }
+        const FreqTablesVec & r3p() const { return r3p_; }
+        const FreqTablesVec & l() const { return l_; }
+        const FreqTablesVec & lr() const { return lr_; }
+};
+
+/// @class mKNSmoother
+/// @brief Modified Kneser-Ney continuation probability smoother
+class mKNSmoother : public Smoother {
+        //--------Private variables--------//
+        double D1_, D2_, D3_; ///< @brief Discount
+        mKNFreqs mknf_; ///< @brief Kneser-Ney continuation counts
+        
+        double D_(size_t k) const
+        { 
+                switch(k) 
+                {
+                case 1: return D1_;
+                case 2: return D2_;
+                default: return D3_;
+                }
+                
+        }
+        
+        // Compute continuation probability of word in given context
+        // k-gram order is passed 
+        double prob_cont (const std::string &, std::string, size_t) const;
+public:
+        //--------Constructors--------//
+        mKNSmoother (kgramFreqs & f, size_t N, double D1, double D2, double D3) 
+                : Smoother(f, N), D1_(D1), D2_(D2), D3_(D3), mknf_(f) 
+                { f.add_satellite(&mknf_); }
+        
+        //--------Parameters getters/setters--------//
+        double D1() const { return D1_; }
+        double D2() const { return D2_; }
+        double D3() const { return D3_; }
+        void set_D1 (double D1) {
+                if (D1 < 0 or D1 > 1)
+                        throw std::domain_error(
+                                "Discount parameters must be between 0 and 1."
+                        );
+                D1_ = D1;
+        }
+        void set_D2 (double D2) {
+                if (D2 < 0 or D2 > 1)
+                        throw std::domain_error(
+                                        "Discount parameters must be between 0 and 1."
+                        );
+                D2_ = D2;
+        }
+        void set_D3 (double D3) {
+                if (D3 < 0 or D3 > 1)
+                        throw std::domain_error(
+                                        "Discount parameters must be between 0 and 1."
+                        );
+                D3_ = D3;
+        }
+        
+        //--------Probabilities--------//
+        // KN probabilities. Defined in Smoothing.cpp
+        double operator() (const std::string & word, std::string context) const;
+}; // class KneserNeySmoother
+
 
 class RFreqs : public Satellite {
         using FrequencyTable = std::unordered_map<std::string, size_t>;
