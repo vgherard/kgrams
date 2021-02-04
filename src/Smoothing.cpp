@@ -655,33 +655,25 @@ double WBSmoother::operator() (const std::string & word, std::string context)
 }
 
 
-///// 
-
-int main () {
-        std::vector<std::string> text = {"a a b a b a !",
-                           " b c b a b a .",
-                           "a c b b b a",
-                           " c a b b a ! a !",
-                           "b b b b b b b b", "a ."};
-        kgramFreqs f(2);
-        f.process_sentences(text);
-        mKNSmoother m(f, 2, 0.75, 0.75, 0.75);
-        double prob_a = m("a", "a");
-        double prob_b = m("b", "a");
-        double prob_excl = m("!", "a");
-        double prob_eos = m("___EOS___", "a");
-        double prob_unk = m("___UNK___", "a");
-        double sum = prob_a + prob_b + prob_excl + prob_eos + prob_unk;
-        prob_a = m("a", "a b");
-        prob_b = m("b", "a b");
-        prob_excl = m("!", "a b");
-        prob_eos = m("___EOS___", "a b");
-        prob_unk = m("___UNK___", "a b");
-        prob_a = m("a", "___BOS___ ___BOS___");
-        prob_b = m("b", "___BOS___ ___BOS___");
-        prob_excl = m("!", "___BOS___ ___BOS___");
-        prob_eos = m("___EOS___", "___BOS___ ___BOS___");
-        prob_unk = m("___UNK___", "___BOS___ ___BOS___");
-        sum = prob_a + prob_b + prob_excl + prob_eos + prob_unk;
-        return 0;
-}
+// int main () {
+//         std::vector<std::string> text = {"a a b a b a"};
+//         kgramFreqs f(2);
+//         f.process_sentences(text);
+//         mKNSmoother m(f, 2, 0.75, 0.75, 0.75);
+//         double prob_a = m("a", "a");
+//         double prob_b = m("b", "a");
+//         double prob_eos = m("___EOS___", "a");
+//         double prob_unk = m("___UNK___", "a");
+//         double sum = prob_a + prob_b + prob_eos + prob_unk;
+//         prob_a = m("a", "a b");
+//         prob_b = m("b", "a b");
+//         prob_eos = m("___EOS___", "a b");
+//         prob_unk = m("___UNK___", "a b");
+//         sum = prob_a + prob_b + prob_eos + prob_unk;
+//         prob_a = m("a", "___BOS___ ___BOS___");
+//         prob_b = m("b", "___BOS___ ___BOS___");
+//         prob_eos = m("___EOS___", "___BOS___ ___BOS___");
+//         prob_unk = m("___UNK___", "___BOS___ ___BOS___");
+//         sum = prob_a + prob_b + prob_eos + prob_unk;
+//         return 0;
+// }
