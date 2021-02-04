@@ -103,7 +103,7 @@ probability("a" \%|\% UNK(), f) # NA, as context has count zero
 
 ### Compute probabilities from a language model
 
-m <- language_model(f, "laplace")
+m <- language_model(f, "add_k", k = 1)
 probability(c("a", "b", EOS(), UNK()) \%|\% BOS(), m) # c(0.4, 0.2, 0.2, 0.2)
 probability("a" \%|\% UNK(), m) # not NA
 

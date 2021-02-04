@@ -43,9 +43,15 @@
 <meta property="og:description" content="Information on available k-gram continuation probability smoothers.List of smoothers currently supported by kgrams
 
 
-&quot;ml&quot;: Maximum Likelihood estimate.
-&quot;add_k&quot;: Add-k smoothing.
-&quot;laplace&quot;: Laplace (A.K.A. Add-one) smoothing.
+&quot;ml&quot;: Maximum Likelihood estimate
+(Markov 1913)
+.
+&quot;add_k&quot;: Add-k smoothing
+(Dale and Laplace 1995; Lidstone 1920; Johnson 1932; Jeffreys 1998)
+.
+&quot;abs&quot;: Absolute discounting (Ney and Essen 1991)
+.
+&quot;wb&quot;: Witten-Bell smoothing (Bell et al. 1990; Witten and Bell 1991)
 &quot;kn&quot;: Interpolated Kneser-Ney with fixed discount.
 (Kneser and Ney 1995; Chen and Goodman 1999)
 .
@@ -125,9 +131,15 @@
     <p>Information on available k-gram continuation probability smoothers.</p><h3 class='hasAnchor' id='arguments'><a class='anchor' href='#arguments'></a>List of smoothers currently supported by <code>kgrams</code></h3>
 
 <ul>
-<li><p><code>"ml"</code>: Maximum Likelihood estimate.</p></li>
-<li><p><code>"add_k"</code>: Add-k smoothing.</p></li>
-<li><p><code>"laplace"</code>: Laplace (A.K.A. Add-one) smoothing.</p></li>
+<li><p><code>"ml"</code>: Maximum Likelihood estimate
+(Markov 1913)
+.</p></li>
+<li><p><code>"add_k"</code>: Add-k smoothing
+(Dale and Laplace 1995; Lidstone 1920; Johnson 1932; Jeffreys 1998)
+.</p></li>
+<li><p><code>"abs"</code>: Absolute discounting (Ney and Essen 1991)
+.</p></li>
+<li><p><code>"wb"</code>: Witten-Bell smoothing (Bell et al. 1990; Witten and Bell 1991)</p></li>
 <li><p><code>"kn"</code>: Interpolated Kneser-Ney with fixed discount.
 (Kneser and Ney 1995; Chen and Goodman 1999)
 .</p></li>
@@ -159,14 +171,30 @@ of probability smoothers available in <a href='kgrams-package.html'>kgrams</a>.
 the selected smoothing technique.</p>
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Brants T, Popat AC, Xu P, Och FJ, Dean J (2007).
+    <p>Bell TC, Cleary JG, Witten IH (1990).
+<em>Text compression</em>.
+Prentice-Hall, Inc.<br /><br /> Brants T, Popat AC, Xu P, Och FJ, Dean J (2007).
 &#8220;Large Language Models in Machine Translation.&#8221;
 In <em>Proceedings of the 2007 Joint Conference on Empirical Methods in Natural Language Processing and Computational Natural Language Learning (EMNLP-CoNLL)</em>, 858--867.
 <a href='https://www.aclweb.org/anthology/D07-1090'>https://www.aclweb.org/anthology/D07-1090</a>.<br /><br /> Chen SF, Goodman J (1999).
 &#8220;An empirical study of smoothing techniques for language modeling.&#8221;
-<em>Computer Speech \&amp; Language</em>, <b>13</b>(4), 359--394.<br /><br /> Kneser R, Ney H (1995).
+<em>Computer Speech \&amp; Language</em>, <b>13</b>(4), 359--394.<br /><br /> Dale AI, Laplace P (1995).
+<em>Philosophical essay on probabilities</em>.
+Springer.<br /><br /> Jeffreys H (1998).
+<em>The theory of probability</em>.
+OUP Oxford.<br /><br /> Johnson WE (1932).
+&#8220;Probability: The deductive and inductive problems.&#8221;
+<em>Mind</em>, <b>41</b>(164), 409--423.<br /><br /> Kneser R, Ney H (1995).
 &#8220;Improved backing-off for M-gram language modeling.&#8221;
-<em>1995 International Conference on Acoustics, Speech, and Signal Processing</em>, <b>1</b>, 181--184.</p>
+<em>1995 International Conference on Acoustics, Speech, and Signal Processing</em>, <b>1</b>, 181--184.<br /><br /> Lidstone GJ (1920).
+&#8220;Note on the general case of the Bayes-Laplace formula for inductive or a posteriori probabilities.&#8221;
+<em>Transactions of the Faculty of Actuaries</em>, <b>8</b>(182-192), 13.<br /><br /> Markov AA (1913).
+&#8220;Essai d'une Recherche Statistique Sur le Texte du Roman Eugene Oneguine.&#8221;
+<em>Bull. Acad. Imper. Sci. St. Petersburg</em>, <b>7</b>.<br /><br /> Ney H, Essen U (1991).
+&#8220;On smoothing techniques for bigram-based natural language modelling.&#8221;
+In <em>Acoustics, Speech, and Signal Processing, IEEE International Conference on</em>, 825--828.<br /><br /> Witten IH, Bell TC (1991).
+&#8220;The zero-frequency problem: Estimating the probabilities of novel events in adaptive text compression.&#8221;
+<em>Ieee transactions on information theory</em>, <b>37</b>(4), 1085--1094.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Valerio Gherardi</p>
@@ -174,7 +202,7 @@ In <em>Proceedings of the 2007 Joint Conference on Empirical Methods in Natural 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># List available smoothers</span>
 <span class='fu'>smoothers</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "sbo"     "add_k"   "laplace" "ml"      "kn"     </div><div class='input'>
+</div><div class='output co'>#&gt; [1] "ml"    "add_k" "abs"   "kn"    "sbo"   "wb"   </div><div class='input'>
 <span class='co'># Get information on smoother "kn", i.e. Interpolated Kneser-Ney</span>
 <span class='fu'>info</span><span class='op'>(</span><span class='st'>"kn"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; Interpolated Kneser-Ney with fixed discount
