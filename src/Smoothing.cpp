@@ -88,7 +88,7 @@ const {
 //--------//----------------SBOSmoother----------------//--------//
 
 /// @brief Remove first word from context
-void SBOSmoother::backoff (std::string & context) const 
+void Smoother::backoff (std::string & context) const 
 {
         size_t pos = context.find_first_not_of(" ");
         pos = context.find_first_of(" ", pos);
@@ -168,11 +168,8 @@ double MLSmoother::operator() (const std::string & word, std::string context)
 
 
 
-/// @brief Initialize an AddkSmoother from a kgramFreqs object with a
-/// fixed constant 'k'.
-/// @param f a kgramFreqs class object. k-gram frequency table from which
-/// "bare" k-gram counts are read off.
-void KNSmoother::KNFreqs::update () 
+/// @brief update satellite values of KNSmoother
+void KNFreqs::update () 
 {
         // Reinitialize l_, r_, and lr_... is it possible to do something more
         // clever?
@@ -258,7 +255,7 @@ double KNSmoother::operator() (const std::string & word, std::string context)
         // Compute BackoffFac(c)
         // overwrite num which is no longer necessary
         auto p = f_.kgram_code(context); // this is a pair {order, code}
-        double backoff = den != 0 ? 
+        double backoff_fac = den != 0 ? 
                 D_ * knf_.r(p.first, p.second) / den : 1;
         
         // Backoff directly on the k-gram code (stored in p.second)
@@ -269,7 +266,7 @@ double KNSmoother::operator() (const std::string & word, std::string context)
         // Compute continuation probability
         std::string index_word = f_.index(word);
         double prob_cont = this->prob_cont(index_word, context, p.first);
-        return prob_disc + backoff * prob_cont;
+        return prob_disc + backoff_fac * prob_cont;
 }
 
 
@@ -325,4 +322,141 @@ double KNSmoother::prob_cont (
         double prob_cont_backoff = prob_cont(word, context, order - 1);
         
         return prob_cont_disc + backoff_fac * prob_cont_backoff;
+}
+
+//--------//----------------AbsSmoother----------------//--------//
+
+
+void RFreqs::update () 
+{
+        // Reinitialize l_, r_, and lr_... is it possible to do something more
+        // clever?
+        r_ = std::vector<FrequencyTable>(f_.N());
+        
+        // Retrieve continuation counts from k-gram counts up to the maximum 
+        // order allowed (f.N())
+        std::string kgram_code;
+        size_t r_pos;
+        for (size_t k = 2; k <= f_.N(); ++k) {
+                const FrequencyTable & kgram_codes(f_[k]);
+                auto itend = kgram_codes.end();
+                for (auto it = kgram_codes.begin(); it != itend; it++) {
+                        // kgram_code is always of the form "n_1 n_2 ... n_k"
+                        // with exactly one space between word codes
+                        kgram_code = it->first;
+                        r_pos = kgram_code.find_last_of(" ");
+                        // Reject kgrams ending in BOS
+                        // In this way sum(prob(w|...)) = 1, where w != BOS
+                        if (kgram_code.substr(r_pos + 1) == BOS_IND)
+                                continue;
+                        r_[k - 1][kgram_code.substr(0, r_pos)]++;
+                }
+        }
+}
+
+/// @brief Return Absolute Discount continuation probability of a word
+/// given a context.
+/// @param word A string. Word for which the continuation probability
+/// is to be computed.
+/// @param context A string. Context conditioning the probability of
+/// 'word'.
+/// @return a positive number. Absolute Discount continuation
+/// probability of 'word' given 'context'.
+double AbsSmoother::operator() (const std::string & word, std::string context) 
+        const {
+        // The probability of word 'w' in context 'c' is given by:
+        //
+        //      Prob(w|c) = ProbDisc(w|c) + BackoffFac(c) * Prob(w|c--)
+        //
+        // where c-- is the backed-off context (remove first word from 'c') and:
+        //
+        //      ProbDisc(w|c) = [Count(c,w)-D]+ / Count(c)
+        //      BackoffFac(c) = 1 - sum_w(ProbDisc(w|c))
+        //                    = D * N1+(c,*) / Count(c)
+        //      Prob(w|c--) = Lowest order probability of 'w|c--' 
+        //
+        // Here N1+(c,*) = (# different words following context 'c') is the
+        // continuation count; []+ denotes positive part; the continuation 
+        // probability is defined below. For the base case, we replace
+        //      Prob(w|) = 1 / V,
+        // where V is the number of words in the dictionary (without <BOS>)
+        
+        if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
+                return -1;
+        context = truncate(context); // keep at most N - 1 words
+        double den = f_.query(context);
+        double num = f_.query(context + " " + word) - D_;
+        num = num > 0 ? num : 0;
+        
+        // Compute ProbDisc(w|c)
+        double prob_disc = den != 0 ? num / den : 0;
+        
+        // Handle separately the 1-gram probability case
+        if (context == "") {
+                num = f_[1].size() - 1; // N1+(.) without considering <BOS>
+                // Compute BackoffFac(c)
+                double backoff_fac = den != 0 ? D_ * num / den : 1; 
+                // Compute ProbCont(c) (this is potentially > than num!)
+                double prob_cont = 1 / (double)(V() + 2);
+                return prob_disc + backoff_fac * prob_cont;
+        }
+        
+        // Compute BackoffFac(c)
+        double backoff_fac = den != 0 ? D_ * absf_.query(context) / den : 1;
+        
+        // Compute lower order probability
+        backoff(context);
+        double prob_backoff = this->operator()(word, context);
+        return prob_disc + backoff_fac * prob_backoff;
+}
+
+//--------//----------------WBSmoother----------------//--------//
+
+/// @brief Return Witten-Bell continuation probability of a word
+/// given a context.
+/// @param word A string. Word for which the continuation probability
+/// is to be computed.
+/// @param context A string. Context conditioning the probability of
+/// 'word'.
+/// @return a positive number. Witten-Bell continuation
+/// probability of 'word' given 'context'.
+double WBSmoother::operator() (const std::string & word, std::string context) 
+        const {
+        // The probability of word 'w' in context 'c' is given by:
+        //
+        //      Prob(w|c) = ProbHigh(w|c) + BackoffFac(c) * Prob(w|c--)
+        //
+        // where c-- is the backed-off context (remove first word from 'c') and:
+        //
+        //      ProbHigh(w|c) = Count(c,w) / (Count(c) + N1+(c,*))
+        //      BackoffFac(c) = 1 - sum_w(ProbDisc(w|c))
+        //                    = N1+(c,*) / (Count(c) + N1+(c,*))
+        //      Prob(w|c--) = Lowest order probability of 'w|c--' 
+        //
+        // Here N1+(c,*) = (# different words following context 'c') is the
+        // continuation count; []+ denotes positive part; the continuation 
+        // probability is defined below. For the base case, we replace
+        //      Prob(w|) = 1 / V,
+        // where V is the number of words in the dictionary (without <BOS>)
+        
+        if (word == BOS_TOK or word.find_first_not_of(" ") == std::string::npos) 
+                return -1;
+        context = truncate(context); // keep at most N - 1 words
+        double c_context = f_.query(context);
+        double N1p_context = wbf_.query(context);
+        double c_kgram = f_.query(context + " " + word);
+        double den = c_context + N1p_context;
+        double prob_backoff;
+        if (context == "")
+                prob_backoff = 1 / (double)(V() + 2);
+        else {
+                backoff(context);
+                prob_backoff = this->operator()(word, context);
+        }
+        
+        double res = den == 0 ? prob_backoff :
+                (c_kgram + N1p_context * prob_backoff) 
+                / (c_context + N1p_context);
+                
+        return res;
 }

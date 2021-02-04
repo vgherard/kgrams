@@ -24,9 +24,10 @@ Information on available k-gram continuation probability smoothers.
 \itemize{
 \item \code{"ml"}: Maximum Likelihood estimate
 \insertCite{markov1913essai}{kgrams}.
-\item \code{"add_k"}: Add-k smoothing \insertCite{jeffreys1998theory}{kgrams}.
-\item \code{"laplace"}: Laplace (a.k.a. Add-one) smoothing
-\insertCite{jeffreys1998theory}{kgrams}.
+\item \code{"add_k"}: Add-k smoothing
+\insertCite{dale1995philosophical,lidstone1920note,johnson1932probability,jeffreys1998theory}{kgrams}.
+\item \code{"abs"}: Absolute discounting \insertCite{ney1991smoothing}{kgrams}.
+\item \code{"wb"}: Witten-Bell smoothing \insertCite{bell1990text,witten1991zero}{kgrams}
 \item \code{"kn"}: Interpolated Kneser-Ney with fixed discount.
 \insertCite{Kneser1995ImprovedBF,chen1999empirical}{kgrams}.
 \item \code{"sbo"}: Stupid Backoff \insertCite{brants-etal-2007-large}{kgrams}.

@@ -150,13 +150,7 @@ language_model.language_model <- function(object, ...) {
         smoother <- class(object)[[2]]
         args <- parameters(object)
         N <- args[["N"]]
-        cpp_obj <- switch(smoother, 
-                sbo = new(SBOSmoother, cpp_freqs, N, args[["lambda"]]),
-                add_k = new(AddkSmoother, cpp_freqs, N, args[["k"]]),
-                laplace = new(AddkSmoother, cpp_freqs, N, 1.0),
-                ml = new(MLSmoother, cpp_freqs, N),
-                kn = new(KNSmoother, cpp_freqs, N, args[["D"]])
-        )
+        cpp_obj <- cpp_smoother_constructor(smoother, cpp_freqs, N, args)
         new_language_model(cpp_obj, 
                            cpp_freqs, 
                            attr(object, ".preprocess"), 
@@ -181,17 +175,23 @@ language_model.kgram_freqs <-
                 if (is.null(args[[parameter$name]]))
                         args[[parameter$name]] <- parameter$default
         cpp_freqs <- attr(object, "cpp_obj")
-        cpp_obj <- switch(smoother, 
-               sbo = new(SBOSmoother, cpp_freqs, N, args[["lambda"]]),
-               add_k = new(AddkSmoother, cpp_freqs, N, args[["k"]]),
-               laplace = new(AddkSmoother, cpp_freqs, N, 1.0),
-               ml = new(MLSmoother, cpp_freqs, N),
-               kn = new(KNSmoother, cpp_freqs, N, args[["D"]])
-        )
+        cpp_obj <- cpp_smoother_constructor(smoother, cpp_freqs, N, args) 
         new_language_model(cpp_obj, 
                            cpp_freqs, 
                            attr(object, ".preprocess"), 
                            attr(object, ".tokenize_sentences"),
                            smoother
                            )
+}
+
+cpp_smoother_constructor <- function(smoother, cpp_freqs, N, args) {
+        switch(smoother, 
+               sbo = new(SBOSmoother, cpp_freqs, N, args[["lambda"]]),
+               add_k = new(AddkSmoother, cpp_freqs, N, args[["k"]]),
+               laplace = new(AddkSmoother, cpp_freqs, N, 1.0),
+               ml = new(MLSmoother, cpp_freqs, N),
+               kn = new(KNSmoother, cpp_freqs, N, args[["D"]]),
+               abs = new(AbsSmoother, cpp_freqs, N, args[["D"]]),
+               wb = new(WBSmoother, cpp_freqs, N)
+        )
 }

@@ -83,6 +83,15 @@ list_parameters <- function(smoother) {
                             validator = function(x)
                                     isTRUE(is.numeric(x) & 0 < x & x < 1)
                        )
-               )
+               ),
+               abs = list(
+                       list(name = "D",
+                            expected = "a number between zero and one",
+                            default = 0.75,
+                            validator = function(x)
+                                    isTRUE(is.numeric(x) & 0 < x & x < 1)
+                       )
+               ),
+               wb = list()
         )
 }

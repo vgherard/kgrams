@@ -8,9 +8,10 @@
 #' 
 #' - \code{"ml"}: Maximum Likelihood estimate 
 #' \insertCite{markov1913essai}{kgrams}.
-#' - \code{"add_k"}: Add-k smoothing \insertCite{jeffreys1998theory}{kgrams}.
-#' - \code{"laplace"}: Laplace (a.k.a. Add-one) smoothing 
-#' \insertCite{jeffreys1998theory}{kgrams}.
+#' - \code{"add_k"}: Add-k smoothing 
+#' \insertCite{dale1995philosophical,lidstone1920note,johnson1932probability,jeffreys1998theory}{kgrams}.
+#' - \code{"abs"}: Absolute discounting \insertCite{ney1991smoothing}{kgrams}.
+#' - \code{"wb"}: Witten-Bell smoothing \insertCite{bell1990text,witten1991zero}{kgrams}
 #' - \code{"kn"}: Interpolated Kneser-Ney with fixed discount. 
 #' \insertCite{Kneser1995ImprovedBF,chen1999empirical}{kgrams}.
 #' - \code{"sbo"}: Stupid Backoff \insertCite{brants-etal-2007-large}{kgrams}.
@@ -38,7 +39,7 @@
 
 #' @rdname smoothers
 #' @export
-smoothers <- function() c("sbo", "add_k", "laplace", "ml", "kn")
+smoothers <- function() c("ml", "add_k", "abs", "kn", "sbo", "wb")
 
 #' @rdname smoothers
 #' @export
@@ -65,13 +66,6 @@ info <- function(smoother) {
                     "* parameters: k (additive constant in k-gram counts)\n",
                     "* constraints: k > 0\n")
         
-        if (smoother == "laplace")
-                cat("Laplace Smoother\n",
-                    "* code: 'laplace'\n",
-                    "* parameters: none\n",
-                    "* constraints: none\n",
-                    "* notes: particular case of Add-k smoothing for k = 1")
-        
         if (smoother == "ml")
                 cat("Maximum-Likelihood estimate\n",
                     "* code: 'ml'\n",
@@ -84,4 +78,16 @@ info <- function(smoother) {
                     "* code: 'kn'\n",
                     "* parameters: D (discount in higher order probability part)\n",
                     "* constraints: 0 < D < 1\n")
+        
+        if (smoother == "abs")
+                cat("Absolute discounting\n",
+                    "* code: 'abs'\n",
+                    "* parameters: D (discount in higher order probability part)\n",
+                    "* constraints: 0 < D < 1\n")
+        
+        if (smoother == "wb")
+                cat("Witten-Bell Smoothing\n",
+                    "* code: 'wb'\n",
+                    "* parameters: none\n",
+                    "* constraints: none\n")
 }

@@ -61,6 +61,34 @@ public:
         { return sample_generic(this, n, max_length, T); }
 }; // class KNSmootherR
 
+class AbsSmootherR : public AbsSmoother {
+public:
+        AbsSmootherR (kgramFreqsR & f, size_t N, const double D) 
+                : AbsSmoother(f, N, D) {}
+        NumericVector probability (CharacterVector word, std::string context) 
+        { return probability_generic(this, word, context); }
+        NumericVector probability_sentence (CharacterVector sentence) 
+        { return probability_generic(this, sentence); }
+        List log_probability_sentence (CharacterVector sentence) 
+        { return log_prob_generic(this, sentence); }
+        CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
+        { return sample_generic(this, n, max_length, T); }
+}; // class AbsSmootherR
+
+class WBSmootherR : public WBSmoother {
+public:
+        WBSmootherR (kgramFreqsR & f, size_t N) 
+                : WBSmoother(f, N) {}
+        NumericVector probability (CharacterVector word, std::string context) 
+        { return probability_generic(this, word, context); }
+        NumericVector probability_sentence (CharacterVector sentence) 
+        { return probability_generic(this, sentence); }
+        List log_probability_sentence (CharacterVector sentence) 
+        { return log_prob_generic(this, sentence); }
+        CharacterVector sample (size_t n, size_t max_length, double T = 1.0) 
+        { return sample_generic(this, n, max_length, T); }
+}; // class AbsSmootherR
+
 RCPP_EXPOSED_CLASS(kgramFreqsR)
 RCPP_MODULE (Smoothing) {
         class_<Smoother>("___Smoother")
@@ -81,6 +109,13 @@ RCPP_MODULE (Smoothing) {
         class_<KNSmoother>("___KNSmoother")
                 .derives<Smoother>("___Smoother")
                 .property("D", &KNSmoother::D, &KNSmoother::set_D)
+        ;
+        class_<AbsSmoother>("___AbsSmoother")
+                .derives<Smoother>("___Smoother")
+                .property("D", &AbsSmoother::D, &AbsSmoother::set_D)
+        ;
+        class_<WBSmoother>("___WBSmoother")
+                .derives<Smoother>("___Smoother")
         ;
         class_<SBOSmootherR>("SBOSmoother")
                 .derives<SBOSmoother>("___SBOSmoother")
@@ -113,5 +148,21 @@ RCPP_MODULE (Smoothing) {
                 .method("probability_sentence", &KNSmootherR::probability_sentence)
                 .method("log_probability_sentence", &KNSmootherR::log_probability_sentence)
                 .method("sample", &KNSmootherR::sample)
+        ;
+        class_<AbsSmootherR>("AbsSmoother")
+                .derives<AbsSmoother>("___AbsSmoother")
+                .constructor<kgramFreqsR&, size_t, const double>()
+                .method("probability", &AbsSmootherR::probability)
+                .method("probability_sentence", &AbsSmootherR::probability_sentence)
+                .method("log_probability_sentence", &AbsSmootherR::log_probability_sentence)
+                .method("sample", &AbsSmootherR::sample)
+        ;
+        class_<WBSmootherR>("WBSmoother")
+                .derives<WBSmoother>("___WBSmoother")
+                .constructor<kgramFreqsR&, size_t>()
+                .method("probability", &WBSmootherR::probability)
+                .method("probability_sentence", &WBSmootherR::probability_sentence)
+                .method("log_probability_sentence", &WBSmootherR::log_probability_sentence)
+                .method("sample", &WBSmootherR::sample)
         ;
 }

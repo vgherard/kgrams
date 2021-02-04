@@ -48,7 +48,7 @@ void kgramFreqs::process_sentence(const std::string & sentence,
 /// would all produce the same result.
 
 double kgramFreqs::query (std::string kgram) const {
-        auto p = dict_.kgram_code(kgram);
+        auto p = kgram_code(kgram);
         if (p.first > N_) return -1;
         auto it = freqs_[p.first].find(p.second);
         return it != freqs_[p.first].end() ? it->second : 0;

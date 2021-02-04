@@ -23,6 +23,9 @@ protected:
         
         /// @brief truncate 'context' to last N - 1 words.
         std::string truncate (std::string context) const; // Smoothing.cpp
+        
+        /// @brief Remove first word from context
+        void backoff (std::string & context) const; // Smoothing.cpp
 public:
         /// @brief constructor
         Smoother (const kgramFreqs & f, size_t N) : f_(f) { set_N(N); }
@@ -62,13 +65,6 @@ public:
 class SBOSmoother : public Smoother {
         //--------Private variables--------//
         double lambda_; ///< @brief Backoff penalization
-        
-        //--------Private methods--------//
-        
-        /// @brief Remove first word from context
-        void backoff (std::string & context) const; // Smoothing.cpp
-
-        
 public:
         //--------Constructor--------//
 
@@ -148,39 +144,42 @@ public:
         double operator() (const std::string & word, std::string context) const;
 }; // class MLSmoother
 
+class KNFreqs : public Satellite {
+        using FrequencyTable = std::unordered_map<std::string, size_t>;
+        const kgramFreqs & f_;
+        /// @brief Left continuation counts for Kneser-Ney smoothing
+        std::vector<FrequencyTable> l_;
+        /// @brief Right continuation counts for Kneser-Ney smoothing
+        std::vector<FrequencyTable> r_;
+        /// @brief Two-sided continuation counts for Kneser-Ney smoothing
+        std::vector<FrequencyTable> lr_;
+public:
+        KNFreqs (const kgramFreqs & f) 
+                : f_(f), l_(f_.N()), r_(f_.N()), lr_(f_.N() - 1) 
+        { update(); }
+        void update ();
+        
+        const double r(size_t order, std::string kgram) const {
+                auto it = r_[order].find(kgram);
+                return it != r_[order].end() ? it->second : 0; 
+        }
+        const double l(size_t order, std::string kgram) const {
+                auto it = l_[order].find(kgram);
+                return it != l_[order].end() ? it->second : 0; 
+        }
+        const double lr(size_t order, std::string kgram) const {
+                auto it = lr_[order].find(kgram);
+                return it != lr_[order].end() ? it->second : 0; 
+        }
+};
+
 /// @class KneserNeySmoother
 /// @brief Kneser-Ney continuation probability smoother
 class KNSmoother : public Smoother {
         //--------Local aliases--------//
-        using FrequencyTable = std::unordered_map<std::string, size_t>;
+        
 
-        class KNFreqs : public Satellite {
-                const kgramFreqs & f_;
-                /// @brief Left continuation counts for Kneser-Ney smoothing
-                std::vector<FrequencyTable> l_;
-                /// @brief Right continuation counts for Kneser-Ney smoothing
-                std::vector<FrequencyTable> r_;
-                /// @brief Two-sided continuation counts for Kneser-Ney smoothing
-                std::vector<FrequencyTable> lr_;
-        public:
-                KNFreqs (const kgramFreqs & f) 
-                        : f_(f), l_(f_.N()), r_(f_.N()), lr_(f_.N() - 1) 
-                                { update(); }
-                void update ();
-                
-                const double r(size_t order, std::string kgram) const {
-                        auto it = r_[order].find(kgram);
-                        return it != r_[order].end() ? it->second : 0; 
-                }
-                const double l(size_t order, std::string kgram) const {
-                        auto it = l_[order].find(kgram);
-                        return it != l_[order].end() ? it->second : 0; 
-                }
-                const double lr(size_t order, std::string kgram) const {
-                        auto it = lr_[order].find(kgram);
-                        return it != lr_[order].end() ? it->second : 0; 
-                }
-        };
+        
         
         //--------Private variables--------//
         double D_; ///< @brief Discount
@@ -211,5 +210,78 @@ public:
         // KN probabilities. Defined in Smoothing.cpp
         double operator() (const std::string & word, std::string context) const;
 }; // class KneserNeySmoother
+
+class RFreqs : public Satellite {
+        using FrequencyTable = std::unordered_map<std::string, size_t>;
+        const kgramFreqs & f_;
+        /// @brief Right continuation counts for Kneser-Ney smoothing
+        std::vector<FrequencyTable> r_;
+public:
+        RFreqs (const kgramFreqs & f) 
+                : f_(f), r_(f_.N())
+        { update(); }
+        void update ();
+        
+        const double r(size_t order, std::string kgram) const {
+                auto it = r_[order].find(kgram);
+                return it != r_[order].end() ? it->second : 0; 
+        }
+        
+        double query (std::string kgram) const {
+                auto p = f_.kgram_code(kgram);
+                if (p.first > f_.N()) return -1;
+                auto it = r_[p.first].find(p.second);
+                return it != r_[p.first].end() ? it->second : 0;
+        }
+}; // class RFreqs
+
+/// @class AbsSmoother
+/// @brief Absolute Discount continuation probability smoother
+class AbsSmoother : public Smoother {
+        //--------Local aliases--------//
+        using FrequencyTable = std::unordered_map<std::string, size_t>;
+        
+        //--------Private variables--------//
+        double D_; ///< @brief Discount
+        RFreqs absf_; ///< @brief Right continuation counts
+
+public:
+        //--------Constructors--------//
+        AbsSmoother (kgramFreqs & f, size_t N, const double D) 
+                : Smoother(f, N), D_(D), absf_(f) { f.add_satellite(&absf_); }
+        
+        //--------Parameters getters/setters--------//
+        double D() const { return D_; }
+        void set_D (double D) {
+                if (D < 0 or D > 1)
+                        throw std::domain_error(
+                                "Discount must be between 0 and 1."
+                        );
+                D_ = D;
+        }
+        
+        //--------Probabilities--------//
+        // KN probabilities. Defined in Smoothing.cpp
+        double operator() (const std::string & word, std::string context) const;
+}; // class AbsSmoother
+
+/// @class WBSmoother
+/// @brief Witten-Bell continuation probability smoother
+class WBSmoother : public Smoother {
+        //--------Local aliases--------//
+        using FrequencyTable = std::unordered_map<std::string, size_t>;
+        
+        //--------Private variables--------//
+        RFreqs wbf_; ///< @brief Right continuation counts
+        
+public:
+        //--------Constructors--------//
+        WBSmoother (kgramFreqs & f, size_t N) 
+                : Smoother(f, N), wbf_(f) { f.add_satellite(&wbf_); }
+        
+        //--------Probabilities--------//
+        // KN probabilities. Defined in Smoothing.cpp
+        double operator() (const std::string & word, std::string context) const;
+}; // class WBSmoother
 
 #endif //SMOOTHING_H
