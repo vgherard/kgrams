@@ -14,7 +14,7 @@
 #' - \code{"wb"}: Witten-Bell smoothing \insertCite{bell1990text,witten1991zero}{kgrams}
 #' - \code{"kn"}: Interpolated Kneser-Ney. 
 #' \insertCite{Kneser1995ImprovedBF,chen1999empirical}{kgrams}.
-#' - \code{"kn"}: Interpolated modified Kneser-Ney. 
+#' - \code{"mkn"}: Interpolated modified Kneser-Ney. 
 #' \insertCite{chen1999empirical}{kgrams}.
 #' - \code{"sbo"}: Stupid Backoff \insertCite{brants-etal-2007-large}{kgrams}.
 #'
@@ -82,7 +82,7 @@ info <- function(smoother) {
                     "* constraints: 0 < D < 1\n")
         
         if (smoother == "mkn")
-                cat("Interpolated Modified Kneser-Ney\n",
+                cat("Interpolated modified Kneser-Ney\n",
                     "* code: 'mkn'\n",
                     "* parameters: D1, D2, D3\n",
                     "* constraints: 0 < D < 1\n")

@@ -52,8 +52,11 @@
 &quot;abs&quot;: Absolute discounting (Ney and Essen 1991)
 .
 &quot;wb&quot;: Witten-Bell smoothing (Bell et al. 1990; Witten and Bell 1991)
-&quot;kn&quot;: Interpolated Kneser-Ney with fixed discount.
+&quot;kn&quot;: Interpolated Kneser-Ney.
 (Kneser and Ney 1995; Chen and Goodman 1999)
+.
+&quot;kn&quot;: Interpolated modified Kneser-Ney.
+(Chen and Goodman 1999)
 .
 &quot;sbo&quot;: Stupid Backoff (Brants et al. 2007)
 .
@@ -140,8 +143,11 @@
 <li><p><code>"abs"</code>: Absolute discounting (Ney and Essen 1991)
 .</p></li>
 <li><p><code>"wb"</code>: Witten-Bell smoothing (Bell et al. 1990; Witten and Bell 1991)</p></li>
-<li><p><code>"kn"</code>: Interpolated Kneser-Ney with fixed discount.
+<li><p><code>"kn"</code>: Interpolated Kneser-Ney.
 (Kneser and Ney 1995; Chen and Goodman 1999)
+.</p></li>
+<li><p><code>"kn"</code>: Interpolated modified Kneser-Ney.
+(Chen and Goodman 1999)
 .</p></li>
 <li><p><code>"sbo"</code>: Stupid Backoff (Brants et al. 2007)
 .</p></li>
@@ -202,12 +208,12 @@ In <em>Acoustics, Speech, and Signal Processing, IEEE International Conference o
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># List available smoothers</span>
 <span class='fu'>smoothers</span><span class='op'>(</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "ml"    "add_k" "abs"   "kn"    "sbo"   "wb"   </div><div class='input'>
+</div><div class='output co'>#&gt; [1] "ml"    "add_k" "abs"   "kn"    "mkn"   "sbo"   "wb"   </div><div class='input'>
 <span class='co'># Get information on smoother "kn", i.e. Interpolated Kneser-Ney</span>
 <span class='fu'>info</span><span class='op'>(</span><span class='st'>"kn"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; Interpolated Kneser-Ney with fixed discount
+</div><div class='output co'>#&gt; Interpolated Kneser-Ney
 #&gt;  * code: 'kn'
-#&gt;  * parameters: D (discount in higher order probability part)
+#&gt;  * parameters: D
 #&gt;  * constraints: 0 &lt; D &lt; 1</div><div class='input'>
 </div></pre>
   </div>
