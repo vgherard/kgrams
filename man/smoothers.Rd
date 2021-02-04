@@ -30,7 +30,7 @@ Information on available k-gram continuation probability smoothers.
 \item \code{"wb"}: Witten-Bell smoothing \insertCite{bell1990text,witten1991zero}{kgrams}
 \item \code{"kn"}: Interpolated Kneser-Ney.
 \insertCite{Kneser1995ImprovedBF,chen1999empirical}{kgrams}.
-\item \code{"kn"}: Interpolated modified Kneser-Ney.
+\item \code{"mkn"}: Interpolated modified Kneser-Ney.
 \insertCite{chen1999empirical}{kgrams}.
 \item \code{"sbo"}: Stupid Backoff \insertCite{brants-etal-2007-large}{kgrams}.
 }
