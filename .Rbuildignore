@@ -15,3 +15,4 @@ Doxyfile
 ^codecov\.yml$
 ^cpp_docs$
 ^src/\.vscode$
+^src/.*\.out$
