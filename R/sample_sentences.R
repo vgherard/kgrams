@@ -38,6 +38,7 @@
 #' # Sample sentences from 8-gram Kneser-Ney model trained on Shakespeare's
 #' # "Much Ado About Nothing"
 #' 
+#' \dontrun{
 #' 
 #' ### Prepare the model and set seed
 #' freqs <- kgram_freqs(much_ado, 8, .tknz_sent = tknz_sent)
@@ -52,6 +53,8 @@
 #' 
 #' ### Sampling at low temperature
 #' sample_sentences(model, n = 3, max_length = 10, t = 0.01)
+#' 
+#' }
 #' @export
 sample_sentences <- function(model, n, max_length, t = 1.0) 
 {
