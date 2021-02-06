@@ -1,65 +1,3 @@
-new_language_model <- function(cpp_obj, 
-                               cpp_freqs, 
-                               .preprocess, 
-                               .tokenize_sentences, 
-                               smoother
-                               ) 
-{
-        structure(list(), 
-                  cpp_obj = cpp_obj, 
-                  cpp_freqs = cpp_freqs,
-                  .preprocess = .preprocess,
-                  .tokenize_sentences = .tokenize_sentences,
-                  class = c("language_model", smoother)
-                  )
-}
-
-as_language_model <- function(object) 
-        UseMethod("as_language_model", object)
-
-as_language_model.language_model <- function(object) 
-        return(object)
-
-as_language_model.kgram_freqs <- function(object)
-        return(language_model(object, "ml"))
-
-as_language_model.default <- function(object) {
-        msg <- "Input cannot be coerced to 'language_model'."
-        rlang::abort(message = msg, class = "domain_error")
-}
-
-#' @export
-print.language_model <- function(x, ...) {
-        cat("A k-gram language model.\n")
-        return(invisible(x))
-}
-
-#' @export
-summary.language_model <- function(object, ...) {
-        cat("A k-gram language model.\n\n")
-        
-        cat("Smoother:\n")
-        cat("* '", class(object)[[2]], "'.\n", sep = "")
-        cat("\n")
-        
-        cat("Parameters:\n")
-        for (name in names(parameters(object)))
-                cat("* ", name, ": ", param(object, name), "\n", sep = "")
-        cat("\n")
-        
-        cat("Number of words in training corpus:\n")
-        cat("* W: ", attr(object, "cpp_freqs")$tot_words(), "\n", sep = "")
-        cat("\n")
-        cat("Number of distinct k-grams with positive counts:\n")
-        for (k in 1:param(object, "N"))
-                cat("* ", k, "-grams:", attr(object, "cpp_freqs")$unique(k), 
-                    "\n", sep = "")
-        return(invisible(object))
-}
-
-#' @export
-str.language_model <- function(object, ...) summary(object)
-
 #' k-gram Language Models
 #' 
 #' @description 
@@ -151,11 +89,12 @@ language_model.language_model <- function(object, ...) {
         args <- parameters(object)
         N <- args[["N"]]
         cpp_obj <- cpp_smoother_constructor(smoother, cpp_freqs, N, args)
-        new_language_model(cpp_obj, 
-                           cpp_freqs, 
-                           attr(object, ".preprocess"), 
-                           attr(object, ".tokenize_sentences"),
-                           smoother
+        new_language_model(
+                cpp_obj, 
+                cpp_freqs, 
+                attr(object, ".preprocess"), 
+                attr(object, ".tknz_sent"),
+                smoother
         )
 }
 
@@ -176,12 +115,78 @@ language_model.kgram_freqs <-
                         args[[parameter$name]] <- parameter$default
         cpp_freqs <- attr(object, "cpp_obj")
         cpp_obj <- cpp_smoother_constructor(smoother, cpp_freqs, N, args) 
-        new_language_model(cpp_obj, 
-                           cpp_freqs, 
-                           attr(object, ".preprocess"), 
-                           attr(object, ".tokenize_sentences"),
-                           smoother
-                           )
+        new_language_model(
+                cpp_obj, 
+                cpp_freqs, 
+                attr(object, ".preprocess"), 
+                attr(object, ".tknz_sent"),
+                smoother
+        )
+} 
+
+
+
+#----------------------------- printing methods -------------------------------#
+
+#' @export
+print.language_model <- function(x, ...) {
+        cat("A k-gram language model.\n")
+        return(invisible(x))
+}
+
+#' @export
+summary.language_model <- function(object, ...) {
+        cat("A k-gram language model.\n\n")
+        
+        cat("Smoother:\n")
+        cat("* '", class(object)[[2]], "'.\n", sep = "")
+        cat("\n")
+        
+        cat("Parameters:\n")
+        for (name in names(parameters(object)))
+                cat("* ", name, ": ", param(object, name), "\n", sep = "")
+        cat("\n")
+        
+        cat("Number of words in training corpus:\n")
+        cat("* W: ", attr(object, "cpp_freqs")$tot_words(), "\n", sep = "")
+        cat("\n")
+        cat("Number of distinct k-grams with positive counts:\n")
+        for (k in 1:param(object, "N"))
+                cat("* ", k, "-grams:", attr(object, "cpp_freqs")$unique(k), 
+                    "\n", sep = "")
+        return(invisible(object))
+}
+
+#' @export
+str.language_model <- function(object, ...) summary(object)
+
+#---------------------------------- internal ----------------------------------#
+
+new_language_model <- function(
+        cpp_obj, cpp_freqs, .preprocess, .tknz_sent, smoother
+        ) 
+{
+        structure(list(), 
+                  cpp_obj = cpp_obj, 
+                  cpp_freqs = cpp_freqs,
+                  .preprocess = .preprocess,
+                  .tknz_sent = .tknz_sent,
+                  class = c("language_model", smoother)
+        )
+}
+
+as_language_model <- function(object) 
+        UseMethod("as_language_model", object)
+
+as_language_model.language_model <- function(object) 
+        return(object)
+
+as_language_model.kgram_freqs <- function(object)
+        return(language_model(object, "ml"))
+
+as_language_model.default <- function(object) {
+        msg <- "Input cannot be coerced to 'language_model'."
+        rlang::abort(message = msg, class = "domain_error")
 }
 
 cpp_smoother_constructor <- function(smoother, cpp_freqs, N, args) {
@@ -197,3 +202,5 @@ cpp_smoother_constructor <- function(smoother, cpp_freqs, N, args) {
                wb = new(WBSmoother, cpp_freqs, N)
         )
 }
+
+

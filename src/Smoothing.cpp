@@ -158,10 +158,7 @@ double MLSmoother::operator() (const std::string & word, std::string context)
                 return -1;
         context = truncate(context, N_);
         double den = f_.query(context);
-        if (den == 0)
-                return -1;
-        else
-                return f_.query(context + " " + word) / den;
+        return den > 0 ? f_.query(context + " " + word) / den : -1;
 }
 
 //--------//----------------KNSmoother----------------//--------//
@@ -189,14 +186,22 @@ void KNFreqs::update ()
                         // kgram_code is always of the form "n_1 n_2 ... n_k"
                         // with exactly one space between word codes
                         kgram_code = it->first;
-                        r_pos = kgram_code.find_last_of(" ");
+                        if (k > 1) {
+                                r_pos = kgram_code.find_last_of(" ");
+                                l_pos = kgram_code.find_first_of(" ") + 1;
+                        } else {
+                                r_pos = 0;
+                                l_pos = kgram_code.length();
+                        }
                         // Reject kgrams ending in BOS
                         // In this way sum(prob(w|...)) = 1, where w != BOS
-                        if (kgram_code.substr(r_pos + 1) == BOS_IND)
+                        if (kgram_code.substr(r_pos + (k > 1)) == BOS_IND)
                                 continue;
-                        l_pos = kgram_code.find_first_of(" ") + 1;
-                        l_[k - 1][kgram_code.substr(l_pos)]++;
+                        // Add right continuation counts
                         r_[k - 1][kgram_code.substr(0, r_pos)]++;
+                        // Add left continuation counts
+                        l_[k - 1][kgram_code.substr(l_pos)]++;
+                        // Add left right continuation counts if k >= 2
                         if (k == 1) continue;
                         else if (k == 2) { lr_[0][""]++; continue; }
                         lr_[k - 2][ 
@@ -241,13 +246,13 @@ double KNSmoother::operator() (const std::string & word, std::string context)
         num = num > 0 ? num : 0;
         
         // Compute ProbDisc(w|c)
-        double prob_disc = den != 0 ? num / den : 0;
+        double prob_disc = den > 0 ? num / den : 0;
         
         // Handle separately the 1-gram probability case
         if (context == "") {
                 num = f_[1].size() - 1; // N1+(.) without considering <BOS>
                 // Compute BackoffFac(c)
-                double backoff_fac = den != 0 ? D_ * num / den : 1; 
+                double backoff_fac = den > 0 ? D_ * num / den : 1; 
                 // Compute ProbCont(c) (this is potentially > than num!)
                 double prob_cont = 1 / (double)(V() + 2);
                 return prob_disc + backoff_fac * prob_cont;
@@ -331,23 +336,26 @@ double KNSmoother::prob_cont (
 /// @brief update satellite values of KNSmoother
 void mKNFreqs::update () 
 {
+        size_t N = f_.N();
         // Reinitialize l_, r_, and lr_... is it possible to do something more
         // clever?
-        l_ = FreqTablesVec(f_.N());
-        r1_ = FreqTablesVec(f_.N());
-        r2_ = FreqTablesVec(f_.N());
-        r3p_ = FreqTablesVec(f_.N());
-        lr_ = FreqTablesVec(f_.N() - 1);
+        l_ = FreqTablesVec(N);
+        r1_ = FreqTablesVec(N);
+        r2_ = FreqTablesVec(N);
+        r3p_ = FreqTablesVec(N);
+        r1low_ = FreqTablesVec(N - 1);
+        r2low_ = FreqTablesVec(N - 1);
+        r3plow_ = FreqTablesVec(N - 1);
+        lr_ = FreqTablesVec(N - 1);
         
-        // Retrieve continuation counts from k-gram counts up to the maximum 
-        // order allowed (f.N())
+        // Compute left and left-right continuation counts
         std::string kgram_code;
         size_t l_pos, r_pos;
-        for (size_t k = 1; k <= f_.N(); ++k) {
+        for (size_t k = 1; k <= N; ++k) {
                 const std::unordered_map<std::string, size_t> & 
-                        kgram_codes(f_[k]);
-                auto itend = kgram_codes.end();
-                for (auto it = kgram_codes.begin(); it != itend; it++) {
+                        freqs(f_[k]);
+                auto itend = freqs.end();
+                for (auto it = freqs.begin(); it != itend; it++) {
                         // kgram_code is always of the form "n_1 n_2 ... n_k"
                         // with exactly one space between word codes
                         kgram_code = it->first;
@@ -363,16 +371,15 @@ void mKNFreqs::update ()
                         if (kgram_code.substr(r_pos + (k > 1)) == BOS_IND)
                                 continue;
                         // Add right continuation counts
-                        switch(it->second) 
-                        {
+                        switch(it->second) {
                         case 1: 
-                                r1_[k - 1][kgram_code.substr(0, r_pos)]++;
+                                r1_[k - 1][kgram_code.substr(0, r_pos)]++; 
                                 break;
                         case 2: 
-                                r2_[k - 1][kgram_code.substr(0, r_pos)]++;
+                                r2_[k - 1][kgram_code.substr(0, r_pos)]++; 
                                 break;
                         default: 
-                                r3p_[k - 1][kgram_code.substr(0, r_pos)]++;
+                                r3p_[k - 1][kgram_code.substr(0, r_pos)]++; 
                                 break;
                         }
                         // Add left continuation counts
@@ -383,6 +390,33 @@ void mKNFreqs::update ()
                         lr_[k - 2][ 
                         kgram_code.substr(l_pos, r_pos - l_pos)
                         ]++;
+                }
+        }
+        
+        // Compute right continuation counts for when predicting at low order 
+        for (size_t k = 1; k < N; ++k) {
+                const std::unordered_map<std::string, size_t> &  
+                        freqs(l_[k]);
+                auto itend = freqs.end();
+                for (auto it = freqs.begin(); it != itend; it++) {
+                        // kgram_code is always of the form "n_1 n_2 ... n_k"
+                        // with exactly one space between word codes
+                        kgram_code = it->first;
+                        r_pos = k > 1 ? kgram_code.find_last_of(" ") : 0;
+                        
+                        // Reject kgrams ending in BOS
+                        // In this way sum(prob(w|...)) = 1, where w != BOS
+                        if (kgram_code.substr(r_pos + (k > 1)) == BOS_IND)
+                                continue;
+                        
+                        // Eliminate last word's code from kgram_code
+                        kgram_code = kgram_code.substr(0, r_pos);
+                                
+                        switch(it->second) {
+                        case 1: r1low_[k - 1][kgram_code]++; break;
+                        case 2: r2low_[k - 1][kgram_code]++; break;
+                        default: r3plow_[k - 1][kgram_code]++; break;
+                        }
                 }
         }
 }
@@ -426,25 +460,23 @@ const {
         // Compute ProbDisc(w|c)
         double prob_disc;
         double den = f_.query(context);
-        if (den == 0)
-                prob_disc = 0.;
-        else {
+        if (den > 0) {
                 double num = f_.query(context + " " + word);
-                num += -D_(num);
-                num = num > 0 ? num : 0;
+                discount(num);
                 prob_disc = num / den;
         }
+        else 
+                prob_disc = 0.;
         
         // Compute BackoffFac(c)
         double backoff_fac;
-        if (den == 0)
-                backoff_fac = 1.;
-        else {
+        if (den > 0) {
                 double N1 = mknf_.r1().query(p.first, p.second);
                 double N2 = mknf_.r2().query(p.first, p.second);
                 double N3p = mknf_.r3p().query(p.first, p.second);
                 backoff_fac = (D1_ * N1 + D2_ * N2 + D3_ * N3p) / den;
-        }
+        } else 
+                backoff_fac = 1.;
         
         // Compute ProbCont(w|c--)
         double prob_cont;
@@ -483,27 +515,24 @@ double mKNSmoother::prob_cont (
         // Compute ProbContDisc(w|c)
         double prob_cont_disc;
         double den = mknf_.lr().query(order - 1, context);
-        if (den == 0)
-                prob_cont_disc = 0;
-        else {
+        if (den > 0){
                 double num = mknf_.l().query(
                         order, context != "" ? context + " " + word : word
                 );
-                num += -D_(num);
-                num = num > 0 ? num : 0;
+                discount(num);
                 prob_cont_disc = num / den;
-        }
+        } else
+                prob_cont_disc = 0;
         
         // Compute BackoffFac(c)
         double backoff_fac;
-        if (den == 0)
-                backoff_fac = 1.;
-        else {
-                double N1 = mknf_.r1().query(order - 1, context);
-                double N2 = mknf_.r2().query(order - 1, context);
-                double N3p = mknf_.r3p().query(order - 1, context);
+        if (den > 0) {
+                double N1 = mknf_.r1low().query(order - 1, context);
+                double N2 = mknf_.r2low().query(order - 1, context);
+                double N3p = mknf_.r3plow().query(order - 1, context);
                 backoff_fac = (D1_ * N1 + D2_ * N2 + D3_ * N3p) / den;
-        }
+        } else backoff_fac = 1.;
+                   
         
         // Compute ProbCont(w|c--)
         double prob_cont_backoff;
@@ -537,11 +566,16 @@ void RFreqs::update ()
                         // kgram_code is always of the form "n_1 n_2 ... n_k"
                         // with exactly one space between word codes
                         kgram_code = it->first;
-                        r_pos = kgram_code.find_last_of(" ");
+                        if (k > 1) {
+                                r_pos = kgram_code.find_last_of(" ");
+                        } else {
+                                r_pos = 0;
+                        }
                         // Reject kgrams ending in BOS
                         // In this way sum(prob(w|...)) = 1, where w != BOS
-                        if (kgram_code.substr(r_pos + 1) == BOS_IND)
+                        if (kgram_code.substr(r_pos + (k > 1)) == BOS_IND)
                                 continue;
+                        // Add right continuation counts
                         r_[k - 1][kgram_code.substr(0, r_pos)]++;
                 }
         }
@@ -655,25 +689,15 @@ double WBSmoother::operator() (const std::string & word, std::string context)
 }
 
 
-// int main () {
-//         std::vector<std::string> text = {"a a b a b a"};
-//         kgramFreqs f(2);
-//         f.process_sentences(text);
-//         mKNSmoother m(f, 2, 0.75, 0.75, 0.75);
-//         double prob_a = m("a", "a");
-//         double prob_b = m("b", "a");
-//         double prob_eos = m("___EOS___", "a");
-//         double prob_unk = m("___UNK___", "a");
-//         double sum = prob_a + prob_b + prob_eos + prob_unk;
-//         prob_a = m("a", "a b");
-//         prob_b = m("b", "a b");
-//         prob_eos = m("___EOS___", "a b");
-//         prob_unk = m("___UNK___", "a b");
-//         sum = prob_a + prob_b + prob_eos + prob_unk;
-//         prob_a = m("a", "___BOS___ ___BOS___");
-//         prob_b = m("b", "___BOS___ ___BOS___");
-//         prob_eos = m("___EOS___", "___BOS___ ___BOS___");
-//         prob_unk = m("___UNK___", "___BOS___ ___BOS___");
-//         sum = prob_a + prob_b + prob_eos + prob_unk;
-//         return 0;
-// }
+int main () {
+        std::vector<std::string> text = {"a a b a b a"};
+        kgramFreqs f(2);
+        f.process_sentences(text);
+        mKNSmoother m(f, 2, 0.25, 0.5, 0.75);
+        double prob_a = m("a", "b");
+        double prob_b = m("b", "b");
+        double prob_eos = m(EOS_TOK, "b");
+        double prob_unk = m(UNK_TOK, "b");
+        double sum = prob_a + prob_b + prob_eos + prob_unk;
+        return 0;
+}

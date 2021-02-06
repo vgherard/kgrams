@@ -19,16 +19,16 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// tokenize_sentences
-Rcpp::CharacterVector tokenize_sentences(Rcpp::CharacterVector input, std::string EOS, bool keep_first);
-RcppExport SEXP _kgrams_tokenize_sentences(SEXP inputSEXP, SEXP EOSSEXP, SEXP keep_firstSEXP) {
+// tknz_sent
+Rcpp::CharacterVector tknz_sent(Rcpp::CharacterVector input, std::string EOS, bool keep_first);
+RcppExport SEXP _kgrams_tknz_sent(SEXP inputSEXP, SEXP EOSSEXP, SEXP keep_firstSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type input(inputSEXP);
     Rcpp::traits::input_parameter< std::string >::type EOS(EOSSEXP);
     Rcpp::traits::input_parameter< bool >::type keep_first(keep_firstSEXP);
-    rcpp_result_gen = Rcpp::wrap(tokenize_sentences(input, EOS, keep_first));
+    rcpp_result_gen = Rcpp::wrap(tknz_sent(input, EOS, keep_first));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -69,7 +69,7 @@ RcppExport SEXP _rcpp_module_boot_kgramFreqs();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_kgrams_preprocess", (DL_FUNC) &_kgrams_preprocess, 3},
-    {"_kgrams_tokenize_sentences", (DL_FUNC) &_kgrams_tokenize_sentences, 3},
+    {"_kgrams_tknz_sent", (DL_FUNC) &_kgrams_tknz_sent, 3},
     {"_kgrams_EOS", (DL_FUNC) &_kgrams_EOS, 0},
     {"_kgrams_BOS", (DL_FUNC) &_kgrams_BOS, 0},
     {"_kgrams_UNK", (DL_FUNC) &_kgrams_UNK, 0},

@@ -1,43 +1,3 @@
-# Low-level constructor 
-new_kgram_freqs <- function(cpp_obj, .preprocess, .tokenize_sentences) {
-        dictionary <- new_dictionary(cpp_obj$dictionary())
-        stopifnot(is.function(.preprocess), is.function(.tokenize_sentences))
-        structure(list(), 
-                  dictionary = dictionary,
-                  .preprocess = utils::removeSource(.preprocess),
-                  .tokenize_sentences = utils::removeSource(.tokenize_sentences),
-                  cpp_obj = cpp_obj, 
-                  class = "kgram_freqs"
-        )
-}
-
-#' @export
-print.kgram_freqs <- function(x, ...) {
-        cat("A k-gram frequency table.\n")
-        return(invisible(x))
-}
-
-#' @export
-summary.kgram_freqs <- function(object, ...) {
-        cat("A k-gram frequency table.\n\n")
-        cat("Parameters:\n")
-        for (name in names(parameters(object)))
-                cat("* ", name, ": ", param(object, name), "\n", sep = "")
-        cat("\n")
-        cat("Number of words in training corpus:\n")
-        cat("* W: ", attr(object, "cpp_obj")$tot_words(), "\n", sep = "")
-        cat("\n")
-        cat("Number of distinct k-grams with positive counts:\n")
-        for (k in 1:param(object, "N"))
-                cat("* ", k, "-grams:", attr(object, "cpp_obj")$unique(k), "\n",
-                    sep = "")
-        return(invisible(object))
-}
-
-#' @export
-str.kgram_freqs <- function(object, ...) summary(object)
-        
-
 #' k-gram Frequency Tables
 #'
 #' @description 
@@ -58,6 +18,9 @@ str.kgram_freqs <- function(object, ...) summary(object)
 #' @author Valerio Gherardi
 #' @md
 #'
+#' @param object any type allowed by the available methods. The type defines the 
+#' behaviour of \code{kgram_freqs()} as a default constructor, a copy 
+#' constructor or a constructor of a non-trivial object. See ‘Details’.
 #' @param text a character vector or a connection. Source of text from which
 #' k-gram frequencies are to be extracted.
 #' @param freqs a \code{kgram_freqs} object, to which new k-gram counts from
@@ -66,16 +29,16 @@ str.kgram_freqs <- function(object, ...) summary(object)
 #' @param .preprocess a function taking a character vector as input and returning
 #' a character vector as output. Optional preprocessing transformation  
 #' applied to text before k-gram tokenization. See  ‘Details’.
-#' @param .tokenize_sentences a function taking a character vector as input and 
+#' @param .tknz_sent a function taking a character vector as input and 
 #' returning a character vector as output. Optional sentence tokenization step
 #' applied to text after preprocessing and before k-gram tokenization. See 
 #' ‘Details’. 
-#' @param dictionary anything coercible to class 
+#' @param dict anything coercible to class 
 #' \link[kgrams]{dictionary}. Optional pre-specified word dictionary. 
-#' @param open_dictionary \code{TRUE} or \code{FALSE}. If \code{TRUE}, any new 
+#' @param open_dict \code{TRUE} or \code{FALSE}. If \code{TRUE}, any new 
 #' word encountered during processing not appearing in the original dictionary 
 #' is included into the dictionary. Otherwise, new words are replaced by an
-#' unknown word token. It is by default \code{TRUE} if \code{dictionary} is
+#' unknown word token. It is by default \code{TRUE} if \code{dict} is
 #' specified, \code{FALSE} otherwise.
 #' @param in_place \code{TRUE} or \code{FALSE}. Should the initial 
 #' \code{kgram_freqs} object be modified in place?
@@ -92,7 +55,19 @@ str.kgram_freqs <- function(object, ...) summary(object)
 #' k-gram counts from text. For \code{process_sentences()}, the updated 
 #' \code{kgram_freqs} object is returned invisibly if \code{in_place} is 
 #' \code{TRUE}, visibly otherwise. 
-#' @details These generic functions extract k-gram 
+#' @details The function \code{kgram_freqs()} is a generic constructor for
+#' objects of class \code{kgram_freqs}, i.e. k-gram frequency tables. The 
+#' constructor from \code{integer} returns an empty 'kgram_freqs' of fixed 
+#' order, with an optional
+#' predefined dictionary (which can be empty) and \code{.preprocess} and 
+#' \code{.tknz_sent} functions to be used as defaults in other \code{kgram_freqs} 
+#' methods. The constructor from \code{kgram_freqs} returns a copy of an 
+#' existing object, and it is provided because, in general, \code{kgram_freqs}
+#' objects have reference semantics, as discussed below. 
+#' 
+#' The following discussion focuses on \code{process_sentences()} generic, as 
+#' well as on the \code{character} and \code{connection} methods of the 
+#' constructor \code{kgram_freqs()}. These functions extract k-gram 
 #' frequency counts from a text source, which may be either a character vector 
 #' or a connection. The second option is useful if one wants to avoid loading 
 #' the full text corpus in physical memory, allowing to process text from 
@@ -120,16 +95,17 @@ str.kgram_freqs <- function(object, ...) summary(object)
 #' a \code{kgram_freqs} object \code{freqs} will also affect 
 #' \code{language_model} objects created from \code{freqs} with 
 #' \code{language_model()}, which will also be updated with the new information.
-#' If one wants to avoid this behaviour, one has to make a copy using 
-#' \code{in_place = FALSE}.
+#' If one wants to avoid this behaviour, one can make copies using either the
+#' \code{kgram_freqs()} copy constructor, or the \code{in_place = FALSE} 
+#' argument.
 #'
-#' The \code{dictionary} argument allows to provide an initial set of known 
+#' The \code{dict} argument allows to provide an initial set of known 
 #' words. Subsequently, one can either work with such a closed dictionary 
-#' (\code{open_dictionary == FALSE}), or extended the dictionary with all 
+#' (\code{open_dict == FALSE}), or extended the dictionary with all 
 #' new words encountered during k-gram processing 
-#' (\code{open_dictionary == TRUE})  .
+#' (\code{open_dict == TRUE})  .
 #'
-#' The \code{.preprocess} and \code{.tokenize_sentences} functions are applied
+#' The \code{.preprocess} and \code{.tknz_sent} functions are applied
 #' \emph{before} k-gram counting takes place, and are in principle 
 #' arbitrary transformations of the original text.
 #' \emph{After} preprocessing and sentence tokenization, each line of the 
@@ -138,19 +114,19 @@ str.kgram_freqs <- function(object, ...) summary(object)
 #' with \code{N - 1} Begin-Of-Sentence (BOS) and one End-Of-Sentence (EOS) 
 #' tokens, respectively. This is illustrated in the examples). For basic
 #' usage, this package offers the utilities \link[kgrams]{preprocess} and 
-#' \link[kgrams]{tokenize_sentences}. Notice that, strictly speaking, there is 
+#' \link[kgrams]{tknz_sent}. Notice that, strictly speaking, there is 
 #' some redundancy in these two arguments, as the processed input to the k-gram
-#' counting algorithm is \code{.tokenize_sentences(.preprocess(text))}.
+#' counting algorithm is \code{.tknz_sent(.preprocess(text))}.
 #' They appear explicitly as separate arguments for two main reasons:
 #' 
-#' - The presence of \code{.tokenize_sentences} is a reminder of the
+#' - The presence of \code{.tknz_sent} is a reminder of the
 #' fact that sentences have to be explicitly separeted in different entries
 #' of the processed input, in order for \code{kgram_freqs()} to append the 
 #' correct Begin-Of-Sentence and End-Of-Sentence paddings to each sentence.
 #' 
 #' - At prediction time (e.g. with \link[kgrams]{probability}), by default only
 #' \code{.preprocess} is applied when computing conditional probabilities,
-#' whereas both \code{.preprocess()} and \code{.tokenize_sentences()} are 
+#' whereas both \code{.preprocess()} and \code{.tknz_sent()} are 
 #' applied when computing sentence absolute probabilities.
 #'  
 #' 
@@ -200,15 +176,15 @@ str.kgram_freqs <- function(object, ...) summary(object)
 #'         return(x)
 #' }
 #'
-#' .tokenize_sentences <- function(x) {
+#' .tknz_sent <- function(x) {
 #'         # Tokenize sentences keeping Shakespeare's punctuation
-#'         x <- kgrams::tokenize_sentences(x, keep_first = TRUE)
+#'         x <- kgrams::tknz_sent(x, keep_first = TRUE)
 #'         # Remove empty sentences
 #'         x <- x[x != ""]
 #'         return(x)
 #' }
 #' 
-#' f <- kgram_freqs(con, 3, .preprocess, .tokenize_sentences, batch_size = 1000)
+#' f <- kgram_freqs(con, 3, .preprocess, .tknz_sent, batch_size = 1000)
 #' summary(f)
 #' 
 #' query(f, c("leonato", "thy", "smartphones")) # c(145, 52, 0)
@@ -216,128 +192,132 @@ str.kgram_freqs <- function(object, ...) summary(object)
 #' @name kgram_freqs
 NULL
 
-# Generic constructor
+#---------------------------- kgram_freqs constructors ------------------------#
+
 #' @rdname kgram_freqs
 #' @export
-kgram_freqs <- function(
-        text,
-        N,
-        .preprocess = identity,
-        .tokenize_sentences = identity,
-        dictionary = NULL,
-        open_dictionary = is.null(dictionary),
-        verbose = TRUE,
-        ...
-) 
-        UseMethod("kgram_freqs", text)
+kgram_freqs <- function(object, ...) 
+        UseMethod("kgram_freqs", object)
 
-# Constructor from character vector
+#' @rdname kgram_freqs
+#' @export
+kgram_freqs.numeric <- function(
+        object, 
+        .preprocess = identity, 
+        .tknz_sent = identity, 
+        dict = NULL,
+        ...
+        ) 
+        new_kgram_freqs(object, dict, .preprocess, .tknz_sent)
+
+#' @rdname kgram_freqs
+#' @export
+kgram_freqs.kgram_freqs <- function(object, ...) {
+        old <- attr(object, "cpp_obj")
+        attr(object, "cpp_obj") <- new(kgramFreqs, old)
+        return(object)
+}
+
 #' @rdname kgram_freqs
 #' @export
 kgram_freqs.character <- function(
-        text, 
+        object, 
         N,
         .preprocess = identity, 
-        .tokenize_sentences = identity,
-        dictionary = NULL,
-        open_dictionary = is.null(dictionary),
+        .tknz_sent = identity,
+        dict = NULL,
+        open_dict = is.null(dict),
         verbose = TRUE,
         ...
 )
 {
-        freqs <- kgram_freqs_init(
-                N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
-        ) 
+        freqs <- new_kgram_freqs(N, dict, .preprocess, .tknz_sent) 
         res <- process_sentences.character(
-                text, 
+                object, 
                 freqs, 
-                open_dictionary = open_dictionary, 
+                open_dict = open_dict, 
                 in_place = TRUE,
                 verbose = verbose,
                 ...
-        )
+                )
         return(res) # Constructor returns visibly
-}
+} # kgram_freqs.character
 
-# Constructor from connection
 #' @rdname kgram_freqs
 #' @export
 kgram_freqs.connection <- function(
-        text,
+        object,
         N,
         .preprocess = identity,
-        .tokenize_sentences = identity,
-        dictionary = NULL,
-        open_dictionary = is.null(dictionary),
+        .tknz_sent = identity,
+        dict = NULL,
+        open_dict = is.null(dict),
         verbose = TRUE,
         max_lines = max_lines,
         batch_size = NULL,
         ...
 )
 {
-        freqs <- kgram_freqs_init(
-                N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
-        ) 
+        freqs <- new_kgram_freqs(N, dict, .preprocess, .tknz_sent) 
         res <- process_sentences.connection(
-                text,
+                object,
                 freqs,
-                open_dictionary = open_dictionary,
+                open_dict = open_dict,
                 in_place = TRUE,
                 max_lines = max_lines,
                 batch_size = batch_size,
                 verbose = TRUE,
                 ...
-        )
+                )
         return(res) # Constructor returns visibly
-}
+} # kgram_freqs.connection
 
-# Process sentences generic
+#------------------------------ process_sentences -----------------------------#
+
 #' @rdname kgram_freqs
 #' @export
 process_sentences <- function(
         text,
         freqs,
         .preprocess = attr(freqs, ".preprocess"),
-        .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
-        open_dictionary = TRUE,
+        .tknz_sent = attr(freqs, ".tknz_sent"),
+        open_dict = TRUE,
         in_place = TRUE,
         verbose = TRUE,
         ...
-) 
+        ) 
         UseMethod("process_sentences", text)
 
 
-# Process sentences from character vector
 #' @rdname kgram_freqs
 #' @export
 process_sentences.character <- function(
         text,
         freqs,
         .preprocess = attr(freqs, ".preprocess"),
-        .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
-        open_dictionary = TRUE,
+        .tknz_sent = attr(freqs, ".tknz_sent"),
+        open_dict = TRUE,
         in_place = TRUE,
         verbose = TRUE,
         ...
 )
 {
         freqs <- process_sentences_init(freqs, in_place)
-        process <- kgram_process_task(freqs, open_dictionary, verbose)
+        process <- kgram_process_task(freqs, open_dict, verbose)
         process(text)
         if (in_place)
                 return(invisible(freqs))
         return(freqs)
-}
+} # process_sentences.character
 
-# Process sentences from connection
 #' @rdname kgram_freqs
 #' @export
 process_sentences.connection <- function(
         text,
         freqs,
         .preprocess = attr(freqs, ".preprocess"),
-        .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
-        open_dictionary = TRUE,
+        .tknz_sent = attr(freqs, ".tknz_sent"),
+        open_dict = TRUE,
         in_place = TRUE,
         verbose = TRUE,
         max_lines = Inf,
@@ -347,7 +327,7 @@ process_sentences.connection <- function(
 {
         freqs <- process_sentences_init(freqs, in_place)
         # Progress is printed directly from R
-        process <- kgram_process_task(freqs, open_dictionary, verbose = F)
+        process <- kgram_process_task(freqs, open_dict, verbose = F)
         
         open(text, "r")
         if (batch_size == Inf) 
@@ -368,17 +348,69 @@ process_sentences.connection <- function(
         if (in_place)
                 return(invisible(freqs))
         return(freqs)
+} # process_sentences.connection
+
+#-------------------------------- print methods -------------------------------#
+#' @export
+print.kgram_freqs <- function(x, ...) {
+        cat("A k-gram frequency table.\n")
+        return(invisible(x))
 }
 
-kgram_freqs_init <- function(
-        N, dictionary, open_dictionary, .preprocess, .tokenize_sentences
-) 
+#' @export
+summary.kgram_freqs <- function(object, ...) {
+        cat("A k-gram frequency table.\n\n")
+        cat("Parameters:\n")
+        for (name in names(parameters(object)))
+                cat("* ", name, ": ", param(object, name), "\n", sep = "")
+        cat("\n")
+        cat("Number of words in training corpus:\n")
+        cat("* W: ", attr(object, "cpp_obj")$tot_words(), "\n", sep = "")
+        cat("\n")
+        cat("Number of distinct k-grams with positive counts:\n")
+        for (k in 1:param(object, "N"))
+                cat("* ", k, "-grams:", attr(object, "cpp_obj")$unique(k), "\n",
+                    sep = "")
+        return(invisible(object))
+}
+
+#' @export
+str.kgram_freqs <- function(object, ...) summary(object)
+
+#-------------------------------- internal ------------------------------------#
+
+# Low level constructor for class 'kgram_freqs'
+new_kgram_freqs <- function(N, dict, .preprocess, .tknz_sent) 
 {
-        if (is.null(dictionary))
-                dictionary <- dictionary()
-        dictionary <- as_dictionary(dictionary)
-        cpp_obj <- new(kgramFreqs, N, attr(dictionary, "cpp_obj"))
-        new_kgram_freqs(cpp_obj, .preprocess, .tokenize_sentences)
+        if (isFALSE(is.numeric(N) & N > 0)) {
+                h <- "Invalid argument"
+                x <- "'N' must be a length one positive integer."
+                rlang::abort(c(h, x = x), class = "domain_error")
+        }
+        
+        if (is.null(dict)) 
+                dict <- dictionary()
+        else 
+                tryCatch(dict <- as_dictionary(dict),
+                         error = function(cnd) {
+                                 h <- "'dict' is not coercible to dictionary."
+                                 rlang::abort(h, class = "domain_error")
+                                 }
+                         )
+        if (!is.function(.preprocess))
+                rlang::abort("'.preprocess' must be a function.")
+        if (!is.function(.tknz_sent))
+                rlang::abort("'.tknz_sent' must be a function.")
+        
+        cpp_obj <- new(kgramFreqs, N, attr(dict, "cpp_obj"))
+        
+        structure(list(), 
+                  dict = dict,
+                  .preprocess = utils::removeSource(.preprocess),
+                  .tknz_sent = utils::removeSource(.tknz_sent),
+                  cpp_obj = cpp_obj, 
+                  class = "kgram_freqs"
+                  )
 }
 
 process_sentences_init <- function(freqs, in_place) {
@@ -389,13 +421,13 @@ process_sentences_init <- function(freqs, in_place) {
         return(freqs)
 }
 
-kgram_process_task <- function(freqs, open_dictionary, verbose) {
+kgram_process_task <- function(freqs, open_dict, verbose) {
         cpp_obj <- attr(freqs, "cpp_obj")
         .preprocess <- attr(freqs, ".preprocess")
-        .tokenize_sentences <- attr(freqs, ".tokenize_sentences")
+        .tknz_sent <- attr(freqs, ".tknz_sent")
         function(batch) {
                 batch <- .preprocess(batch)
-                batch <- .tokenize_sentences(batch)
-                cpp_obj$process_sentences(batch, !open_dictionary, verbose)
+                batch <- .tknz_sent(batch)
+                cpp_obj$process_sentences(batch, !open_dict, verbose)
         } # return
 }

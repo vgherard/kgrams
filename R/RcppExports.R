@@ -7,10 +7,10 @@ preprocess <- function(input, erase = "[^.?!:;'[:alnum:][:space:]]", lower_case 
     .Call(`_kgrams_preprocess`, input, erase, lower_case)
 }
 
-#' @rdname tokenize_sentences
+#' @rdname tknz_sent
 #' @export
-tokenize_sentences <- function(input, EOS = "[.?!:;]+", keep_first = FALSE) {
-    .Call(`_kgrams_tokenize_sentences`, input, EOS, keep_first)
+tknz_sent <- function(input, EOS = "[.?!:;]+", keep_first = FALSE) {
+    .Call(`_kgrams_tknz_sent`, input, EOS, keep_first)
 }
 
 #' @rdname special_tokens

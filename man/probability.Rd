@@ -14,7 +14,7 @@ probability(object, model, .preprocess = attr(model, ".preprocess"), ...)
   object,
   model,
   .preprocess = attr(model, ".preprocess"),
-  .tokenize_sentences = attr(model, ".tokenize_sentences"),
+  .tknz_sent = attr(model, ".tknz_sent"),
   ...
 )
 }
@@ -34,7 +34,7 @@ applied to input before computing probabilities}
 
 \item{...}{further arguments passed to or from other methods.}
 
-\item{.tokenize_sentences}{a function taking a character vector as input and
+\item{.tknz_sent}{a function taking a character vector as input and
 returning a character vector as output. Optional sentence tokenization step
 applied before computing sentence probabilities.}
 }
@@ -75,10 +75,10 @@ probabilities, any context of more than \code{N - 1} words (where
 \code{N} is the k-gram order the language model) is truncated to the last
 \code{N - 1} words.
 
-By default, the same \code{.preprocess()} and \code{.tokenize_sentences()}
+By default, the same \code{.preprocess()} and \code{.tknz_sent()}
 functions used during model building are applied to the input, but this can
 be overriden with arbitrary functions. Notice that the
-\code{.tokenize_sentences} can be useful (for sentence probabilities) if
+\code{.tknz_sent} can be useful (for sentence probabilities) if
 e.g. the input is a length one unprocessed character vector.
 }
 \examples{

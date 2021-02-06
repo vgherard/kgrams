@@ -2,6 +2,8 @@
 % Please edit documentation in R/kgram_freqs.R
 \name{kgram_freqs}
 \alias{kgram_freqs}
+\alias{kgram_freqs.numeric}
+\alias{kgram_freqs.kgram_freqs}
 \alias{kgram_freqs.character}
 \alias{kgram_freqs.connection}
 \alias{process_sentences}
@@ -9,35 +11,36 @@
 \alias{process_sentences.connection}
 \title{k-gram Frequency Tables}
 \usage{
-kgram_freqs(
-  text,
-  N,
+kgram_freqs(object, ...)
+
+\method{kgram_freqs}{numeric}(
+  object,
   .preprocess = identity,
-  .tokenize_sentences = identity,
-  dictionary = NULL,
-  open_dictionary = is.null(dictionary),
-  verbose = TRUE,
+  .tknz_sent = identity,
+  dict = NULL,
   ...
 )
 
+\method{kgram_freqs}{kgram_freqs}(object, ...)
+
 \method{kgram_freqs}{character}(
-  text,
+  object,
   N,
   .preprocess = identity,
-  .tokenize_sentences = identity,
-  dictionary = NULL,
-  open_dictionary = is.null(dictionary),
+  .tknz_sent = identity,
+  dict = NULL,
+  open_dict = is.null(dict),
   verbose = TRUE,
   ...
 )
 
 \method{kgram_freqs}{connection}(
-  text,
+  object,
   N,
   .preprocess = identity,
-  .tokenize_sentences = identity,
-  dictionary = NULL,
-  open_dictionary = is.null(dictionary),
+  .tknz_sent = identity,
+  dict = NULL,
+  open_dict = is.null(dict),
   verbose = TRUE,
   max_lines = max_lines,
   batch_size = NULL,
@@ -48,8 +51,8 @@ process_sentences(
   text,
   freqs,
   .preprocess = attr(freqs, ".preprocess"),
-  .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
-  open_dictionary = TRUE,
+  .tknz_sent = attr(freqs, ".tknz_sent"),
+  open_dict = TRUE,
   in_place = TRUE,
   verbose = TRUE,
   ...
@@ -59,8 +62,8 @@ process_sentences(
   text,
   freqs,
   .preprocess = attr(freqs, ".preprocess"),
-  .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
-  open_dictionary = TRUE,
+  .tknz_sent = attr(freqs, ".tknz_sent"),
+  open_dict = TRUE,
   in_place = TRUE,
   verbose = TRUE,
   ...
@@ -70,8 +73,8 @@ process_sentences(
   text,
   freqs,
   .preprocess = attr(freqs, ".preprocess"),
-  .tokenize_sentences = attr(freqs, ".tokenize_sentences"),
-  open_dictionary = TRUE,
+  .tknz_sent = attr(freqs, ".tknz_sent"),
+  open_dict = TRUE,
   in_place = TRUE,
   verbose = TRUE,
   max_lines = Inf,
@@ -80,32 +83,33 @@ process_sentences(
 )
 }
 \arguments{
-\item{text}{a character vector or a connection. Source of text from which
-k-gram frequencies are to be extracted.}
+\item{object}{any type allowed by the available methods. The type defines the
+behaviour of \code{kgram_freqs()} as a default constructor, a copy
+constructor or a constructor of a non-trivial object. See ‘Details’.}
 
-\item{N}{a length one integer. Maximum order of k-grams to be considered.}
+\item{...}{further arguments passed to or from other methods.}
 
 \item{.preprocess}{a function taking a character vector as input and returning
 a character vector as output. Optional preprocessing transformation
 applied to text before k-gram tokenization. See  ‘Details’.}
 
-\item{.tokenize_sentences}{a function taking a character vector as input and
+\item{.tknz_sent}{a function taking a character vector as input and
 returning a character vector as output. Optional sentence tokenization step
 applied to text after preprocessing and before k-gram tokenization. See
 ‘Details’.}
 
-\item{dictionary}{anything coercible to class
+\item{dict}{anything coercible to class
 \link[kgrams]{dictionary}. Optional pre-specified word dictionary.}
 
-\item{open_dictionary}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, any new
+\item{N}{a length one integer. Maximum order of k-grams to be considered.}
+
+\item{open_dict}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, any new
 word encountered during processing not appearing in the original dictionary
 is included into the dictionary. Otherwise, new words are replaced by an
-unknown word token. It is by default \code{TRUE} if \code{dictionary} is
+unknown word token. It is by default \code{TRUE} if \code{dict} is
 specified, \code{FALSE} otherwise.}
 
 \item{verbose}{Print current progress to the console.}
-
-\item{...}{further arguments passed to or from other methods.}
 
 \item{max_lines}{a length one positive integer or \code{Inf}.
 Maximum number of lines to be read from the \code{connection}.
@@ -114,6 +118,9 @@ If \code{Inf}, keeps reading until the End-Of-File.}
 \item{batch_size}{a length one positive integer less than or equal to
 \code{max_lines}.Size of text batches when reading text from
 \code{connection}.}
+
+\item{text}{a character vector or a connection. Source of text from which
+k-gram frequencies are to be extracted.}
 
 \item{freqs}{a \code{kgram_freqs} object, to which new k-gram counts from
 \code{text} are to be added.}
@@ -141,7 +148,19 @@ probability smoothing techniques. See \link[kgrams]{language_model}.
 }
 }
 \details{
-These generic functions extract k-gram
+The function \code{kgram_freqs()} is a generic constructor for
+objects of class \code{kgram_freqs}, i.e. k-gram frequency tables. The
+constructor from \code{integer} returns an empty 'kgram_freqs' of fixed
+order, with an optional
+predefined dictionary (which can be empty) and \code{.preprocess} and
+\code{.tknz_sent} functions to be used as defaults in other \code{kgram_freqs}
+methods. The constructor from \code{kgram_freqs} returns a copy of an
+existing object, and it is provided because, in general, \code{kgram_freqs}
+objects have reference semantics, as discussed below.
+
+The following discussion focuses on \code{process_sentences()} generic, as
+well as on the \code{character} and \code{connection} methods of the
+constructor \code{kgram_freqs()}. These functions extract k-gram
 frequency counts from a text source, which may be either a character vector
 or a connection. The second option is useful if one wants to avoid loading
 the full text corpus in physical memory, allowing to process text from
@@ -169,16 +188,17 @@ visibly in the second case. It is worth to mention that modifying in place
 a \code{kgram_freqs} object \code{freqs} will also affect
 \code{language_model} objects created from \code{freqs} with
 \code{language_model()}, which will also be updated with the new information.
-If one wants to avoid this behaviour, one has to make a copy using
-\code{in_place = FALSE}.
+If one wants to avoid this behaviour, one can make copies using either the
+\code{kgram_freqs()} copy constructor, or the \code{in_place = FALSE}
+argument.
 
-The \code{dictionary} argument allows to provide an initial set of known
+The \code{dict} argument allows to provide an initial set of known
 words. Subsequently, one can either work with such a closed dictionary
-(\code{open_dictionary == FALSE}), or extended the dictionary with all
+(\code{open_dict == FALSE}), or extended the dictionary with all
 new words encountered during k-gram processing
-(\code{open_dictionary == TRUE})  .
+(\code{open_dict == TRUE})  .
 
-The \code{.preprocess} and \code{.tokenize_sentences} functions are applied
+The \code{.preprocess} and \code{.tknz_sent} functions are applied
 \emph{before} k-gram counting takes place, and are in principle
 arbitrary transformations of the original text.
 \emph{After} preprocessing and sentence tokenization, each line of the
@@ -187,18 +207,18 @@ sentence (these sentences are implicitly padded
 with \code{N - 1} Begin-Of-Sentence (BOS) and one End-Of-Sentence (EOS)
 tokens, respectively. This is illustrated in the examples). For basic
 usage, this package offers the utilities \link[kgrams]{preprocess} and
-\link[kgrams]{tokenize_sentences}. Notice that, strictly speaking, there is
+\link[kgrams]{tknz_sent}. Notice that, strictly speaking, there is
 some redundancy in these two arguments, as the processed input to the k-gram
-counting algorithm is \code{.tokenize_sentences(.preprocess(text))}.
+counting algorithm is \code{.tknz_sent(.preprocess(text))}.
 They appear explicitly as separate arguments for two main reasons:
 \itemize{
-\item The presence of \code{.tokenize_sentences} is a reminder of the
+\item The presence of \code{.tknz_sent} is a reminder of the
 fact that sentences have to be explicitly separeted in different entries
 of the processed input, in order for \code{kgram_freqs()} to append the
 correct Begin-Of-Sentence and End-Of-Sentence paddings to each sentence.
 \item At prediction time (e.g. with \link[kgrams]{probability}), by default only
 \code{.preprocess} is applied when computing conditional probabilities,
-whereas both \code{.preprocess()} and \code{.tokenize_sentences()} are
+whereas both \code{.preprocess()} and \code{.tknz_sent()} are
 applied when computing sentence absolute probabilities.
 }
 }
@@ -245,15 +265,15 @@ con <- url("http://shakespeare.mit.edu/much_ado/full.html")
         return(x)
 }
 
-.tokenize_sentences <- function(x) {
+.tknz_sent <- function(x) {
         # Tokenize sentences keeping Shakespeare's punctuation
-        x <- kgrams::tokenize_sentences(x, keep_first = TRUE)
+        x <- kgrams::tknz_sent(x, keep_first = TRUE)
         # Remove empty sentences
         x <- x[x != ""]
         return(x)
 }
 
-f <- kgram_freqs(con, 3, .preprocess, .tokenize_sentences, batch_size = 1000)
+f <- kgram_freqs(con, 3, .preprocess, .tknz_sent, batch_size = 1000)
 summary(f)
 
 query(f, c("leonato", "thy", "smartphones")) # c(145, 52, 0)

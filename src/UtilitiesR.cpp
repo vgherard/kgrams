@@ -26,14 +26,14 @@ Rcpp::CharacterVector preprocess(
         return input;
 }
 
-size_t tokenize_sentences(
+size_t tknz_sent(
                 std::string &, std::vector<std::string> &, const std::regex &, bool
 );
 
-//' @rdname tokenize_sentences
+//' @rdname tknz_sent
 //' @export
 // [[Rcpp::export]]
-Rcpp::CharacterVector tokenize_sentences(Rcpp::CharacterVector input,
+Rcpp::CharacterVector tknz_sent(Rcpp::CharacterVector input,
                                          std::string EOS = "[.?!:;]+",
                                          bool keep_first = false)
 {
@@ -47,7 +47,7 @@ Rcpp::CharacterVector tokenize_sentences(Rcpp::CharacterVector input,
         std::string line;
         for (size_t i = 0; i < len; ++i) {
                 line = input[i];
-                tokenized += tokenize_sentences(line, tmp[i], _EOS, keep_first);
+                tokenized += tknz_sent(line, tmp[i], _EOS, keep_first);
         }
         
         Rcpp::CharacterVector res(tokenized);
@@ -62,7 +62,7 @@ Rcpp::CharacterVector tokenize_sentences(Rcpp::CharacterVector input,
         return res;
 }
 
-size_t tokenize_sentences(std::string & line, 
+size_t tknz_sent(std::string & line, 
                           std::vector<std::string> & line_res,
                           const std::regex& _EOS, 
                           bool keep_first)

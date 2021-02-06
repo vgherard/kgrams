@@ -40,7 +40,7 @@
 #' 
 #' 
 #' ### Prepare the model and set seed
-#' freqs <- kgram_freqs(much_ado, 8, .tokenize_sentences = tokenize_sentences)
+#' freqs <- kgram_freqs(much_ado, 8, .tknz_sent = tknz_sent)
 #' model <- language_model(freqs, "kn", D = 0.75)
 #' set.seed(840)
 #' 

@@ -213,6 +213,9 @@ class mKNFreqs : public Satellite {
         FreqTablesVec r1_;
         FreqTablesVec r2_;
         FreqTablesVec r3p_;
+        FreqTablesVec r1low_;
+        FreqTablesVec r2low_;
+        FreqTablesVec r3plow_;
         /// @brief Two-sided continuation counts for Kneser-Ney smoothing
         FreqTablesVec lr_;
 public:
@@ -220,12 +223,16 @@ public:
                 : f_(f), 
                   l_(f_.N()), 
                   r1_(f_.N()), r2_(f_.N()), r3p_(f_.N()),
+                  r1low_(f_.N() - 1), r2low_(f_.N() - 1), r3plow_(f_.N() - 1),
                   lr_(f_.N() - 1) 
                 { update(); }
         void update ();
         const FreqTablesVec & r1() const { return r1_; }
         const FreqTablesVec & r2() const { return r2_; }
         const FreqTablesVec & r3p() const { return r3p_; }
+        const FreqTablesVec & r1low() const { return r1low_; }
+        const FreqTablesVec & r2low() const { return r2low_; }
+        const FreqTablesVec & r3plow() const { return r3plow_; }
         const FreqTablesVec & l() const { return l_; }
         const FreqTablesVec & lr() const { return lr_; }
 };
@@ -237,17 +244,15 @@ class mKNSmoother : public Smoother {
         double D1_, D2_, D3_; ///< @brief Discount
         mKNFreqs mknf_; ///< @brief Kneser-Ney continuation counts
         
-        double D_(size_t k) const
-        { 
-                switch(k) 
-                {
-                case 1: return D1_;
-                case 2: return D2_;
-                default: return D3_;
-                }
-                
+        void discount (double & count) const {
+                if (count > 2.5) // i.e. count >= 3
+                        count -= D3_;
+                else if (count > 1.5) // i.e. count == 2 
+                        count -= D2_;
+                else if (count > 0.5) // i.e. count == 1
+                        count -= D1_;
+                if (count < 0) count = 0;
         }
-        
         // Compute continuation probability of word in given context
         // k-gram order is passed 
         double prob_cont (const std::string &, std::string, size_t) const;

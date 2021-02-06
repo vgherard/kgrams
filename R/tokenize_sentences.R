@@ -12,7 +12,7 @@
 #' @return a character vector, each entry of which corresponds to a single
 #' sentence.
 #' @details
-#' \code{tokenize_sentences()} splits text into sentences using a list of 
+#' \code{tknz_sent()} splits text into sentences using a list of 
 #' single character delimiters, specified by the parameter \code{EOS}. 
 #' Specifically, when an EOS token is found, the next sentence begins at the
 #' first position in the input string not containing any of the EOS tokens 
@@ -23,13 +23,13 @@
 #' the returned sequences, which means that all delimiters are treated 
 #' symmetrically.
 #' 
-#' In the absence of any \code{EOS} delimiter, \code{tokenize_sentences()} 
+#' In the absence of any \code{EOS} delimiter, \code{tknz_sent()} 
 #' returns the input as is, since parts of text corresponding to different 
 #' entries of the input vector \code{x} are understood as parts of separate 
 #' sentences.
 #' @examples
-#' tokenize_sentences("Hi there! I'm using `sbo`.")
-#' @name tokenize_sentences
+#' tknz_sent("Hi there! I'm using `sbo`.")
+#' @name tknz_sent
 NULL
 
 # Defined in UtilitiesR.cpp

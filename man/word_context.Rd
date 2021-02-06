@@ -30,7 +30,7 @@ create objects which can be given as input to probability() (see
 \link[kgrams]{probability} for further examples).
 }
 \examples{
-f <- kgram_freqs(much_ado, 2, .tokenize_sentences = tokenize_sentences)
+f <- kgram_freqs(much_ado, 2, .tknz_sent = tknz_sent)
 m <- language_model(f, "kn", D = 0.5)
 probability("leonato" \%|\% "enter", m)
 

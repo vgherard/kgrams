@@ -16,7 +16,7 @@
 #' @param .preprocess a function taking a character vector as input and 
 #' returning a character vector as output. Preprocessing transformation  
 #' applied to input before computing probabilities
-#' @param .tokenize_sentences a function taking a character vector as input and 
+#' @param .tknz_sent a function taking a character vector as input and 
 #' returning a character vector as output. Optional sentence tokenization step
 #' applied before computing sentence probabilities.
 #' @param ... further arguments passed to or from other methods.
@@ -51,10 +51,10 @@
 #' \code{N} is the k-gram order the language model) is truncated to the last
 #' \code{N - 1} words.
 #' 
-#' By default, the same \code{.preprocess()} and \code{.tokenize_sentences()} 
+#' By default, the same \code{.preprocess()} and \code{.tknz_sent()} 
 #' functions used during model building are applied to the input, but this can
 #' be overriden with arbitrary functions. Notice that the 
-#' \code{.tokenize_sentences} can be useful (for sentence probabilities) if
+#' \code{.tknz_sent} can be useful (for sentence probabilities) if
 #' e.g. the input is a length one unprocessed character vector. 
 #'
 #' @examples 
@@ -116,13 +116,13 @@ probability.character <- function(
         object, 
         model,
         .preprocess = attr(model, ".preprocess"),
-        .tokenize_sentences = attr(model, ".tokenize_sentences"),
+        .tknz_sent = attr(model, ".tknz_sent"),
         ...
 ) {
         # If 'model' is not a language model, try to coerce it to language model
         model <- as_language_model(model)
         object <- .preprocess(object)
-        object <- .tokenize_sentences(object)
+        object <- .tknz_sent(object)
         attr(model, "cpp_obj")$probability_sentence(object) # return
 }
         

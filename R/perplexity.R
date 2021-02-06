@@ -13,7 +13,7 @@
 #' @param .preprocess a function taking a character vector as input and 
 #' returning a character vector as output. Preprocessing transformation  
 #' applied to input before computing perplexity.
-#' @param .tokenize_sentences a function taking a character vector as input and 
+#' @param .tknz_sent a function taking a character vector as input and 
 #' returning a character vector as output. Optional sentence tokenization step
 #' applied before computing perplexity.
 #' @param batch_size a length one positive integer or \code{NULL}.
@@ -37,7 +37,7 @@
 #' the End-Of-Sentence tokens, but not the Begin-Of-Sentence tokens, in the
 #' word count.
 #' 
-#' The custom .preprocess and .tokenize_sentences arguments allow to apply
+#' The custom .preprocess and .tknz_sent arguments allow to apply
 #' transformations to the text corpus before the perplexity computation takes
 #' place. By default, the same functions used during model building are 
 #' employed, c.f. \link[kgrams]{kgram_freqs} and \link[kgrams]{language_model}.
@@ -58,8 +58,8 @@
 #' train <- much_ado
 #' test <- midsummer
 #' 
-#' tknz <- function(text) tokenize_sentences(text, keep_first = TRUE)
-#' f <- kgram_freqs(train, 8, .tokenize_sentences = tknz)
+#' tknz <- function(text) tknz_sent(text, keep_first = TRUE)
+#' f <- kgram_freqs(train, 8, .tknz_sent = tknz)
 #' m <- language_model(f, "kn", D = 0.75)
 #' 
 #' FUN <- function(N) {
@@ -80,7 +80,7 @@
 perplexity <- function(text,
                        model,
                        .preprocess = attr(model, ".preprocess"),
-                       .tokenize_sentences = attr(model, ".tokenize_sentences"),
+                       .tknz_sent = attr(model, ".tknz_sent"),
                        ...
                        )
 {
@@ -96,12 +96,12 @@ perplexity.character <- function(
         text,
         model,
         .preprocess = attr(model, ".preprocess"),
-        .tokenize_sentences = attr(model, ".tokenize_sentences"),
+        .tknz_sent = attr(model, ".tknz_sent"),
         ...
         ) 
 {
         text <- .preprocess(text)
-        text <- .tokenize_sentences(text)
+        text <- .tknz_sent(text)
         lp <- attr(model, "cpp_obj")$log_probability_sentence(text)
         cross_entropy <- -sum(lp$log_prob) / sum(lp$n_words) 
         return(exp(cross_entropy))
@@ -113,7 +113,7 @@ perplexity.connection <- function(
         text,
         model,
         .preprocess = attr(model, ".preprocess"),
-        .tokenize_sentences = attr(model, ".tokenize_sentences"),
+        .tknz_sent = attr(model, ".tknz_sent"),
         batch_size = NULL,
         ...
 ) 
@@ -126,7 +126,7 @@ perplexity.connection <- function(
         
         open(text, "r")
         while (length(batch <- readLines(text, batch_size))) {
-                batch <- .tokenize_sentences( .preprocess(batch) )
+                batch <- .tknz_sent( .preprocess(batch) )
                 lp <- attr(model, "cpp_obj")$log_probability_sentence(batch)
                 sum_log_prob <- sum_log_prob + sum(lp$log_prob)
                 n_words <- sum(lp$n_words)

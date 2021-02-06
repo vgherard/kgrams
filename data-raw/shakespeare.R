@@ -6,7 +6,7 @@
         # Apply standard preprocessing including lower-case
         x <- kgrams::preprocess(x)
         # Tokenize sentences keeping Shakespeare's punctuation
-        x <- kgrams::tokenize_sentences(x, keep_first = TRUE)
+        x <- kgrams::tknz_sent(x, keep_first = TRUE)
         # Remove empty sentences
         x <- x[x != ""]
         # Collapse everything into a single string

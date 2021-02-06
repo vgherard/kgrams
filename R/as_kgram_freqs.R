@@ -27,6 +27,6 @@ as_kgram_freqs <- function(object, ...)
 as_kgram_freqs.language_model <- function(object, ...) {
         cpp_obj <- attr(object, "cpp_freqs")
         .preprocess <- attr(object, ".preprocess")
-        .tokenize_sentences <- attr(object, ".tokenize_sentences")
-        new_kgram_freqs(cpp_obj, .preprocess, .tokenize_sentences)
+        .tknz_sent <- attr(object, ".tknz_sent")
+        new_kgram_freqs(cpp_obj, .preprocess, .tknz_sent)
 }
