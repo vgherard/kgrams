@@ -86,6 +86,9 @@ probabilities from a language model" />
   </a>
 </li>
 <li>
+  <a href="../articles/kgrams.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -124,7 +127,7 @@ probabilities from a language model</p>
   <span class='va'>object</span>,
   <span class='va'>model</span>,
   .preprocess <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".preprocess"</span><span class='op'>)</span>,
-  .tokenize_sentences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
+  .tknz_sent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".tknz_sent"</span><span class='op'>)</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -155,7 +158,7 @@ applied to input before computing probabilities</p></td>
       <td><p>further arguments passed to or from other methods.</p></td>
     </tr>
     <tr>
-      <th>.tokenize_sentences</th>
+      <th>.tknz_sent</th>
       <td><p>a function taking a character vector as input and
 returning a character vector as output. Optional sentence tokenization step
 applied before computing sentence probabilities.</p></td>
@@ -193,10 +196,10 @@ ignored by <code>probability()</code> (see the examples below). For continuation
 probabilities, any context of more than <code>N - 1</code> words (where
 <code>N</code> is the k-gram order the language model) is truncated to the last
 <code>N - 1</code> words.</p>
-<p>By default, the same <code>.preprocess()</code> and <code>.tokenize_sentences()</code>
+<p>By default, the same <code>.preprocess()</code> and <code>.tknz_sent()</code>
 functions used during model building are applied to the input, but this can
 be overriden with arbitrary functions. Notice that the
-<code>.tokenize_sentences</code> can be useful (for sentence probabilities) if
+<code>.tknz_sent</code> can be useful (for sentence probabilities) if
 e.g. the input is a length one unprocessed character vector.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 

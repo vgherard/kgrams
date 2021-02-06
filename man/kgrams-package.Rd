@@ -4,9 +4,11 @@
 \name{kgrams-package}
 \alias{kgrams}
 \alias{kgrams-package}
-\title{kgrams: k-grams, Language Models, and All That}
+\title{kgrams: Classical k-gram Language Models in R}
 \description{
-Efficient tools for training and tuning k-gram language models, including several probability smoothing methods, perplexity computations, random text generation and more.
+Tools for training and evaluating k-gram language models in R, 
+        supporting several probability smoothing techniques, 
+        perplexity computations, random text generation and more.
 }
 \author{
 \strong{Maintainer}: Valerio Gherardi \email{vgherard@sissa.it} (\href{https://orcid.org/0000-0002-8215-3013}{ORCID})

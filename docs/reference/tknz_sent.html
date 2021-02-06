@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Word-context conditional expression — word_context • kgrams</title>
+<title>Sentence tokenizer — tknz_sent • kgrams</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Word-context conditional expression — word_context" />
-<meta property="og:description" content="Create word-context conditional expression with the %|% operator." />
+<meta property="og:title" content="Sentence tokenizer — tknz_sent" />
+<meta property="og:description" content="Extract sentences from a batch of text lines." />
 
 
 
@@ -106,54 +106,61 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Word-context conditional expression</h1>
+    <h1>Sentence tokenizer</h1>
     
-    <div class="hidden name"><code>word_context.Rd</code></div>
+    <div class="hidden name"><code>tknz_sent.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Create word-context conditional expression with the <code>%|%</code> operator.</p>
+    <p>Extract sentences from a batch of text lines.</p>
     </div>
 
-    <pre class="usage"><span class='va'>word</span> <span class='op'>%|%</span> <span class='va'>context</span></pre>
+    <pre class="usage"><span class='fu'>tknz_sent</span><span class='op'>(</span><span class='va'>input</span>, EOS <span class='op'>=</span> <span class='st'>"[.?!:;]+"</span>, keep_first <span class='op'>=</span> <span class='cn'>FALSE</span><span class='op'>)</span></pre>
 
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>word</th>
-      <td><p>a character vector. Word or words to include as the variable
-part of the conditional expression.</p></td>
+      <th>input</th>
+      <td><p>a character vector.</p></td>
     </tr>
     <tr>
-      <th>context</th>
-      <td><p>a character vector of length one. The fixed (or "given") part
-of the conditional expression.</p></td>
+      <th>EOS</th>
+      <td><p>a regular expression matching an End-Of-Sentence delimiter.</p></td>
+    </tr>
+    <tr>
+      <th>keep_first</th>
+      <td><p>TRUE or FALSE? Should the first character of the matches
+be appended to the returned sentences (with a space)?</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>a <code>word_context</code> class object.</p>
+    <p>a character vector, each entry of which corresponds to a single
+sentence.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The intuitive meaning of the operator <code>%|%</code> is that of the mathematical
-symbol <code><a href='https://rdrr.io/r/base/Logic.html'>|</a></code> (given). This operator is used to create conditional expressions
-representing the occurrence of some word after a given context (for instance,
-the expression <code>"you" %|% "i love"</code> would represent the occurrence of
-the word <code>"you"</code> after the string "i love"). The purpose of <code>%|%</code> is to
-create objects which can be given as input to probability() (see
-<a href='probability.html'>probability</a> for further examples).</p>
+    <p><code>tknz_sent()</code> splits text into sentences using a list of
+single character delimiters, specified by the parameter <code>EOS</code>.
+Specifically, when an EOS token is found, the next sentence begins at the
+first position in the input string not containing any of the EOS tokens
+<em>or white space</em> (so that entries like <code>"Hi there!!!"</code> or
+<code>"Hello . . ."</code> are both recognized as a single sentence).</p>
+<p>If <code>keep_first</code> is <code>FALSE</code>, the delimiters are stripped off from
+the returned sequences, which means that all delimiters are treated
+symmetrically.</p>
+<p>In the absence of any <code>EOS</code> delimiter, <code>tknz_sent()</code>
+returns the input as is, since parts of text corresponding to different
+entries of the input vector <code>x</code> are understood as parts of separate
+sentences.</p>
     <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
 
     <p>Valerio Gherardi</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>much_ado</span>, <span class='fl'>2</span>, .tknz_sent <span class='op'>=</span> <span class='va'>tknz_sent</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-<span class='fu'><a href='probability.html'>probability</a></span><span class='op'>(</span><span class='st'>"leonato"</span> <span class='op'>%|%</span> <span class='st'>"enter"</span>, <span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.1377552</div><div class='input'>
-</div></pre>
+    <pre class="examples"><div class='input'><span class='fu'>tknz_sent</span><span class='op'>(</span><span class='st'>"Hi there! I'm using `sbo`."</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; [1] "Hi there"         " I'm using `sbo`" ""                </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

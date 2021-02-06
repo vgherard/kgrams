@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Word-context conditional expression — word_context • kgrams</title>
+<title>Articles • kgrams</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,7 @@
 
 
 
-<meta property="og:title" content="Word-context conditional expression — word_context" />
-<meta property="og:description" content="Create word-context conditional expression with the %|% operator." />
+<meta property="og:title" content="Articles" />
 
 
 
@@ -59,7 +58,7 @@
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    <div class="container template-reference-topic">
+    <div class="container template-article-index">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -106,59 +105,18 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Word-context conditional expression</h1>
-    
-    <div class="hidden name"><code>word_context.Rd</code></div>
+      <h1>Articles</h1>
     </div>
 
-    <div class="ref-description">
-    <p>Create word-context conditional expression with the <code>%|%</code> operator.</p>
+    <div class="section ">
+      <h3>All vignettes</h3>
+      <p class="section-desc"></p>
+
+      <dl>
+        <dt><a href="kgrams.html">Classical k-gram Language Models in R</a></dt>
+        <dd></dt>
+      </dl>
     </div>
-
-    <pre class="usage"><span class='va'>word</span> <span class='op'>%|%</span> <span class='va'>context</span></pre>
-
-    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
-    <table class="ref-arguments">
-    <colgroup><col class="name" /><col class="desc" /></colgroup>
-    <tr>
-      <th>word</th>
-      <td><p>a character vector. Word or words to include as the variable
-part of the conditional expression.</p></td>
-    </tr>
-    <tr>
-      <th>context</th>
-      <td><p>a character vector of length one. The fixed (or "given") part
-of the conditional expression.</p></td>
-    </tr>
-    </table>
-
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>a <code>word_context</code> class object.</p>
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>The intuitive meaning of the operator <code>%|%</code> is that of the mathematical
-symbol <code><a href='https://rdrr.io/r/base/Logic.html'>|</a></code> (given). This operator is used to create conditional expressions
-representing the occurrence of some word after a given context (for instance,
-the expression <code>"you" %|% "i love"</code> would represent the occurrence of
-the word <code>"you"</code> after the string "i love"). The purpose of <code>%|%</code> is to
-create objects which can be given as input to probability() (see
-<a href='probability.html'>probability</a> for further examples).</p>
-    <h2 class="hasAnchor" id="author"><a class="anchor" href="#author"></a>Author</h2>
-
-    <p>Valerio Gherardi</p>
-
-    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>much_ado</span>, <span class='fl'>2</span>, .tknz_sent <span class='op'>=</span> <span class='va'>tknz_sent</span><span class='op'>)</span>
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-<span class='fu'><a href='probability.html'>probability</a></span><span class='op'>(</span><span class='st'>"leonato"</span> <span class='op'>%|%</span> <span class='st'>"enter"</span>, <span class='va'>m</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.1377552</div><div class='input'>
-</div></pre>
-  </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
-    <nav id="toc" data-toggle="toc" class="sticky-top">
-      <h2 data-toc-skip>Contents</h2>
-    </nav>
   </div>
 </div>
 

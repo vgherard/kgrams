@@ -5,12 +5,11 @@
         x <- gsub("<[^>]+>||<[^>]+$||^[^>]+>$", "", x)
         # Apply standard preprocessing including lower-case
         x <- kgrams::preprocess(x)
+        x <- paste(x, collapse = " ")
         # Tokenize sentences keeping Shakespeare's punctuation
         x <- kgrams::tknz_sent(x, keep_first = TRUE)
         # Remove empty sentences
         x <- x[x != ""]
-        # Collapse everything into a single string
-        x <- paste(x, collapse = " ")
 }
 
 local({

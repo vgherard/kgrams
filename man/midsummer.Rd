@@ -20,7 +20,7 @@ midsummer
 The entire play "A Midsummer Night's Dream" from William Shakespeare.
 }
 \examples{
-substr(midsummer, 840, 840 + 480)
+midsummer[840]
 
 }
 \seealso{

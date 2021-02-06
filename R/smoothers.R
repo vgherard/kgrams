@@ -79,19 +79,19 @@ info <- function(smoother) {
                 cat("Interpolated Kneser-Ney\n",
                     "* code: 'kn'\n",
                     "* parameters: D\n",
-                    "* constraints: 0 < D < 1\n")
+                    "* constraints: 0 <= D <= 1\n")
         
         if (smoother == "mkn")
                 cat("Interpolated modified Kneser-Ney\n",
                     "* code: 'mkn'\n",
                     "* parameters: D1, D2, D3\n",
-                    "* constraints: 0 < D < 1\n")
+                    "* constraints: 0 <= Di <= 1\n")
         
         if (smoother == "abs")
                 cat("Absolute discounting\n",
                     "* code: 'abs'\n",
                     "* parameters: D\n",
-                    "* constraints: 0 < D < 1\n")
+                    "* constraints: 0 <= D <= 1\n")
         
         if (smoother == "wb")
                 cat("Witten-Bell Smoothing\n",

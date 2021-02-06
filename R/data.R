@@ -10,7 +10,7 @@
 #' @seealso \link[kgrams]{midsummer}
 #' 
 #' @examples 
-#' substr(much_ado, 840, 840 + 480)
+#' much_ado[840]
 #' 
 #' @source \url{http://shakespeare.mit.edu/much_ado/}
 "much_ado"
@@ -27,7 +27,7 @@
 #' @seealso \link[kgrams]{much_ado}
 #' 
 #' @examples 
-#' substr(midsummer, 840, 840 + 480)
+#' midsummer[840]
 #' 
 #' @source \url{http://shakespeare.mit.edu/midsummer/}
 "midsummer"

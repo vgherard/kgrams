@@ -96,6 +96,9 @@ probability smoothing techniques. See language_model.
   </a>
 </li>
 <li>
+  <a href="../articles/kgrams.html">Get started</a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
       </ul>
@@ -134,37 +137,40 @@ probability smoothing techniques. See <a href='language_model.html'>language_mod
 
     </div>
 
-    <pre class="usage"><span class='fu'>kgram_freqs</span><span class='op'>(</span>
-  <span class='va'>text</span>,
-  <span class='va'>N</span>,
+    <pre class="usage"><span class='fu'>kgram_freqs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+
+<span class='co'># S3 method for numeric</span>
+<span class='fu'>kgram_freqs</span><span class='op'>(</span>
+  <span class='va'>object</span>,
   .preprocess <span class='op'>=</span> <span class='va'>identity</span>,
-  .tokenize_sentences <span class='op'>=</span> <span class='va'>identity</span>,
-  dictionary <span class='op'>=</span> <span class='cn'>NULL</span>,
-  open_dictionary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>dictionary</span><span class='op'>)</span>,
-  verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  .tknz_sent <span class='op'>=</span> <span class='va'>identity</span>,
+  dict <span class='op'>=</span> <span class='cn'>NULL</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
+<span class='co'># S3 method for kgram_freqs</span>
+<span class='fu'>kgram_freqs</span><span class='op'>(</span><span class='va'>object</span>, <span class='va'>...</span><span class='op'>)</span>
+
 <span class='co'># S3 method for character</span>
 <span class='fu'>kgram_freqs</span><span class='op'>(</span>
-  <span class='va'>text</span>,
+  <span class='va'>object</span>,
   <span class='va'>N</span>,
   .preprocess <span class='op'>=</span> <span class='va'>identity</span>,
-  .tokenize_sentences <span class='op'>=</span> <span class='va'>identity</span>,
-  dictionary <span class='op'>=</span> <span class='cn'>NULL</span>,
-  open_dictionary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>dictionary</span><span class='op'>)</span>,
+  .tknz_sent <span class='op'>=</span> <span class='va'>identity</span>,
+  dict <span class='op'>=</span> <span class='cn'>NULL</span>,
+  open_dict <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>dict</span><span class='op'>)</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
 <span class='op'>)</span>
 
 <span class='co'># S3 method for connection</span>
 <span class='fu'>kgram_freqs</span><span class='op'>(</span>
-  <span class='va'>text</span>,
+  <span class='va'>object</span>,
   <span class='va'>N</span>,
   .preprocess <span class='op'>=</span> <span class='va'>identity</span>,
-  .tokenize_sentences <span class='op'>=</span> <span class='va'>identity</span>,
-  dictionary <span class='op'>=</span> <span class='cn'>NULL</span>,
-  open_dictionary <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>dictionary</span><span class='op'>)</span>,
+  .tknz_sent <span class='op'>=</span> <span class='va'>identity</span>,
+  dict <span class='op'>=</span> <span class='cn'>NULL</span>,
+  open_dict <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/NULL.html'>is.null</a></span><span class='op'>(</span><span class='va'>dict</span><span class='op'>)</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   max_lines <span class='op'>=</span> <span class='va'>max_lines</span>,
   batch_size <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -175,8 +181,8 @@ probability smoothing techniques. See <a href='language_model.html'>language_mod
   <span class='va'>text</span>,
   <span class='va'>freqs</span>,
   .preprocess <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".preprocess"</span><span class='op'>)</span>,
-  .tokenize_sentences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
-  open_dictionary <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  .tknz_sent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".tknz_sent"</span><span class='op'>)</span>,
+  open_dict <span class='op'>=</span> <span class='cn'>TRUE</span>,
   in_place <span class='op'>=</span> <span class='cn'>TRUE</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
@@ -187,8 +193,8 @@ probability smoothing techniques. See <a href='language_model.html'>language_mod
   <span class='va'>text</span>,
   <span class='va'>freqs</span>,
   .preprocess <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".preprocess"</span><span class='op'>)</span>,
-  .tokenize_sentences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
-  open_dictionary <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  .tknz_sent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".tknz_sent"</span><span class='op'>)</span>,
+  open_dict <span class='op'>=</span> <span class='cn'>TRUE</span>,
   in_place <span class='op'>=</span> <span class='cn'>TRUE</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   <span class='va'>...</span>
@@ -199,8 +205,8 @@ probability smoothing techniques. See <a href='language_model.html'>language_mod
   <span class='va'>text</span>,
   <span class='va'>freqs</span>,
   .preprocess <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".preprocess"</span><span class='op'>)</span>,
-  .tokenize_sentences <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".tokenize_sentences"</span><span class='op'>)</span>,
-  open_dictionary <span class='op'>=</span> <span class='cn'>TRUE</span>,
+  .tknz_sent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>".tknz_sent"</span><span class='op'>)</span>,
+  open_dict <span class='op'>=</span> <span class='cn'>TRUE</span>,
   in_place <span class='op'>=</span> <span class='cn'>TRUE</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>,
   max_lines <span class='op'>=</span> <span class='cn'>Inf</span>,
@@ -212,13 +218,14 @@ probability smoothing techniques. See <a href='language_model.html'>language_mod
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
-      <th>text</th>
-      <td><p>a character vector or a connection. Source of text from which
-k-gram frequencies are to be extracted.</p></td>
+      <th>object</th>
+      <td><p>any type allowed by the available methods. The type defines the
+behaviour of <code>kgram_freqs()</code> as a default constructor, a copy
+constructor or a constructor of a non-trivial object. See ‘Details’.</p></td>
     </tr>
     <tr>
-      <th>N</th>
-      <td><p>a length one integer. Maximum order of k-grams to be considered.</p></td>
+      <th>...</th>
+      <td><p>further arguments passed to or from other methods.</p></td>
     </tr>
     <tr>
       <th>.preprocess</th>
@@ -227,32 +234,32 @@ a character vector as output. Optional preprocessing transformation
 applied to text before k-gram tokenization. See  ‘Details’.</p></td>
     </tr>
     <tr>
-      <th>.tokenize_sentences</th>
+      <th>.tknz_sent</th>
       <td><p>a function taking a character vector as input and
 returning a character vector as output. Optional sentence tokenization step
 applied to text after preprocessing and before k-gram tokenization. See
 ‘Details’.</p></td>
     </tr>
     <tr>
-      <th>dictionary</th>
+      <th>dict</th>
       <td><p>anything coercible to class
 <a href='dictionary.html'>dictionary</a>. Optional pre-specified word dictionary.</p></td>
     </tr>
     <tr>
-      <th>open_dictionary</th>
+      <th>N</th>
+      <td><p>a length one integer. Maximum order of k-grams to be considered.</p></td>
+    </tr>
+    <tr>
+      <th>open_dict</th>
       <td><p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, any new
 word encountered during processing not appearing in the original dictionary
 is included into the dictionary. Otherwise, new words are replaced by an
-unknown word token. It is by default <code>TRUE</code> if <code>dictionary</code> is
+unknown word token. It is by default <code>TRUE</code> if <code>dict</code> is
 specified, <code>FALSE</code> otherwise.</p></td>
     </tr>
     <tr>
       <th>verbose</th>
       <td><p>Print current progress to the console.</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>further arguments passed to or from other methods.</p></td>
     </tr>
     <tr>
       <th>max_lines</th>
@@ -265,6 +272,11 @@ If <code>Inf</code>, keeps reading until the End-Of-File.</p></td>
       <td><p>a length one positive integer less than or equal to
 <code>max_lines</code>.Size of text batches when reading text from
 <code>connection</code>.</p></td>
+    </tr>
+    <tr>
+      <th>text</th>
+      <td><p>a character vector or a connection. Source of text from which
+k-gram frequencies are to be extracted.</p></td>
     </tr>
     <tr>
       <th>freqs</th>
@@ -286,7 +298,18 @@ k-gram counts from text. For <code>process_sentences()</code>, the updated
 <code>TRUE</code>, visibly otherwise.</p>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>These generic functions extract k-gram
+    <p>The function <code>kgram_freqs()</code> is a generic constructor for
+objects of class <code>kgram_freqs</code>, i.e. k-gram frequency tables. The
+constructor from <code>integer</code> returns an empty 'kgram_freqs' of fixed
+order, with an optional
+predefined dictionary (which can be empty) and <code>.preprocess</code> and
+<code>.tknz_sent</code> functions to be used as defaults in other <code>kgram_freqs</code>
+methods. The constructor from <code>kgram_freqs</code> returns a copy of an
+existing object, and it is provided because, in general, <code>kgram_freqs</code>
+objects have reference semantics, as discussed below.</p>
+<p>The following discussion focuses on <code>process_sentences()</code> generic, as
+well as on the <code>character</code> and <code>connection</code> methods of the
+constructor <code>kgram_freqs()</code>. These functions extract k-gram
 frequency counts from a text source, which may be either a character vector
 or a connection. The second option is useful if one wants to avoid loading
 the full text corpus in physical memory, allowing to process text from
@@ -312,14 +335,15 @@ visibly in the second case. It is worth to mention that modifying in place
 a <code>kgram_freqs</code> object <code>freqs</code> will also affect
 <code>language_model</code> objects created from <code>freqs</code> with
 <code><a href='language_model.html'>language_model()</a></code>, which will also be updated with the new information.
-If one wants to avoid this behaviour, one has to make a copy using
-<code>in_place = FALSE</code>.</p>
-<p>The <code>dictionary</code> argument allows to provide an initial set of known
+If one wants to avoid this behaviour, one can make copies using either the
+<code>kgram_freqs()</code> copy constructor, or the <code>in_place = FALSE</code>
+argument.</p>
+<p>The <code>dict</code> argument allows to provide an initial set of known
 words. Subsequently, one can either work with such a closed dictionary
-(<code>open_dictionary == FALSE</code>), or extended the dictionary with all
+(<code>open_dict == FALSE</code>), or extended the dictionary with all
 new words encountered during k-gram processing
-(<code>open_dictionary == TRUE</code>)  .</p>
-<p>The <code>.preprocess</code> and <code>.tokenize_sentences</code> functions are applied
+(<code>open_dict == TRUE</code>)  .</p>
+<p>The <code>.preprocess</code> and <code>.tknz_sent</code> functions are applied
 <em>before</em> k-gram counting takes place, and are in principle
 arbitrary transformations of the original text.
 <em>After</em> preprocessing and sentence tokenization, each line of the
@@ -328,17 +352,17 @@ sentence (these sentences are implicitly padded
 with <code>N - 1</code> Begin-Of-Sentence (BOS) and one End-Of-Sentence (EOS)
 tokens, respectively. This is illustrated in the examples). For basic
 usage, this package offers the utilities <a href='preprocess.html'>preprocess</a> and
-<a href='tokenize_sentences.html'>tokenize_sentences</a>. Notice that, strictly speaking, there is
+<a href='tknz_sent.html'>tknz_sent</a>. Notice that, strictly speaking, there is
 some redundancy in these two arguments, as the processed input to the k-gram
-counting algorithm is <code>.tokenize_sentences(.preprocess(text))</code>.
+counting algorithm is <code>.tknz_sent(.preprocess(text))</code>.
 They appear explicitly as separate arguments for two main reasons:</p><ul>
-<li><p>The presence of <code>.tokenize_sentences</code> is a reminder of the
+<li><p>The presence of <code>.tknz_sent</code> is a reminder of the
 fact that sentences have to be explicitly separeted in different entries
 of the processed input, in order for <code>kgram_freqs()</code> to append the
 correct Begin-Of-Sentence and End-Of-Sentence paddings to each sentence.</p></li>
 <li><p>At prediction time (e.g. with <a href='probability.html'>probability</a>), by default only
 <code>.preprocess</code> is applied when computing conditional probabilities,
-whereas both <code>.preprocess()</code> and <code>.tokenize_sentences()</code> are
+whereas both <code>.preprocess()</code> and <code>.tknz_sent()</code> are
 applied when computing sentence absolute probabilities.</p></li>
 </ul>
 
@@ -405,15 +429,15 @@ applied when computing sentence absolute probabilities.</p></li>
         <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-<span class='va'>.tokenize_sentences</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='va'>.tknz_sent</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='op'>{</span>
         <span class='co'># Tokenize sentences keeping Shakespeare's punctuation</span>
-        <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>kgrams</span><span class='fu'>::</span><span class='fu'><a href='tokenize_sentences.html'>tokenize_sentences</a></span><span class='op'>(</span><span class='va'>x</span>, keep_first <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+        <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='fu'>kgrams</span><span class='fu'>::</span><span class='fu'><a href='tknz_sent.html'>tknz_sent</a></span><span class='op'>(</span><span class='va'>x</span>, keep_first <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
         <span class='co'># Remove empty sentences</span>
         <span class='va'>x</span> <span class='op'>&lt;-</span> <span class='va'>x</span><span class='op'>[</span><span class='va'>x</span> <span class='op'>!=</span> <span class='st'>""</span><span class='op'>]</span>
         <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'>kgram_freqs</span><span class='op'>(</span><span class='va'>con</span>, <span class='fl'>3</span>, <span class='va'>.preprocess</span>, <span class='va'>.tokenize_sentences</span>, batch_size <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>
+<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'>kgram_freqs</span><span class='op'>(</span><span class='va'>con</span>, <span class='fl'>3</span>, <span class='va'>.preprocess</span>, <span class='va'>.tknz_sent</span>, batch_size <span class='op'>=</span> <span class='fl'>1000</span><span class='op'>)</span>
 <span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>f</span><span class='op'>)</span>
 
 <span class='fu'><a href='query.html'>query</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"leonato"</span>, <span class='st'>"thy"</span>, <span class='st'>"smartphones"</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># c(145, 52, 0)</span>

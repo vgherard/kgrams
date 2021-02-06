@@ -266,7 +266,7 @@ kgram_freqs.connection <- function(
                 in_place = TRUE,
                 max_lines = max_lines,
                 batch_size = batch_size,
-                verbose = TRUE,
+                verbose = verbose,
                 ...
                 )
         return(res) # Constructor returns visibly

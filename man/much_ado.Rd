@@ -20,7 +20,7 @@ much_ado
 The entire play "Much Ado About Nothing" from William Shakespeare.
 }
 \examples{
-substr(much_ado, 840, 840 + 480)
+much_ado[840]
 
 }
 \seealso{
