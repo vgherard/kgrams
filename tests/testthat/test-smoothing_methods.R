@@ -131,6 +131,12 @@ test_that("Correct probabilities in simple case", {
                                 ),
                         probability(wc, models[["kn"]])
                 )
+                expect_equal(
+                        (1 - 0.25) / 1 + 0.25 / 1 *
+                                ((3 - 0.75) / 5 + (2 * 0.25 + 0.75) / 5 * 1 / 4
+                                ),
+                        probability(wc, models[["mkn"]])
+                )
                 expect_equal(1, probability(wc, models[["sbo"]]))
                 expect_equal(
                         (1 + 1 * (4 + 3 * 1 / 4) / (7 + 3) ) / (1 + 1),
