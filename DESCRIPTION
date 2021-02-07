@@ -11,7 +11,6 @@ Description:
         Tools for training and evaluating k-gram language models in R, 
         supporting several probability smoothing techniques, 
         perplexity computations, random text generation and more.
-        
 License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
