@@ -16,3 +16,4 @@ Doxyfile
 ^cpp_docs$
 ^src/\.vscode$
 ^src/.*\.out$
+^cran-comments\.md$
