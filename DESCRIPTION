@@ -1,5 +1,5 @@
 Package: kgrams
-Title: Classical k-gram Language Models in R
+Title: Classical k-gram Language Models
 Version: 0.1.0
 Authors@R: 
     person(given = "Valerio",
@@ -11,7 +11,8 @@ Description:
         Tools for training and evaluating k-gram language models in R, 
         supporting several probability smoothing techniques, 
         perplexity computations, random text generation and more.
-License: GPL (>= 3) + file LICENSE
+        
+License: GPL (>= 3)
 Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE)
