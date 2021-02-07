@@ -1,3 +1,15 @@
+## Resubmission (v2)
+
+Changes from previous version:
+
+* Removed 'in R' from Title 'Classical k-gram Language Models in R'.
+* Removed file LICENSE, and reference to it in the DESCRIPTION field.
+* Fixed URL detected as possibly invalid.
+
+**Note.**
+The package implements several classical algorithms and next versions
+will likely include more. I'm not referencing any of these in the DESCRIPTION field 'Description', as this would require to add a large list of references (at present about fifteen, many of which do not have an associated DOI), and bog down the essence of the description. All algorithms are properly and fully referenced in the package documentation pages, whenever these are mentioned explicitly. 
+
 ## Test environments
 I have tested `kgrams` on the following platforms. NOTEs are commented in the next section.
 
