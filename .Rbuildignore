@@ -17,3 +17,5 @@ Doxyfile
 ^src/\.vscode$
 ^src/.*\.out$
 ^cran-comments\.md$
+^CRAN-RELEASE$
+^LICENSE$
