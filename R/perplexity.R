@@ -54,7 +54,9 @@
 #' @examples
 #' # Train 4-, 6-, and 8-gram models on Shakespeare's "Much Ado About Nothing",
 #' # compute their perplexities on the training and test corpora.
-#' # We use Shakespeare's "A Midsummer Night's Dream" as test. 
+#' # We use Shakespeare's "A Midsummer Night's Dream" as test.
+#' 
+#' \dontrun{
 #' train <- much_ado
 #' test <- midsummer
 #' 
@@ -62,13 +64,13 @@
 #' f <- kgram_freqs(train, 8, .tknz_sent = tknz)
 #' m <- language_model(f, "kn", D = 0.75)
 #' 
+#' # Compute perplexities for 4-, 6-, and 8-gram models 
 #' FUN <- function(N) {
 #'         param(m, "N") <- N
 #'         c(train = perplexity(train, m), test = perplexity(test, m))
 #'         }
-#' 
-#' # Demonstrate overfitting of the higher order models
 #' sapply(c("N = 4" = 4, "N = 6" = 6, "N = 8" = 8), FUN)
+#' }
 #' 
 #' @references 
 #' \insertAllCited{}
