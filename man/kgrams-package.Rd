@@ -4,7 +4,7 @@
 \name{kgrams-package}
 \alias{kgrams}
 \alias{kgrams-package}
-\title{kgrams: Classical k-gram Language Models in R}
+\title{kgrams: Classical k-gram Language Models}
 \description{
 Tools for training and evaluating k-gram language models in R, 
         supporting several probability smoothing techniques, 
