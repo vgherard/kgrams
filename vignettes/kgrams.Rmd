@@ -1,6 +1,8 @@
 ---
-title: "Classical k-gram Language Models in R"
+title: "Classical $k$-gram Language Models in R"
+author: "Valerio Gherardi"
 output: rmarkdown::html_vignette
+bibliography: ../inst/REFERENCES.bib
 vignette: >
   %\VignetteIndexEntry{kgrams}
   %\VignetteEngine{knitr::rmarkdown}
@@ -20,17 +22,30 @@ library(kgrams)
 
 ## Introduction
 
+`kgrams` provides R users with a set of tools for training, tuning and exploring $k$-gram language models[^word_level]. It gives support for a number of common Natural Language Processing (NLP) tasks: from the basic ones, such as extracting (*tokenizing*) $k$-grams from a text and predicting sentence or continuation probabilities, to more advanced ones such as computing language model perplexities [^perplexity] and sampling sentences according the language model's probability distribution.
+Furthermore, it supports many classical $k$-gram smoothing methods, including the well-known modified Kneser-Ney algorithm, first described in [@chen1999empirical], and widely considered the best performing smoothing technique for $k$-gram models.
 
-## Building a k-gram language model
+$k$-gram language models are notoriously demanding from the space point of view, and many of the toolkits available for $k$-gram based NLP employ various techniques and data structures to achieve the data compression required by the large scales of industry (and, sometimes, academic) applications (see [@Pibiri_2019] for a recent review). On the other hand, at such large scales, *neural* language models are often the most economic and best performing choice, and this is likely to become more and more so in the future. In developing `kgrams`, I made no special attempt at data compression,
+and $k$-grams and count estimates are stored in plain C++ STL hash-tables, which can grow rapidly large as the size of corpora and dictionaries increases. 
 
-This section illustrates the typical workflow for building a k-gram language
+On the other hand, most focus is put on providing a *fast*, time efficient implementation, with intuitive interfaces for text processing and for model evaluation, and a reasonably large choice of pre-implemented smoothing algorithms, making `kgrams` suitable for small- and medium-scale language model experiments, for rapidly building baseline models, and for pedagogical purposes.
+
+In the following Sections, I illustrate the prototypical workflow for [building a $k$-gram language model](#kgram_model) with `kgrams`, show how to compute [probabilities](#probability) and [perplexities](#perplexity), and (for the sake of fun!) [generate random text](#sampling) at different temperatures.
+
+[^word_level]: Here and below, when we talk about "language models", we always refer to *word-level* language models. In particular, a $k$-gram is a $k$-tuple of words.
+
+[^perplexity]: [Perplexity](https://en.wikipedia.org/wiki/Perplexity) is a standard evaluation metric for language models, based on the model's sentence probability distribution cross-entropy with the empirical distribution of a test corpus. It is described in some more detail in this [Subsection](#perplexity).
+
+## Building a $k$-gram language model {#kgram_model}
+
+This section illustrates the typical workflow for building a $k$-gram language
 model with `kgrams`. In summary, this involves the following main steps:
 
-1. Load the training corpus, i.e. the text from which k-gram frequencies are 
+1. Load the training corpus, i.e. the text from which $k$-gram frequencies are 
 estimated.
 2. Preprocess the corpus and tokenize sentences.
-3. Store k-gram frequency counts from the preprocessed training corpus.
-4. Build the final language model, by initializing its parameters and compute eventual auxiliary counts required by the smoothing technique employed.
+3. Store $k$-gram frequency counts from the preprocessed training corpus.
+4. Build the final language model, by initializing its parameters and computing auxiliary counts possibly required by the smoothing technique employed.
 
 We illustrate all these steps in the following.
 
@@ -54,12 +69,12 @@ txt_con <- url("http://shakespeare.mit.edu/much_ado/full.html")
 
 ### Step 2: preprocessing and tokenizing sentences 
 
-One can (and usually should) apply some transformations to the raw training corpus before feeding it as input to the k-gram counting algorithm. In particular, the algorithm considers as a single sentence each entry of its 
+One can (and usually should) apply some transformations to the raw training corpus before feeding it as input to the $k$-gram counting algorithm. In particular, the algorithm considers as a *sentence* each entry of its 
 pre-processed input, and pads each sentence with Begin-Of-Sentence (BOS) and
-End-Of-Sentence (EOS) tokens.
+End-Of-Sentence (EOS) tokens. It considers as a *word* any substring of a sentence delimited by (one or more) space characters. 
 
-In this step, we only need to *define* the functions used for preprocessing and
-sentence tokenization. We will use the following functions, which leverage on the basic utilities `kgrams::preprocess()` and `kgrams::.tknz_sent()`, and perform some additional step, since we will be reading raw HTML lines from the URL connection created above.
+For the moment, we only need to define the functions used for preprocessing and
+sentence tokenization. We will use the following functions, which leverage on the basic utilities `kgrams::preprocess()` and `kgrams::tknz_sent()`, and perform some additional steps, since we will be reading raw HTML lines from the URL connection created above.
 
 ```{r}
 .preprocess <- function(x) {
@@ -83,9 +98,9 @@ sentence tokenization. We will use the following functions, which leverage on th
 }
 ```
 
-### Step 3: get k-gram frequency counts
+### Step 3: get $k$-gram frequency counts
 
-We can now obtain k-gram frequency counts from Shakespeare with a single command, using the function `kgram_freqs()`. The following stores k-gram counts for k-grams of order less than or equal to five:
+We can now obtain $k$-gram frequency counts from Shakespeare with a single command, using the function `kgram_freqs()`. The following stores $k$-gram counts for $k$-grams of order less than or equal to $N = 5$:
 
 ```{r}
 freqs <- kgram_freqs(txt_con, # Read Shakespeare's text from connection
@@ -99,7 +114,7 @@ freqs <- kgram_freqs(txt_con, # Read Shakespeare's text from connection
 freqs
 ```
 
-The object `freqs` is an object of class `kgram_freqs`, i.e. a k-gram frequency table. We can obtain a first informative summary of what this object contains by calling `summary()`:
+The object `freqs` is an object of class `kgram_freqs`, i.e. a $k$-gram frequency table. We can obtain a first informative summary of what this object contains by calling `summary()`:
 
 ```{r}
 summary(freqs)
@@ -108,10 +123,10 @@ summary(freqs)
 The parameter `V` is the size of the dictionary, which was created behind the scenes by `kgram_freqs()`, using all words encountered in the text. In alternative, we could have used a pre-specified dictionary through the argument `dict`, and specify whether new words (not present in the original dictionary) should be added to it, or be replaced by an Unknown-Word (UNK) token, by the argument `open_dict`; see `?kgram_freqs` for further details. The number of distinct unigrams is greater than the size of the dictionary, because the former also includes the special BOS and EOS tokens.
 
 Notice that the functions `.preprocess()` and `.tknz_sent()` we defined above
-are passed as arguments of `kgram_freqs`[^1]. These are also saved in the final
-data structure, and are by default applied also to input at prediction time.
+are passed as arguments of `kgram_freqs()`[^preprocessing]. These are also saved in the final
+`kgram_freqs` object, and are by default applied also to inputs at prediction time.
 
-The following shows how to query k-gram counts from the frequency table created above [^2]:
+The following shows how to query $k$-gram counts from the frequency table created above [^string_concat]:
 
 ```{r}
 # Query some simple unigrams and bigrams
@@ -124,29 +139,31 @@ query(freqs, "")
 query(freqs, EOS()) 
 ```
 
-The most important use of `kgram_freqs` objects is to create language models,
-as we illustrate in the next step.
+The most important use of `kgram_freqs` objects is to create language models, as we illustrate in the next step.
+
+[^preprocessing]: Strictly speaking, a single argument `.preprocess` would suffice, as the processed input is (symbolically) `.tknz_sent(.preprocess(input))`. Having two separate arguments for preprocessing and sentence tokenization has a couple of advantages, as explained in `?kgram_freqs`.
+
+[^string_concat]: The string concatenation operator `%+%` is equivalent to `paste(lhs, rhs)`. Also, the helpers `BOS()`, `EOS()` and `UNK()` return the BOS, EOS and UNK tokens, respectively.
 
 ### Step 4. Build the final language model
 
 `kgrams` provides support for creating language models using several classical
-smoothing techniques. The list of smoothers supported by `kgrams` can be retrieved through:
+smoothing techniques. The list of smoothers currently supported by `kgrams` can be retrieved through:
 
 ```{r}
 smoothers()
 ```
 
-The documentation page `?smoothers` provides a list of original references for
-the various smoothers. We will use [Interpolated Kneser-Ney](https://en.wikipedia.org/wiki/Kneser%E2%80%93Ney_smoothing) smoothing, which goes under the code `"kn"`. We can get some usage help for this method through the command:
+The documentation page `?smoothers` provides a list of original references for the various smoothers. We will use [Interpolated Kneser-Ney](https://en.wikipedia.org/wiki/Kneser%E2%80%93Ney_smoothing) smoothing [@Kneser1995ImprovedBF; see also @chen1999empirical], which goes under the code `"kn"`. We can get some usage help for this method through the command:
 
 ```{r}
 info("kn")
 ```
 
-As shown above, Kneser-Ney has one parameter `D`, which is the discount applied
-to bare k-gram frequency counts or continuation counts. We will use `D = 0.75`.
+As shown above, Kneser-Ney has one parameter $D$, which is the discount applied
+to bare $k$-gram frequency counts or continuation counts. We will initialize the model with $D = 0.75$, and later tune this parameter through a test corpus.
 
-To train a language model with the k-gram counts stored in `freqs`, use:
+To train a language model with the $k$-gram counts stored in `freqs`, use:
 
 ```{r}
 kn <- language_model(freqs, "kn", D = 0.75)
@@ -169,7 +186,7 @@ param(kn, "D")
 param(kn, "D") <- 0.75
 ```
 
-We can also modify the order of the k-gram model, by choosing any number less than or equal to `N = 5` (since we stored up to 5-gram counts):
+We can also modify the order of the $k$-gram model, by choosing any number less than or equal to $N = 5$ (since we stored up to $5$-gram counts):
 
 ```{r}
 param(kn, "N") <- 4 # 'kn' uses only 1:4-grams
@@ -187,7 +204,7 @@ So far we have created a `language_model` object using Interpolated Kneser-Ney a
 - Generate random text by sampling from the language model probability distribution.
 - Compute the language model's perplexity on a test corpus.
 
-#### Word continuation and sentence probabilities
+### Word continuation and sentence probabilities {#probability}
 
 We can obtain both sentence probabilities and word continuation probabilities through the function `probability()`. This is generic on the first argument, which can be a `character` for sentence probabilities, or a `word_context` expression for continuation probabilities.
 
@@ -207,12 +224,13 @@ Behind the scenes, the same `.preprocess()` and `.tknz_sent()` functions used du
 Word continuation probabilities are the conditional probabilities of words following some given context. For instance, the probability that the words `"tears"` or `"pieces"` will follow the context `"Did he break out into"` are computed as follows:
 
 ```{r}
-probability(c("tears", "pieces") %|% "Did he break out into", model = kn)
+probability("tears" %|% "Did he break out into", model = kn)
+probability("pieces" %|% "Did he break out into", model = kn)
 ```
 
-The operator `%|%` takes as input a character vector on its left-hand side, i.e. the candidate words, and a length one character vector on its right-hand side, i.e. the given context. If the context has more than `N - 1` words (where `N` is the order of the language model, five in our case), only the last `N - 1` words are used for prediction.
+The operator `%|%` takes as input a character vector on its left-hand side, i.e. the list of candidate words, and a length one character vector on its right-hand side, i.e. the given context. If the context has more than $N - 1$ words (where $N$ is the order of the language model, five in our case), only the last $N - 1$ words are used for prediction.
 
-#### Generating random text
+### Generating random text {#sampling}
 
 We can sample sentences from the probability distribution defined by our language model using `sample_sentences()`. For instance:
 
@@ -230,33 +248,33 @@ token is found after sampling `max_length` words.
 We can also sample with a temperature different from one. The temperature transformation of a probability distribution $p(i)$ is defined by:
 
 $$p_t(i) = \dfrac{\exp(\log{p(i)} / t)} {Z(t)},$$
-where $Z(t)$ is the partition function, defined in such a way that $\sum _i p_t(i) \equiv 1$. Intuitively, higher and lower temperatures make the original probability distribution smoother and rougher, respectively. By making a physical analogy, we can think of less probable words as states with higher energies, and the effect of temperature is to make more likely to excite these high energy states.
+where $Z(t)$ is the partition function, defined in such a way that $\sum _i p_t(i) \equiv 1$. Intuitively, higher and lower temperatures make the original probability distribution smoother and rougher, respectively. By making a physical analogy, we can think of less probable words as states with higher energies, and the effect of higher (lower) temperatures is to make more (less) likely to excite these high energy states.
 
-We can test the effects of temperature on our Shakespeare-inspired language model:
+We can test the effects of temperature on our Shakespeare-inspired language model, by changing the parameter `t` of `sample_sentences()` (notice that the default `t = 1` corresponds to the original distribution):
 
 ```{r}
 sample_sentences(model = kn, 
                  n = 10,
                  max_length = 10, 
-                 t = 0.1
+                 t = 0.1 # low temperature
                  )
 sample_sentences(model = kn, 
                  n = 10,
                  max_length = 10, 
-                 t = 10
+                 t = 10 # high temperature
                  )
 ```
 
-As explained above, sampling with low temperature gives much more weight to highly likely sentences, and indeed the output is very repetitive. On the contrary, high temperature makes sentence probabilities more uniform, and in fact our output above looks quite random.
+As explained above, sampling with low temperature gives much more weight to probable sentences, and indeed the output is very repetitive. On the contrary, high temperature makes sentence probabilities more uniform, and in fact our output above looks quite random.
 
-#### Compute language model's perplexities
+### Compute language model's perplexities {#perplexity}
 
 [Perplexity](https://en.wikipedia.org/wiki/Perplexity) is a standard evaluation metric for the overall performance of a language model. It is given by $P = e^H$, where $H$ is the cross-entropy of the language model sentence probability distribution against a test corpus empirical distribution:
 
 $$
 H = - \dfrac{1}{W}\sum _s\ \ln (\text {Prob}(s)) 
 $$
-Here $W$ is total number of words in the test corpus (counting EOS but not BOS tokens), and the sum extends over all sentences in the test corpus. Perplexity does not give direct information on the performance of a language model in a specific end-to-end task, but is often found to correlate with the latter, which provides a practical justification for the use of this metric. Notice that better models are associated with lower perplexities, and that $H$ is proportional to the negative log-likelihood of the corpus under the language model assumption.
+Here $W$ is total number of words in the test corpus (following Ref. [@chen1999empirical], we include counts of the EOS token, but not the BOS token, in $W$), and the sum extends over all sentences in the test corpus. Perplexity does not give direct information on the performance of a language model in a specific end-to-end task, but is often found to correlate with the latter, which provides a practical justification for the use of this metric. Notice that better models are associated with lower perplexities, and that $H$ is proportional to the negative log-likelihood of the corpus under the language model assumption.
 
 Perplexities can be computed in `kgrams` using the function `perplexity()`, which can read text both from a `character` vector and from a `connection`. We will take our test corpus again from Shakespeare's opus, specifically the play "A Midsummer Night's Dream", which is example data from `kgrams` namespace:
 
@@ -264,13 +282,13 @@ Perplexities can be computed in `kgrams` using the function `perplexity()`, whic
 midsummer[840]
 ```
 
-We can compute the perplexity of our Kneser-Ney 5-gram model `kn` against this corpus as follows:
+We can compute the perplexity of our Kneser-Ney $5$-gram model `kn` against this corpus as follows:
 
 ```{r}
 perplexity(midsummer, model = kn)
 ```
 
-We can use perplexity to tune our model parameter `D`. We compute perplexity over a grid of values for `D` and plot the results. We do this for the k-gram models with `k = 2:5`:
+We can use perplexity to tune our model parameter $D$. We compute perplexity over a grid of values for `D` and plot the results. We do this for the $k$-gram models with $k \in \{2, 3, 4, 5\}$:
 
 ```{r, out.width="50%", fig.cap="Perplexity as a function of the discount parameter of Interpolated Kneser-Ney 2-gram (red), 3-gram (green), 4-gram (blue) and 5-gram (black) models."}
 D_grid <- seq(from = 0.5, to = 1.0, by = 0.01)
@@ -289,7 +307,7 @@ lines(D_grid, P_grid[[4]], col = "black",)
 ```
 
 We see that the optimal choices for `D` are close to its maximum allowed value 
-`D = 1`, for which the performance of the 2-gram model is slightly worse than the higher order models, and that the 5-gram model performs generally worse than the 3-gram and 4-gram models. Indeed, the optimized perplexities for the various k-gram orders are given by:
+`D = 1`, for which the performance of the 2-gram model is slightly worse than the higher order models, and that the 5-gram model performs generally worse than the 3-gram and 4-gram models. Indeed, the optimized perplexities for the various $k$-gram orders are given by:
 
 
 ```{r}
@@ -302,6 +320,7 @@ which shows that the best performing model is the 4-gram one, while it seems tha
 
 ## Conclusions
 
-[^1]: Strictly speaking, a single argument `.preprocess` would suffice, as the processed input is (symbolically) `.tknz_sent(.preprocess(input))`. Having two separate arguments for preprocessing and sentence tokenization has a couple of advantages, as explained in `?kgram_freqs`.
+In this vignette I have shown how to implement and explore $k$-gram language models in R using `kgrams`. For further help, you can consult the reference page of the `kgrams` [website](https://vgherard.github.io/kgrams/). Development of `kgrams` takes place on its [GitHub repository](https://github.com/vgherard/kgrams/). If you find a bug,
+please let me know by opening an issue on GitHub, and if you have any ideas or proposals for improvement, please feel welcome to send a pull request, or simply an e-mail at <vgherard@sissa.it>.
 
-[^2]: The string concatenation operator `%+%` is equivalent to `paste(lhs, rhs)`. Also, the helpers `BOS()`, `EOS()` and `UNK()` return the BOS, EOS and UNK tokens, respectively.
+## References
