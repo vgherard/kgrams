@@ -171,7 +171,7 @@ chosen uniformly at random from the model's dictionary.</p>
     <pre class="examples"><div class='input'><span class='co'># Sample sentences from 8-gram Kneser-Ney model trained on Shakespeare's</span>
 <span class='co'># "Much Ado About Nothing"</span>
 
-<span class='kw'>if</span> <span class='op'>(</span><span class='cn'>FALSE</span><span class='op'>)</span> <span class='op'>{</span>
+<span class='co'># \donttest{</span>
 
 <span class='co'>### Prepare the model and set seed</span>
 <span class='va'>freqs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='va'>much_ado</span>, <span class='fl'>8</span>, .tknz_sent <span class='op'>=</span> <span class='va'>tknz_sent</span><span class='op'>)</span>
@@ -179,14 +179,18 @@ chosen uniformly at random from the model's dictionary.</p>
 <span class='fu'><a href='https://rdrr.io/r/base/Random.html'>set.seed</a></span><span class='op'>(</span><span class='fl'>840</span><span class='op'>)</span>
 
 <span class='fu'>sample_sentences</span><span class='op'>(</span><span class='va'>model</span>, n <span class='op'>=</span> <span class='fl'>3</span>, max_length <span class='op'>=</span> <span class='fl'>10</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; [1] "&lt;EOS&gt;"                                                                   
+#&gt; [2] "why then depart in peace else by thy side still [...] (truncated output)"
+#&gt; [3] "&lt;EOS&gt;"                                                                   </div><div class='input'>
 <span class='co'>### Sampling at high temperature</span>
 <span class='fu'>sample_sentences</span><span class='op'>(</span><span class='va'>model</span>, n <span class='op'>=</span> <span class='fl'>3</span>, max_length <span class='op'>=</span> <span class='fl'>10</span>, t <span class='op'>=</span> <span class='fl'>100</span><span class='op'>)</span>
-
+</div><div class='output co'>#&gt; [1] "orchard afford awaked kinsman 'forehand sleeps grant overheard as dumbshow [...] (truncated output)"    
+#&gt; [2] "testimony liberty princely benedict 'lady' however villanies i cousins 'father [...] (truncated output)"
+#&gt; [3] "armour signify down remnants ancientry title iv hanged wring pestilence [...] (truncated output)"       </div><div class='input'>
 <span class='co'>### Sampling at low temperature</span>
 <span class='fu'>sample_sentences</span><span class='op'>(</span><span class='va'>model</span>, n <span class='op'>=</span> <span class='fl'>3</span>, max_length <span class='op'>=</span> <span class='fl'>10</span>, t <span class='op'>=</span> <span class='fl'>0.01</span><span class='op'>)</span>
-
-<span class='op'>}</span>
+</div><div class='output co'>#&gt; [1] "&lt;EOS&gt;" "&lt;EOS&gt;" "&lt;EOS&gt;"</div><div class='input'>
+<span class='co'># }</span>
 </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">

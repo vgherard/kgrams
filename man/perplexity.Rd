@@ -94,7 +94,7 @@ parameters), even if their probabilistic interpretation does no longer hold.
 # compute their perplexities on the training and test corpora.
 # We use Shakespeare's "A Midsummer Night's Dream" as test.
 
-\dontrun{
+\donttest{
 train <- much_ado
 test <- midsummer
 

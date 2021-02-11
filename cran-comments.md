@@ -1,3 +1,18 @@
+## Resubmission (v3)
+
+This resubmission addresses two issues pointed out in previous submission:
+
+1. Unnecessary use of dontrun{} in examples.
+2. Always make sure to reset to user's options().
+
+My response:
+
+1. There are four examples marked with `\dontrun{}`, in `?sample_sentences`, `?perplexity` and `?kgram_freqs`. The examples in `?sample_sentences` and `?perplexity` require >5s on some machines, thus I have replaced `\dontrun{}` with `\donttest{}`. The two examples marked with `\dontrun{}` in `kgram_freqs` require (i) a mock file which does not exist and (ii) internet connection. Following the CRAN guide to Writing R Extensions, I left the `\dontrun{}` directive for these examples:
+
+«Thus, example code not included in \dontrun must be executable! In addition, it should not use any system-specific features or require special facilities (such as Internet access or write permission to specific directories).»
+
+2. In the vignette (c.f. inst/doc/kgrams.R) I was setting plot margins with `par()` without resetting them to the original user's value. Fixed this.
+
 ## Resubmission (v2)
 
 Changes from previous version:

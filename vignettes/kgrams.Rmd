@@ -298,12 +298,13 @@ FUN <- function(D, N) {
         perplexity(midsummer, model = kn)
 }
 P_grid <- lapply(2:5, function(N) sapply(D_grid, FUN, N = N))
-par(mar = c(2, 2, 1, 1))
+oldpar <- par(mar = c(2, 2, 1, 1))
 plot(D_grid, P_grid[[1]], type = "n", xlab = "D", ylab = "Perplexity", ylim = c(300, 500))
 lines(D_grid, P_grid[[1]], col = "red")
 lines(D_grid, P_grid[[2]], col = "chartreuse")
-lines(D_grid, P_grid[[3]], col = "blue",)
-lines(D_grid, P_grid[[4]], col = "black",)
+lines(D_grid, P_grid[[3]], col = "blue")
+lines(D_grid, P_grid[[4]], col = "black")
+par(oldpar)
 ```
 
 We see that the optimal choices for `D` are close to its maximum allowed value 

@@ -49,7 +49,7 @@ chosen uniformly at random from the model's dictionary.
 # Sample sentences from 8-gram Kneser-Ney model trained on Shakespeare's
 # "Much Ado About Nothing"
 
-\dontrun{
+\donttest{
 
 ### Prepare the model and set seed
 freqs <- kgram_freqs(much_ado, 8, .tknz_sent = tknz_sent)
