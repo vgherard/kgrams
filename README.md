@@ -7,6 +7,8 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/kgrams)](https://CRAN.R-project.org/package=kgrams)
 [![CircleCI build
 status](https://circleci.com/gh/vgherard/kgrams.svg?style=svg)](https://circleci.com/gh/vgherard/kgrams)
 [![AppVeyor build
@@ -27,8 +29,19 @@ building, and for pedagogical purposes.
 
 ## Installation
 
+#### Released version
+
+You can install the latest release of `kgrams` from
+[CRAN](https://cran.r-project.org/web/packages/kgrams/index.html) with:
+
+``` r
+install.packages("kgrams")
+```
+
+#### Development version
+
 You can install the development version from
-[GitHub](https://github.com/) with:
+[GitHub](https://github.com/vgherard/kgrams) with:
 
 ``` r
 # install.packages("devtools")
