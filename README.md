@@ -9,6 +9,8 @@
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/kgrams)](https://CRAN.R-project.org/package=kgrams)
+[![CRAN
+downloads](http://cranlogs.r-pkg.org/badges/grand-total/kgrams)](https://CRAN.R-project.org/package=kgrams)
 [![CircleCI build
 status](https://circleci.com/gh/vgherard/kgrams.svg?style=svg)](https://circleci.com/gh/vgherard/kgrams)
 [![AppVeyor build
