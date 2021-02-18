@@ -83,7 +83,7 @@ Here are some sentences sampled from the language model’s distribution
 at temperatures `t = c(1, 0.1, 10)`:
 
 ``` r
-# Compute sentence probabilities
+# Sample sentences from the language model at different temperatures
 set.seed(840)
 sample_sentences(model = mkn, n = 3, max_length = 10, t = 1)
 #> [1] "i have studied eight or nine truly by your office [...] (truncated output)"

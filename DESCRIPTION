@@ -31,3 +31,6 @@ Suggests:
 Config/testthat/edition: 3
 RdMacros: Rdpack
 VignetteBuilder: knitr
+URL: https://vgherard.github.io/kgrams/,
+    https://github.com/vgherard/kgrams
+BugReports: https://github.com/vgherard/kgrams/issues

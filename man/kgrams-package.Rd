@@ -10,6 +10,15 @@ Tools for training and evaluating k-gram language models in R,
         supporting several probability smoothing techniques, 
         perplexity computations, random text generation and more.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://vgherard.github.io/kgrams/}
+  \item \url{https://github.com/vgherard/kgrams}
+  \item Report bugs at \url{https://github.com/vgherard/kgrams/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Valerio Gherardi \email{vgherard@sissa.it} (\href{https://orcid.org/0000-0002-8215-3013}{ORCID})
 

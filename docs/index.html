@@ -53,7 +53,14 @@
   <a href="reference/index.html">Reference</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/vgherard/kgrams/">
+    <span class="fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 </div>
 <!--/.nav-collapse -->
   </div>
@@ -95,7 +102,7 @@
 <a href="#example" class="anchor"></a>Example</h2>
 <p>This example shows how to train a modified Kneser-Ney 4-gram model on Shakespeare’s “Much Ado About Nothing” using <code>kgrams</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va">kgrams</span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vgherard.github.io/kgrams/">kgrams</a></span><span class="op">)</span>
 <span class="co"># Get k-gram frequency counts from text, for k = 1:4</span>
 <span class="va">freqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/kgram_freqs.html">kgram_freqs</a></span><span class="op">(</span><span class="fu">kgrams</span><span class="fu">::</span><span class="va"><a href="reference/much_ado.html">much_ado</a></span>, N <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>
 <span class="co"># Build modified Kneser-Ney 4-gram model, with discount parameters D1, D2, D3.</span>
@@ -114,7 +121,7 @@
 <span class="co">#&gt; [1] 9.389238e-01 3.834498e-07</span></code></pre></div>
 <p>Here are some sentences sampled from the language model’s distribution at temperatures <code>t = c(1, 0.1, 10)</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># Compute sentence probabilities</span>
+<code class="sourceCode R"><span class="co"># Sample sentences from the language model at different temperatures</span>
 <span class="fu"><a href="https://rdrr.io/r/base/Random.html">set.seed</a></span><span class="op">(</span><span class="fl">840</span><span class="op">)</span>
 <span class="fu"><a href="reference/sample_sentences.html">sample_sentences</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">mkn</span>, n <span class="op">=</span> <span class="fl">3</span>, max_length <span class="op">=</span> <span class="fl">10</span>, t <span class="op">=</span> <span class="fl">1</span><span class="op">)</span>
 <span class="co">#&gt; [1] "i have studied eight or nine truly by your office [...] (truncated output)"</span>
@@ -148,6 +155,10 @@
 <h2>Links</h2>
 <ul class="list-unstyled">
 <li>Download from CRAN at <br><a href="https://cloud.r-project.org/package=kgrams">https://​cloud.r-project.org/​package=kgrams</a>
+</li>
+<li>Browse source code at <br><a href="https://github.com/vgherard/kgrams/">https://​github.com/​vgherard/​kgrams/​</a>
+</li>
+<li>Report a bug at <br><a href="https://github.com/vgherard/kgrams/issues">https://​github.com/​vgherard/​kgrams/​issues</a>
 </li>
 </ul>
 </div>
