@@ -1,3 +1,9 @@
 url: https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams
 development:
   mode: auto
+
+home:
+
+  links:
+  - text: Hands-on introduction to k-gram language models
+    href: https://datascienceplus.com/an-introduction-to-k-gram-language-models-in-r/

@@ -29,6 +29,10 @@ which aims at streamlining the process of model building, and can be
 suitable for small- and medium-sized NLP experiments, baseline model
 building, and for pedagogical purposes.
 
+**UPDATE** Check out my hands-on [tutorial post on \(k\)-gram language
+models](https://datascienceplus.com/an-introduction-to-k-gram-language-models-in-r/)
+using R at [DataScience+](https://datascienceplus.com/)\!
+
 ## Installation
 
 #### Released version
