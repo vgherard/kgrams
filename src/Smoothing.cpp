@@ -33,7 +33,7 @@ std::string Smoother::truncate (std::string context, size_t k) const {
                 start = context.find_last_of(" ", start);
                 if (start == std::string::npos or start == 0) 
                         return context;
-                n_words++;
+                ++n_words;
         }
         return context.substr(start);
 }
@@ -62,7 +62,7 @@ const {
                 // Ignore eventual BOS tokens explicitly included in the user's
                 // input.
                 if (word == BOS_TOK) continue;
-                n_words++;
+                ++n_words;
                 // This will call the correct method when implemented by
                 // actual smoothers
                 log_prob += std::log(this->operator()(word, context));
@@ -182,7 +182,7 @@ void KNFreqs::update ()
                 const std::unordered_map<std::string, size_t> & 
                         kgram_codes(f_[k]);
                 auto itend = kgram_codes.end();
-                for (auto it = kgram_codes.begin(); it != itend; it++) {
+                for (auto it = kgram_codes.begin(); it != itend; ++it) {
                         // kgram_code is always of the form "n_1 n_2 ... n_k"
                         // with exactly one space between word codes
                         kgram_code = it->first;
@@ -198,15 +198,15 @@ void KNFreqs::update ()
                         if (kgram_code.substr(r_pos + (k > 1)) == BOS_IND)
                                 continue;
                         // Add right continuation counts
-                        r_[k - 1][kgram_code.substr(0, r_pos)]++;
+                        ++r_[k - 1][kgram_code.substr(0, r_pos)];
                         // Add left continuation counts
-                        l_[k - 1][kgram_code.substr(l_pos)]++;
+                        ++l_[k - 1][kgram_code.substr(l_pos)];
                         // Add left right continuation counts if k >= 2
                         if (k == 1) continue;
-                        else if (k == 2) { lr_[0][""]++; continue; }
-                        lr_[k - 2][ 
-                        kgram_code.substr(l_pos, r_pos - l_pos)
-                        ]++;
+                        else if (k == 2) { ++lr_[0][""]; continue; }
+                        ++lr_[k - 2][ 
+                                kgram_code.substr(l_pos, r_pos - l_pos)
+                                ];
                 }
         }
 }
@@ -373,23 +373,23 @@ void mKNFreqs::update ()
                         // Add right continuation counts
                         switch(it->second) {
                         case 1: 
-                                r1_[k - 1][kgram_code.substr(0, r_pos)]++; 
+                                ++r1_[k - 1][kgram_code.substr(0, r_pos)]; 
                                 break;
                         case 2: 
-                                r2_[k - 1][kgram_code.substr(0, r_pos)]++; 
+                                ++r2_[k - 1][kgram_code.substr(0, r_pos)]; 
                                 break;
                         default: 
-                                r3p_[k - 1][kgram_code.substr(0, r_pos)]++; 
+                                ++r3p_[k - 1][kgram_code.substr(0, r_pos)]; 
                                 break;
                         }
                         // Add left continuation counts
-                        l_[k - 1][kgram_code.substr(l_pos)]++;
+                        ++l_[k - 1][kgram_code.substr(l_pos)];
                         // Add left right continuation counts if k >= 2
                         if (k == 1) continue;
-                        else if (k == 2) { lr_[0][""]++; continue; }
-                        lr_[k - 2][ 
-                        kgram_code.substr(l_pos, r_pos - l_pos)
-                        ]++;
+                        else if (k == 2) { ++lr_[0][""]; continue; }
+                        ++lr_[k - 2][ 
+                                kgram_code.substr(l_pos, r_pos - l_pos)
+                                ];
                 }
         }
         
@@ -398,7 +398,7 @@ void mKNFreqs::update ()
                 const std::unordered_map<std::string, size_t> &  
                         freqs(l_[k]);
                 auto itend = freqs.end();
-                for (auto it = freqs.begin(); it != itend; it++) {
+                for (auto it = freqs.begin(); it != itend; ++it) {
                         // kgram_code is always of the form "n_1 n_2 ... n_k"
                         // with exactly one space between word codes
                         kgram_code = it->first;
@@ -413,9 +413,9 @@ void mKNFreqs::update ()
                         kgram_code = kgram_code.substr(0, r_pos);
                                 
                         switch(it->second) {
-                        case 1: r1low_[k - 1][kgram_code]++; break;
-                        case 2: r2low_[k - 1][kgram_code]++; break;
-                        default: r3plow_[k - 1][kgram_code]++; break;
+                        case 1: ++r1low_[k - 1][kgram_code]; break;
+                        case 2: ++r2low_[k - 1][kgram_code]; break;
+                        default: ++r3plow_[k - 1][kgram_code]; break;
                         }
                 }
         }
@@ -562,7 +562,7 @@ void RFreqs::update ()
         for (size_t k = 1; k <= f_.N(); ++k) {
                 const FrequencyTable & kgram_codes(f_[k]);
                 auto itend = kgram_codes.end();
-                for (auto it = kgram_codes.begin(); it != itend; it++) {
+                for (auto it = kgram_codes.begin(); it != itend; ++it) {
                         // kgram_code is always of the form "n_1 n_2 ... n_k"
                         // with exactly one space between word codes
                         kgram_code = it->first;
@@ -576,7 +576,7 @@ void RFreqs::update ()
                         if (kgram_code.substr(r_pos + (k > 1)) == BOS_IND)
                                 continue;
                         // Add right continuation counts
-                        r_[k - 1][kgram_code.substr(0, r_pos)]++;
+                        ++r_[k - 1][kgram_code.substr(0, r_pos)];
                 }
         }
 }

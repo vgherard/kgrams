@@ -11,7 +11,7 @@ void kgramFreqs::process_sentence(const std::string & sentence,
         WordStream stream(sentence);
         std::string word, prefix;
         while (not stream.eos()) {
-                freqs_[0][""]++; // Increase total words count
+                ++freqs_[0][""]; // Increase total words count
                 word = stream.pop_word();
                 
                 if ((not dict_.contains(word)) & (not fixed_dictionary))
@@ -22,7 +22,7 @@ void kgramFreqs::process_sentence(const std::string & sentence,
                 // Increase k-gram counts for (k>1)-grams ending at 'word'
                 for (size_t k = 1; k <= N_; ++k) {
                         prefix = prefixes.read();
-                        freqs_[k][prefix + word]++;
+                        ++freqs_[k][prefix + word];
                         // Update prefix buffer for next word
                         prefixes.write(prefix + word + " ");
                         prefixes.lshift();
