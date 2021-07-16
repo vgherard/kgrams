@@ -227,7 +227,7 @@ kgram_freqs.character <- function(
         .tknz_sent = identity,
         dict = NULL,
         open_dict = is.null(dict),
-        verbose = TRUE,
+        verbose = FALSE,
         ...
 )
 {
@@ -252,7 +252,7 @@ kgram_freqs.connection <- function(
         .tknz_sent = identity,
         dict = NULL,
         open_dict = is.null(dict),
-        verbose = TRUE,
+        verbose = FALSE,
         max_lines = max_lines,
         batch_size = NULL,
         ...
@@ -283,7 +283,7 @@ process_sentences <- function(
         .tknz_sent = attr(freqs, ".tknz_sent"),
         open_dict = TRUE,
         in_place = TRUE,
-        verbose = TRUE,
+        verbose = FALSE,
         ...
         ) 
         UseMethod("process_sentences", text)
@@ -298,7 +298,7 @@ process_sentences.character <- function(
         .tknz_sent = attr(freqs, ".tknz_sent"),
         open_dict = TRUE,
         in_place = TRUE,
-        verbose = TRUE,
+        verbose = FALSE,
         ...
 )
 {
@@ -319,7 +319,7 @@ process_sentences.connection <- function(
         .tknz_sent = attr(freqs, ".tknz_sent"),
         open_dict = TRUE,
         in_place = TRUE,
-        verbose = TRUE,
+        verbose = FALSE,
         max_lines = Inf,
         batch_size = max_lines,
         ...
