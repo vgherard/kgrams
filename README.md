@@ -20,18 +20,18 @@ status](https://ci.appveyor.com/api/projects/status/github/vgherard/kgrams?branc
 coverage](https://codecov.io/gh/vgherard/kgrams/branch/main/graph/badge.svg)](https://codecov.io/gh/vgherard/kgrams?branch=main)
 <!-- badges: end -->
 
-`kgrams` provides tools for training and evaluating \(k\)-gram language
+`kgrams` provides tools for training and evaluating *k*-gram language
 models, including several probability smoothing methods, perplexity
 computations, random text generation and more. It is based on an C++
-backend (which can be used itself as a standalone library for \(k\)-gram
+backend (which can be used itself as a standalone library for *k*-gram
 based NLP) which makes `kgrams` fast, coupled with an accessible R API
 which aims at streamlining the process of model building, and can be
 suitable for small- and medium-sized NLP experiments, baseline model
 building, and for pedagogical purposes.
 
-**UPDATE** Check out my hands-on [tutorial post on \(k\)-gram language
+**UPDATE** Check out my hands-on [tutorial post on *k*-gram language
 models](https://datascienceplus.com/an-introduction-to-k-gram-language-models-in-r/)
-using R at [DataScience+](https://datascienceplus.com/)\!
+using R at [DataScience+](https://datascienceplus.com/)!
 
 ## Installation
 
