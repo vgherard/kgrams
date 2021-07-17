@@ -3,20 +3,20 @@ new_dictionary <- function(cpp_obj) {
 }
 
 #' @export
-print.dictionary <- function(x, ...) {
+print.kgrams_dictionary <- function(x, ...) {
         cat("A dictionary.\n")
         return(invisible(x))
 }
         
 
 #' @export
-summary.dictionary <- function(object, ...) {
+summary.kgrams_dictionary <- function(object, ...) {
         cat("A dictionary of size ", length(dictionary), ".\n")
         return(invisible(object))
 }
 
 #' @export
-str.dictionary <- function(object, ...) summary(object)
+str.kgrams_dictionary <- function(object, ...) summary(object)
 
 
 #' Word dictionaries
