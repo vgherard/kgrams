@@ -17,7 +17,10 @@
 #'
 #' @author Valerio Gherardi
 #' @md
-#'
+#' 
+#' @srrstats {G2.0a} 
+#' *Provide explicit secondary documentation of any expectations on lengths of inputs*
+#' 
 #' @param object any type allowed by the available methods. The type defines the 
 #' behaviour of \code{kgram_freqs()} as a default constructor, a copy 
 #' constructor or a constructor of a non-trivial object. See ‘Details’.
@@ -380,6 +383,9 @@ str.kgram_freqs <- function(object, ...) summary(object)
 #-------------------------------- internal ------------------------------------#
 
 # Low level constructor for class 'kgram_freqs'
+#' @srrstats {G2.0} 
+#' *Implement assertions on lengths of inputs.* 
+#' Relevant for the 'N' argument.
 new_kgram_freqs <- function(N, dict, .preprocess, .tknz_sent) 
 {
         if (isFALSE(is.numeric(N) & N > 0)) {

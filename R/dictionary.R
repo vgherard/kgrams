@@ -25,6 +25,7 @@ str.kgrams_dictionary <- function(object, ...) summary(object)
 #'
 #' @author Valerio Gherardi
 #' @md
+#' @srrstats {G2.0a} *Provide explicit secondary documentation of any expectations on lengths of inputs*
 #'
 #' @param text a character vector, a connection or missing/\code{NULL}. 
 #' Source of text from which k-gram frequencies are to be extracted.
@@ -32,12 +33,12 @@ str.kgrams_dictionary <- function(object, ...) summary(object)
 #' @param .preprocess a function taking a character vector as input and returning
 #' a character vector as output. Optional preprocessing transformation  
 #' applied to text before creating the dictionary.
-#' @param size either \code{NULL} or a positive integer. Predefined size of the
+#' @param size either \code{NULL} or a length one positive integer. Predefined size of the
 #' required dictionary (the top \code{size} most frequent words are retained).
-#' @param cov either \code{NULL} or a number between \code{0} and \code{1}. 
+#' @param cov either \code{NULL} or a length one numeric between \code{0} and \code{1}. 
 #' Predefined text coverage fraction of the dictionary 
 #' (the most frequent words providing the required coverage are retained).
-#' @param thresh either \code{NULL} or a positive integer. 
+#' @param thresh either \code{NULL} or length one a positive integer. 
 #' Predefined text coverage fraction of the dictionary 
 #' (the most frequent words providing the required coverage are retained).
 #' @param batch_size a length one positive integer or \code{NULL}.
@@ -150,6 +151,10 @@ dictionary_missing <- function() {
         return(new_dictionary(cpp_obj))
 }
 
+#' @srrstats {G2.0} 
+#' *Implement assertions on lengths of inputs, particularly through asserting that inputs expected to be single- or multi-valued are indeed so.*
+#' The assertons are automatically implemented by the Rcpp functions 
+#' cpp_obj$insert_*(), which expect length one inputs.
 dict_insert_task <- function(cpp_obj, .preprocess, size, cov, thresh) {
         # if (!is.null(size) + !is.null(size) + !is.null(thresh) > 1)
         #         stop("At most one of 'size', 'cov' or 'thresh' can be specified"

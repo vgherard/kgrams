@@ -13,10 +13,10 @@
 #' --------------------------------------------------------------------- General
 #'
 #' - Already addressed, somewhere
-#' @srrstatsTODO {G1.0} *Statistical Software should list at least one primary reference from published academic literature.* 
-#' @srrstatsTODO {G1.1} *Statistical Software should document whether the algorithm(s) it implements are:* - *The first implementation of a novel algorithm*; or - *The first implementation within **R** of an algorithm which has previously been implemented in other languages or contexts*; or - *An improvement on other implementations of similar algorithms in **R***. 
-#' @srrstatsTODO {G1.3} *All statistical terminology should be clarified and unambiguously defined.* 
-#' @srrstatsTODO {G1.4} *Software should use [`roxygen2`](https://roxygen2.r-lib.org/) to document all functions.*
+#' @srrstats {G1.4} 
+#' *Software should use [`roxygen2`](https://roxygen2.r-lib.org/) to document all functions.*
+#' The package uses roxygen2 to generate documentation
+#' 
 #' @srrstatsTODO {G2.0} *Implement assertions on lengths of inputs, particularly through asserting that inputs expected to be single- or multi-valued are indeed so.*
 #' @srrstatsTODO {G2.0a} *Provide explicit secondary documentation of any expectations on lengths of inputs*
 #' @srrstatsTODO {G2.1} *Implement assertions on types of inputs (see the initial point on nomenclature above).*

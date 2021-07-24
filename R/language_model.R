@@ -19,16 +19,19 @@
 #'
 #' @author Valerio Gherardi
 #' @md
+#' 
+#' @srrstats {G2.0a} 
+#' *Provide explicit secondary documentation of any expectations on lengths of inputs*
 #'
 #' @param object an object which stores the information required to build the
 #' k-gram model. At present, necessarily a \code{kgram_freqs} object, or a 
 #' \code{language_model} object of which a copy is desired (see Details).
-#' @param N an integer. Maximum order of k-grams to use in the language
+#' @param N a length one integer. Maximum order of k-grams to use in the language
 #' model. This muss be less than or equal to the order of the underlying
 #' \code{kgram_freqs} object.
-#' @param smoother a character vector. Indicates the smoothing technique to
-#' be applied to compute k-gram continuation probabilities. A list of 
-#' available smoothers can be obtained with \code{smoothers()}, and 
+#' @param smoother a length one character vector. Indicates the smoothing 
+#' technique to be applied to compute k-gram continuation probabilities. A list 
+#' of available smoothers can be obtained with \code{smoothers()}, and 
 #' further information on a particular smoother through 
 #' \code{info()}.
 #' @param ... possible additional parameters required by the smoother.
@@ -98,6 +101,11 @@ language_model.language_model <- function(object, ...) {
         )
 }
 
+#' @srrstats {G2.0} 
+#' *Implement assertions on lengths of inputs*
+#' Implemented by 'isFALSE()' for the 'N' argument, and by the helper 
+#' 'validate_smoother()' for the 'smoother' argument.
+#' 
 #' @rdname language_model
 #' @export
 language_model.kgram_freqs <- 
