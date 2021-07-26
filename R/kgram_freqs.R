@@ -289,7 +289,17 @@ process_sentences <- function(
         verbose = FALSE,
         ...
         ) 
+{
+        assert_kgram_freqs(freqs)
+        assert_function(.preprocess)
+        assert_function(.tknz_sent)
+        assert_true_or_false(open_dict)
+        assert_true_or_false(in_place)
+        assert_true_or_false(verbose)
+        
         UseMethod("process_sentences", text)
+}
+        
 
 
 #' @rdname kgram_freqs
