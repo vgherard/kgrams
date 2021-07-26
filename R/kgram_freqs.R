@@ -316,7 +316,9 @@ process_sentences.character <- function(
 )
 {
         freqs <- process_sentences_init(freqs, in_place)
-        process <- kgram_process_task(freqs, open_dict, verbose)
+        process <- kgram_process_task(
+                freqs, .preprocess, .tknz_sent, open_dict, verbose
+                )
         process(text)
         if (in_place)
                 return(invisible(freqs))
@@ -340,7 +342,9 @@ process_sentences.connection <- function(
 {
         freqs <- process_sentences_init(freqs, in_place)
         # Progress is printed directly from R
-        process <- kgram_process_task(freqs, open_dict, verbose = F)
+        process <- kgram_process_task(
+                freqs, .preprocess, .tknz_sent, open_dict, verbose = F
+                )
         
         open(text, "r")
         if (batch_size == Inf) 
@@ -425,10 +429,10 @@ process_sentences_init <- function(freqs, in_place) {
         return(freqs)
 }
 
-kgram_process_task <- function(freqs, open_dict, verbose) {
+kgram_process_task <- function(
+        freqs, .preprocess, .tknz_sent, open_dict, verbose
+        ) {
         cpp_obj <- attr(freqs, "cpp_obj")
-        .preprocess <- attr(freqs, ".preprocess")
-        .tknz_sent <- attr(freqs, ".tknz_sent")
         function(batch) {
                 batch <- .preprocess(batch)
                 batch <- .tknz_sent(batch)
