@@ -102,3 +102,19 @@ test_that("kgram_freqs() processes correctly from connection", {
         expect_equal(query(freqs, "a"), 4)
         expect_equal(query(freqs, "b"), 3)
 })
+
+test_that("kgram_reqs class has print, str and summary methods", {
+        funs <- c("print", "str", "summary")
+        methods <- format(methods(class = "kgram_freqs"))
+        expect_true(all(funs %in% methods))
+})
+
+test_that("print, str and summary methods return invisibly", {
+        funs <- list(print, str, summary)
+        freqs <- kgram_freqs(1)
+        capture_output(
+                for (fun in funs) {
+                        expect_invisible(fun(freqs))
+                        expect_identical(fun(freqs), freqs)
+                })
+})
