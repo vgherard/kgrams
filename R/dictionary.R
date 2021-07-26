@@ -60,8 +60,7 @@ str.kgrams_dictionary <- function(object, ...) summary(object)
 #' words included in the dictionary as a regular character vector.
 #' 
 #' Dictionaries can be extracted from \code{kgram_freqs} objects, or \emph{built} 
-#' from text coming either directly from a character vector or a connection to 
-#' textual input.
+#' from text coming either directly from a character vector or a connection.
 #' 
 #' A single preprocessing transformation can be applied before processing the 
 #' text for unique words. After preprocessing, 
@@ -75,7 +74,7 @@ str.kgrams_dictionary <- function(object, ...) summary(object)
 #' argument; or (iii) minimum word count threshold, \code{thresh} argument. 
 #' \emph{Only one of these constraints can be applied at a time}, 
 #' so that specifying more than one of \code{size}, \code{cov} or \code{thresh} 
-#' raises an error. 
+#' results in an error. 
 #' 
 #' @examples 
 #' # Building a dictionary from Shakespeare's "Much Ado About Nothing"
@@ -114,9 +113,9 @@ dictionary.kgram_freqs <- function(
         ...
         ) 
 {
-        x <- !is.null(size) + !is.null(cov) + !is.null(thresh)
+        x <- sum(!is.null(size), !is.null(cov), !is.null(thresh))
         
-        if (x > 3) {
+        if (x > 1) {
                 h <- "Invalid input"
                 x <- "Only one of 'size', 'cov' or 'thresh' can be != NULL."
                 rlang::abort(c(h, x), class = "kgrams_domain_error")
@@ -136,7 +135,7 @@ dictionary.kgram_freqs <- function(
                 assert_positive_integer(size)
                 subset <- 1:min(size, length(words))
         } else if (!is.null(cov)) {
-                subset <- 1:which.max(cumsum(freqs) / sum(freqs) >= thresh)
+                subset <- 1:which.max(cumsum(freqs) / sum(freqs) >= cov)
         } else if (!is.null(thresh)) {
                 assert_positive_integer(thresh)
                 subset <- 1:(which.max(freqs < thresh) - 1)

@@ -8,14 +8,36 @@ test_that("new_dictionary() returns the desired structure", {
         expect_identical(attr(res, "cpp_obj"), cpp_obj)
 })
 
-test_that("Coercion to and from character works as expected", {
+test_that("Coercion to and from character works in simple example", {
         words <- c("a", "b", "c")
         expect_identical(as.character(as_dictionary(words)), words)
 })
 
-test_that("Creating dictionary from character works as expected", {
+test_that("Creating dictionary from character works in simple example", {
         words <- c("a b c")
         expect_identical(as.character(dictionary(words)), c("a", "b", "c"))
+})
+
+test_that("Creating a dictionary of fixed size works in simple example", {
+        words <- c("a a a b b c")
+        dict <- dictionary(words, size = 2)
+        res <- sort(as.character(dict))
+        expect_identical(res, c("a", "b"))
+})
+
+test_that("Creating a dictionary with fixed cov works in simple example", {
+        words <- c("a a a a a a a a b b c")
+        dict <- dictionary(words, cov = 0.5)
+        res <- sort(as.character(dict))
+        expect_identical(res, "a")
+})
+
+
+test_that("Creating a dictionary with fixed thresh works in simple example", {
+        words <- c("a a a b b c")
+        dict <- dictionary(words, thresh = 2)
+        res <- sort(as.character(dict))
+        expect_identical(res, c("a", "b"))
 })
 
 test_that("kgrams_dictionary class has print, str and summary methods", {

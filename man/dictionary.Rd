@@ -91,8 +91,7 @@ Coercion from \code{dictionary} to \code{character} returns the list of
 words included in the dictionary as a regular character vector.
 
 Dictionaries can be extracted from \code{kgram_freqs} objects, or \emph{built}
-from text coming either directly from a character vector or a connection to
-textual input.
+from text coming either directly from a character vector or a connection.
 
 A single preprocessing transformation can be applied before processing the
 text for unique words. After preprocessing,
@@ -106,7 +105,7 @@ argument; (ii) fixed text covering fraction, as specified by the \code{cov}
 argument; or (iii) minimum word count threshold, \code{thresh} argument.
 \emph{Only one of these constraints can be applied at a time},
 so that specifying more than one of \code{size}, \code{cov} or \code{thresh}
-raises an error.
+results in an error.
 }
 \examples{
 # Building a dictionary from Shakespeare's "Much Ado About Nothing"
