@@ -256,8 +256,8 @@ kgram_freqs.connection <- function(
         dict = NULL,
         open_dict = is.null(dict),
         verbose = FALSE,
-        max_lines = max_lines,
-        batch_size = NULL,
+        max_lines = Inf,
+        batch_size = max_lines,
         ...
 )
 {
@@ -341,12 +341,13 @@ process_sentences.connection <- function(
 )
 {
         freqs <- process_sentences_init(freqs, in_place)
-        # Progress is printed directly from R
+        # Progress is printed directly from R, so verbose = F here.
         process <- kgram_process_task(
                 freqs, .preprocess, .tknz_sent, open_dict, verbose = F
                 )
         
-        open(text, "r")
+        if (!isOpen(text))
+            open(text, "r")
         if (batch_size == Inf) 
                 batch_size <- -1L
         left <- max_lines
