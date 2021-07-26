@@ -8,7 +8,8 @@ kgrams_domain_error <- function(name, what) {
 }
 
 assert_positive_integer <- function(x) {
-        p <- is.numeric(x) && length(x) == 1 && !is.na(x) && as.intger(x) == x
+        p <- is.numeric(x) && length(x) == 1 && !is.na(x) &&
+                as.integer(x) == x && x > 0
         if (p) 
                 return(invisible(NULL))
         kgrams_domain_error(
