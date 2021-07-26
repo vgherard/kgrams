@@ -235,7 +235,7 @@ kgram_freqs.character <- function(
 )
 {
         freqs <- new_kgram_freqs(N, dict, .preprocess, .tknz_sent) 
-        res <- process_sentences.character(
+        res <- process_sentences(
                 object, 
                 freqs, 
                 open_dict = open_dict, 
@@ -262,7 +262,7 @@ kgram_freqs.connection <- function(
 )
 {
         freqs <- new_kgram_freqs(N, dict, .preprocess, .tknz_sent) 
-        res <- process_sentences.connection(
+        res <- process_sentences(
                 object,
                 freqs,
                 open_dict = open_dict,
