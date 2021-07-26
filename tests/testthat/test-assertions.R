@@ -12,6 +12,18 @@ test_that("assert_positive_integer", {
         expect_error(assert_positive_integer(Inf, can_be_inf = TRUE), NA)
 })
 
+test_that("assert_probability", {
+        class <- "kgrams_domain_error"
+        expect_error(assert_probability(0.5), NA)
+        expect_error(assert_probability(0), NA)
+        expect_error(assert_probability(1), NA)
+        expect_error(assert_probability("0.5"), class = class)
+        expect_error(assert_probability(c(0.3, 0.6)), class = class)
+        expect_error(assert_probability(NA_real_), class = class)
+        expect_error(assert_probability(-0.5), class = class)
+        expect_error(assert_probability(1.5), class = class)
+})
+
 test_that("assert_function", {
         class <- "kgrams_domain_error"
         expect_error(assert_function(identity), NA)
