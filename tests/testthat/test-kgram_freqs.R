@@ -104,6 +104,9 @@ test_that("kgram_freqs() processes correctly from connection", {
 })
 
 test_that("kgram_reqs class has print, str and summary methods", {
+        skip_if(R.version$major < 4,
+                message = "format() method of methods(..) different in R < 4"
+                )
         funs <- c("print", "str", "summary")
         methods <- format(methods(class = "kgram_freqs"))
         expect_true(all(funs %in% methods))

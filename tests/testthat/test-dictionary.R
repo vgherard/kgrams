@@ -41,6 +41,9 @@ test_that("Creating a dictionary with fixed thresh works in simple example", {
 })
 
 test_that("kgrams_dictionary class has print, str and summary methods", {
+        skip_if(R.version$major < 4,
+                message = "format() method of methods(..) different in R < 4"
+        )
         funs <- c("print", "str", "summary")
         methods <- format(methods(class = "kgrams_dictionary"))
         expect_true(all(funs %in% methods))
