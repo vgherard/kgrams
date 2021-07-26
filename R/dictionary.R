@@ -1,4 +1,4 @@
-new_dictionary <- function(cpp_obj) {
+new_dictionary <- function(cpp_obj = new(Dictionary)) {
         structure(list(), cpp_obj = cpp_obj, class = "kgrams_dictionary")
 }
 
@@ -25,44 +25,42 @@ str.kgrams_dictionary <- function(object, ...) summary(object)
 #'
 #' @author Valerio Gherardi
 #' @md
+#' @srrstats {G2.0a} *Provide explicit secondary documentation of any expectations on lengths of inputs*
 #'
-#' @param text a character vector, a connection or missing/\code{NULL}. 
-#' Source of text from which k-gram frequencies are to be extracted.
-#' @param object an object to be coerced to dictionary.
+#' @param object object from which to extract a dictionary, or to be coerced to 
+#' dictionary.
 #' @param .preprocess a function taking a character vector as input and returning
 #' a character vector as output. Optional preprocessing transformation  
 #' applied to text before creating the dictionary.
-#' @param size either \code{NULL} or a positive integer. Predefined size of the
+#' @param size either \code{NULL} or a length one positive integer. Predefined size of the
 #' required dictionary (the top \code{size} most frequent words are retained).
-#' @param cov either \code{NULL} or a number between \code{0} and \code{1}. 
+#' @param cov either \code{NULL} or a length one numeric between \code{0} and \code{1}. 
 #' Predefined text coverage fraction of the dictionary 
 #' (the most frequent words providing the required coverage are retained).
-#' @param thresh either \code{NULL} or a positive integer. 
-#' Predefined text coverage fraction of the dictionary 
-#' (the most frequent words providing the required coverage are retained).
-#' @param batch_size a length one positive integer or \code{NULL}.
-#' Size of text batches when reading text from a \code{file} or a generic 
-#' \code{connection}. If \code{NULL}, all input text is processed in a single 
-#' batch.
+#' @param thresh either \code{NULL} or length one a positive integer. 
+#' Minimum word count threshold to include a word in the dictionary.
+#' @param max_lines a length one positive integer or \code{Inf}.
+#' Maximum number of lines to be read from the \code{connection}. 
+#' If \code{Inf}, keeps reading until the End-Of-File.
+#' @param batch_size a length one positive integer less than or equal to
+#' \code{max_lines}.Size of text batches when reading text from 
+#' \code{connection}.
 #' @param ... further arguments passed to or from other methods.
 #' @param x a \code{dictionary}.
 #' 
 #' @return A \code{dictionary} for \code{dictionary()} and 
 #' \code{as_dictionary()}, a character vector for the \code{as.character()}
 #' method.
-#' @details These generic functions are used to build dictionaries from a text
-#' source, or to coerce other formats to \code{dictionary}, and from a 
+#' @details These generic functions are used to build \code{dictionary} objects, 
+#' or to coerce from other formats to \code{dictionary}, and from a 
 #' \code{dictionary} to a character vector. By now, the only 
 #' non-trivial type coercible to \code{dictionary} is \code{character}, 
 #' in which case each entry of the input vector is considered as a single word.
 #' Coercion from \code{dictionary} to \code{character} returns the list of
 #' words included in the dictionary as a regular character vector.
 #' 
-#' Dictionaries can be \emph{built} from text coming either directly from a 
-#' character vector, or from a connection. The second option is useful if one 
-#' wants to avoid loading the full text corpus in physical memory, 
-#' allowing to process text from different sources such as files, compressed 
-#' files or URLs.
+#' Dictionaries can be extracted from \code{kgram_freqs} objects, or \emph{built} 
+#' from text coming either directly from a character vector or a connection.
 #' 
 #' A single preprocessing transformation can be applied before processing the 
 #' text for unique words. After preprocessing, 
@@ -76,7 +74,7 @@ str.kgrams_dictionary <- function(object, ...) summary(object)
 #' argument; or (iii) minimum word count threshold, \code{thresh} argument. 
 #' \emph{Only one of these constraints can be applied at a time}, 
 #' so that specifying more than one of \code{size}, \code{cov} or \code{thresh} 
-#' raises an error. 
+#' results in an error. 
 #' 
 #' @examples 
 #' # Building a dictionary from Shakespeare's "Much Ado About Nothing"
@@ -99,78 +97,99 @@ NULL
 
 #' @rdname dictionary
 #' @export
-dictionary <- function(text, ...) {
-        if (missing(text) || is.null(text))
-                return(dictionary_missing())
-        UseMethod("dictionary", text)
-}
-        
-#' @rdname dictionary
-#' @export
-dictionary.character <- function(text,
-                                 .preprocess = identity, 
-                                 size = NULL, 
-                                 cov = NULL, 
-                                 thresh = NULL,
-                                 ...
-                                 )
-{
-        cpp_obj <- new(Dictionary)
-        process <- dict_insert_task(cpp_obj, .preprocess, size, cov, thresh)
-        process(text)
-        new_dictionary(cpp_obj)
+dictionary <- function(object, ...) {
+        if (missing(object) || is.null(object))
+                return(new_dictionary())
+        UseMethod("dictionary", object)
 }
 
 #' @rdname dictionary
 #' @export
-dictionary.connection <- function(text,
-                                  .preprocess = identity,
-                                  size = NULL, 
-                                  cov = NULL, 
-                                  thresh = NULL,
-                                  batch_size = NULL,
-                                  ...
-                                  )
+dictionary.kgram_freqs <- function(
+        object, 
+        size = NULL, 
+        cov = NULL, 
+        thresh = NULL,
+        ...
+        ) 
 {
-        cpp_obj <- new(Dictionary)
-        process <- dict_insert_task(cpp_obj, .preprocess, size, cov, thresh)
-        if (is.null(batch_size)) 
-                batch_size <- -1L
+        x <- sum(!is.null(size), !is.null(cov), !is.null(thresh))
         
-        open(text, "r")
-        while (length(batch <- readLines(text, batch_size)))
-                process(batch)
-        close(text)
-        
-        return(new_dictionary(cpp_obj))
-}
-
-dictionary_missing <- function() {
-        cpp_obj <- new(Dictionary)
-        return(new_dictionary(cpp_obj))
-}
-
-dict_insert_task <- function(cpp_obj, .preprocess, size, cov, thresh) {
-        # if (!is.null(size) + !is.null(size) + !is.null(thresh) > 1)
-        #         stop("At most one of 'size', 'cov' or 'thresh' can be specified"
-        #         )
-        function(batch) {
-                batch <- .preprocess(batch)
-                if (!is.null(size)) {
-                        cpp_obj$insert_n(batch, size)
-                } else if (!is.null(thresh)) {
-                        cpp_obj$insert_cover(batch, cov)
-                } else if (!is.null(thresh)) {
-                        cpp_obj$insert_above(batch, thresh)
-                } else {
-                        cpp_obj$insert_above(batch, 0L)
-                }
+        if (x > 1) {
+                h <- "Invalid input"
+                x <- "Only one of 'size', 'cov' or 'thresh' can be != NULL."
+                rlang::abort(c(h, x), class = "kgrams_domain_error")
         }
+        
+        full_dict <- new_dictionary(attr(object, "cpp_obj")$dictionary())
+        if (x == 0)
+                return(full_dict)
+        
+        words <- as.character(full_dict)
+        freqs <- query(object, words)
+        o <- order(freqs, decreasing = TRUE)
+        words <- words[o]
+        freqs <- freqs[o]
+        
+        if (!is.null(size)) {
+                assert_positive_integer(size)
+                subset <- 1:min(size, length(words))
+        } else if (!is.null(cov)) {
+                subset <- 1:which.max(cumsum(freqs) / sum(freqs) >= cov)
+        } else if (!is.null(thresh)) {
+                assert_positive_integer(thresh)
+                subset <- 1:(which.max(freqs < thresh) - 1)
+        }
+        
+        as_dictionary(words[subset])
+}
+        
+        
+#' @rdname dictionary
+#' @export
+dictionary.character <- function(
+        object,
+        .preprocess = identity, 
+        size = NULL, 
+        cov = NULL, 
+        thresh = NULL,
+        ...
+        )
+{
+        f <- kgram_freqs(object, 1, .preprocess = .preprocess)
+        dictionary(f, size, cov, thresh)
+}
+
+#' @rdname dictionary
+#' @export
+dictionary.connection <- function(
+        object,
+        .preprocess = identity,
+        size = NULL, 
+        cov = NULL, 
+        thresh = NULL,
+        max_lines = Inf,
+        batch_size = max_lines,
+        ...
+        )
+{
+        f <- kgram_freqs(
+                object, 1, 
+                .preprocess = .preprocess, 
+                max_lines = max_lines,
+                batch_size = batch_size
+                )
+        dictionary(f, size, cov, thresh)
 }
 
 #' @rdname dictionary
 #' @export       
-as_dictionary <- function(object) UseMethod("as_dictionary", object)
+as_dictionary <- function(object) {
+        if (is.null(object))
+                return(new_dictionary())
+        UseMethod("as_dictionary", object)
+}
+        
 
 #' @rdname dictionary
 #' @export

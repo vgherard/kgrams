@@ -42,8 +42,8 @@ kgram_freqs(object, ...)
   dict = NULL,
   open_dict = is.null(dict),
   verbose = FALSE,
-  max_lines = max_lines,
-  batch_size = NULL,
+  max_lines = Inf,
+  batch_size = max_lines,
   ...
 )
 

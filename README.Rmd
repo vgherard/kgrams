@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r srr-tags, eval = FALSE, echo = FALSE}
+```
+
+
 # kgrams
 
 <!-- badges: start -->

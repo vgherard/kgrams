@@ -16,6 +16,25 @@ knitr::opts_chunk$set(
 )
 ```
 
+```{r srr-tags, eval = FALSE, echo = FALSE}
+#' @srrstats {G1.0} 
+#' *Statistical Software should list at least one primary reference from published academic literature.*
+#' Various references are provided in this vignette.
+#'
+#' @srrstats {G1.1} 
+#' *Statistical Software should document whether the algorithm(s) it implements are...*
+#' Clarified in a paragraph of the introduction below.
+#'
+#' @srrstats {G1.3} 
+#' *All statistical terminology should be clarified and unambiguously defined.*
+#' In this vignette, all statistical and probability theory terminology used
+#' by the package and package documentation is carefully defined. Many 
+#' explanations, which should suffice for most users, are also given in regular 
+#' documentation pages; the vignette's purpose is to make everything accessible
+#' also to beginners.
+```
+
+
 ```{r setup}
 library(kgrams)
 ```
@@ -29,6 +48,14 @@ $k$-gram language models are notoriously demanding from the space point of view,
 and $k$-grams and count estimates are stored in plain C++ STL hash-tables, which can grow rapidly large as the size of corpora and dictionaries increases. 
 
 On the other hand, most focus is put on providing a *fast*, time efficient implementation, with intuitive interfaces for text processing and for model evaluation, and a reasonably large choice of pre-implemented smoothing algorithms, making `kgrams` suitable for small- and medium-scale language model experiments, for rapidly building baseline models, and for pedagogical purposes.
+
+In my point of view, the interest in $k$-gram language models is mainly 
+pedagogical, as they provide very simple algorithms (together with all their 
+limitations) for learning a natural language's sentence probability 
+distribution. Nonetheless, and for the same reasons, $k$-gram models can also 
+provide a useful, quick baseline for model building with more complex 
+algorithms. An R implementation of classical $k$-gram smoothing techniques is 
+lacking at the time of writing, and the goal of `kgrams` is to fill this gap.
 
 In the following Sections, I illustrate the prototypical workflow for [building a $k$-gram language model](#kgram_model) with `kgrams`, show how to compute [probabilities](#probability) and [perplexities](#perplexity), and (for the sake of fun!) [generate random text](#sampling) at different temperatures.
 

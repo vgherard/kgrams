@@ -17,7 +17,10 @@
 #'
 #' @author Valerio Gherardi
 #' @md
-#'
+#' 
+#' @srrstats {G2.0a} 
+#' *Provide explicit secondary documentation of any expectations on lengths of inputs*
+#' 
 #' @param object any type allowed by the available methods. The type defines the 
 #' behaviour of \code{kgram_freqs()} as a default constructor, a copy 
 #' constructor or a constructor of a non-trivial object. See ‘Details’.
@@ -232,7 +235,7 @@ kgram_freqs.character <- function(
 )
 {
         freqs <- new_kgram_freqs(N, dict, .preprocess, .tknz_sent) 
-        res <- process_sentences.character(
+        res <- process_sentences(
                 object, 
                 freqs, 
                 open_dict = open_dict, 
@@ -253,13 +256,13 @@ kgram_freqs.connection <- function(
         dict = NULL,
         open_dict = is.null(dict),
         verbose = FALSE,
-        max_lines = max_lines,
-        batch_size = NULL,
+        max_lines = Inf,
+        batch_size = max_lines,
         ...
 )
 {
         freqs <- new_kgram_freqs(N, dict, .preprocess, .tknz_sent) 
-        res <- process_sentences.connection(
+        res <- process_sentences(
                 object,
                 freqs,
                 open_dict = open_dict,
@@ -286,7 +289,17 @@ process_sentences <- function(
         verbose = FALSE,
         ...
         ) 
+{
+        assert_kgram_freqs(freqs)
+        assert_function(.preprocess)
+        assert_function(.tknz_sent)
+        assert_true_or_false(open_dict)
+        assert_true_or_false(in_place)
+        assert_true_or_false(verbose)
+        
         UseMethod("process_sentences", text)
+}
+        
 
 
 #' @rdname kgram_freqs
@@ -303,7 +316,9 @@ process_sentences.character <- function(
 )
 {
         freqs <- process_sentences_init(freqs, in_place)
-        process <- kgram_process_task(freqs, open_dict, verbose)
+        process <- kgram_process_task(
+                freqs, .preprocess, .tknz_sent, open_dict, verbose
+                )
         process(text)
         if (in_place)
                 return(invisible(freqs))
@@ -325,12 +340,18 @@ process_sentences.connection <- function(
         ...
 )
 {
-        freqs <- process_sentences_init(freqs, in_place)
-        # Progress is printed directly from R
-        process <- kgram_process_task(freqs, open_dict, verbose = F)
+        assert_positive_integer(max_lines, can_be_inf = TRUE)
+        assert_positive_integer(batch_size, can_be_inf = TRUE)
         
-        open(text, "r")
-        if (batch_size == Inf) 
+        freqs <- process_sentences_init(freqs, in_place)
+        # Progress is printed directly from R, so verbose = F here.
+        process <- kgram_process_task(
+                freqs, .preprocess, .tknz_sent, open_dict, verbose = F
+                )
+        
+        if (!isOpen(text))
+            open(text, "r")
+        if (is.infinite(batch_size)) 
                 batch_size <- -1L
         left <- max_lines
         if (verbose) progress <- new_progress()
@@ -382,30 +403,20 @@ str.kgram_freqs <- function(object, ...) summary(object)
 # Low level constructor for class 'kgram_freqs'
 new_kgram_freqs <- function(N, dict, .preprocess, .tknz_sent) 
 {
-        if (isFALSE(is.numeric(N) & N > 0)) {
-                h <- "Invalid argument"
-                x <- "'N' must be a length one positive integer."
-                rlang::abort(c(h, x = x), class = "domain_error")
-        }
-        
-        if (is.null(dict)) 
-                dict <- dictionary()
-        else 
-                tryCatch(dict <- as_dictionary(dict),
-                         error = function(cnd) {
-                                 h <- "'dict' is not coercible to dictionary."
-                                 rlang::abort(h, class = "domain_error")
-                                 }
-                         )
-        if (!is.function(.preprocess))
-                rlang::abort("'.preprocess' must be a function.")
-        if (!is.function(.tknz_sent))
-                rlang::abort("'.tknz_sent' must be a function.")
+        assert_positive_integer(N)
+        assert_function(.preprocess)
+        assert_function(.tknz_sent)
+        tryCatch(
+                dict <- as_dictionary(dict),
+                error = function(cnd) {
+                        kgrams_domain_error(
+                                name = "dict", 
+                                what = "coercible to dict"
+                                )
+                })
         
         cpp_obj <- new(kgramFreqs, N, attr(dict, "cpp_obj"))
-        
-        structure(list(), 
-                  dict = dict,
+        structure(list(),
                   .preprocess = utils::removeSource(.preprocess),
                   .tknz_sent = utils::removeSource(.tknz_sent),
                   cpp_obj = cpp_obj, 
@@ -421,10 +432,10 @@ process_sentences_init <- function(freqs, in_place) {
         return(freqs)
 }
 
-kgram_process_task <- function(freqs, open_dict, verbose) {
+kgram_process_task <- function(
+        freqs, .preprocess, .tknz_sent, open_dict, verbose
+        ) {
         cpp_obj <- attr(freqs, "cpp_obj")
-        .preprocess <- attr(freqs, ".preprocess")
-        .tknz_sent <- attr(freqs, ".tknz_sent")
         function(batch) {
                 batch <- .preprocess(batch)
                 batch <- .tknz_sent(batch)

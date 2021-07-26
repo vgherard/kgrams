@@ -2,6 +2,7 @@
 % Please edit documentation in R/dictionary.R
 \name{dictionary}
 \alias{dictionary}
+\alias{dictionary.kgram_freqs}
 \alias{dictionary.character}
 \alias{dictionary.connection}
 \alias{as_dictionary}
@@ -10,10 +11,12 @@
 \alias{as.character.kgrams_dictionary}
 \title{Word dictionaries}
 \usage{
-dictionary(text, ...)
+dictionary(object, ...)
+
+\method{dictionary}{kgram_freqs}(object, size = NULL, cov = NULL, thresh = NULL, ...)
 
 \method{dictionary}{character}(
-  text,
+  object,
   .preprocess = identity,
   size = NULL,
   cov = NULL,
@@ -22,12 +25,13 @@ dictionary(text, ...)
 )
 
 \method{dictionary}{connection}(
-  text,
+  object,
   .preprocess = identity,
   size = NULL,
   cov = NULL,
   thresh = NULL,
-  batch_size = NULL,
+  max_lines = Inf,
+  batch_size = max_lines,
   ...
 )
 
@@ -40,32 +44,32 @@ as_dictionary(object)
 \method{as.character}{kgrams_dictionary}(x, ...)
 }
 \arguments{
-\item{text}{a character vector, a connection or missing/\code{NULL}.
-Source of text from which k-gram frequencies are to be extracted.}
+\item{object}{object from which to extract a dictionary, or to be coerced to
+dictionary.}
 
 \item{...}{further arguments passed to or from other methods.}
+
+\item{size}{either \code{NULL} or a length one positive integer. Predefined size of the
+required dictionary (the top \code{size} most frequent words are retained).}
+
+\item{cov}{either \code{NULL} or a length one numeric between \code{0} and \code{1}.
+Predefined text coverage fraction of the dictionary
+(the most frequent words providing the required coverage are retained).}
+
+\item{thresh}{either \code{NULL} or length one a positive integer.
+Minimum word count threshold to include a word in the dictionary.}
 
 \item{.preprocess}{a function taking a character vector as input and returning
 a character vector as output. Optional preprocessing transformation
 applied to text before creating the dictionary.}
 
-\item{size}{either \code{NULL} or a positive integer. Predefined size of the
-required dictionary (the top \code{size} most frequent words are retained).}
+\item{max_lines}{a length one positive integer or \code{Inf}.
+Maximum number of lines to be read from the \code{connection}.
+If \code{Inf}, keeps reading until the End-Of-File.}
 
-\item{cov}{either \code{NULL} or a number between \code{0} and \code{1}.
-Predefined text coverage fraction of the dictionary
-(the most frequent words providing the required coverage are retained).}
-
-\item{thresh}{either \code{NULL} or a positive integer.
-Predefined text coverage fraction of the dictionary
-(the most frequent words providing the required coverage are retained).}
-
-\item{batch_size}{a length one positive integer or \code{NULL}.
-Size of text batches when reading text from a \code{file} or a generic
-\code{connection}. If \code{NULL}, all input text is processed in a single
-batch.}
-
-\item{object}{an object to be coerced to dictionary.}
+\item{batch_size}{a length one positive integer less than or equal to
+\code{max_lines}.Size of text batches when reading text from
+\code{connection}.}
 
 \item{x}{a \code{dictionary}.}
 }
@@ -78,19 +82,16 @@ method.
 Construct or coerce to and from a dictionary.
 }
 \details{
-These generic functions are used to build dictionaries from a text
-source, or to coerce other formats to \code{dictionary}, and from a
+These generic functions are used to build \code{dictionary} objects,
+or to coerce from other formats to \code{dictionary}, and from a
 \code{dictionary} to a character vector. By now, the only
 non-trivial type coercible to \code{dictionary} is \code{character},
 in which case each entry of the input vector is considered as a single word.
 Coercion from \code{dictionary} to \code{character} returns the list of
 words included in the dictionary as a regular character vector.
 
-Dictionaries can be \emph{built} from text coming either directly from a
-character vector, or from a connection. The second option is useful if one
-wants to avoid loading the full text corpus in physical memory,
-allowing to process text from different sources such as files, compressed
-files or URLs.
+Dictionaries can be extracted from \code{kgram_freqs} objects, or \emph{built}
+from text coming either directly from a character vector or a connection.
 
 A single preprocessing transformation can be applied before processing the
 text for unique words. After preprocessing,
@@ -104,7 +105,7 @@ argument; (ii) fixed text covering fraction, as specified by the \code{cov}
 argument; or (iii) minimum word count threshold, \code{thresh} argument.
 \emph{Only one of these constraints can be applied at a time},
 so that specifying more than one of \code{size}, \code{cov} or \code{thresh}
-raises an error.
+results in an error.
 }
 \examples{
 # Building a dictionary from Shakespeare's "Much Ado About Nothing"

@@ -34,6 +34,11 @@
 #' # Get information on smoother "kn", i.e. Interpolated Kneser-Ney
 #' info("kn")
 #' 
+#' @srrstats {G1.0} 
+#' *Statistical Software should list at least one primary reference from published academic literature.*
+#' This documentation page provides references for all smoothing methods for language models
+#' implemented by the package. 
+#' 
 #' @references 
 #' \insertAllCited{}
 #' 
