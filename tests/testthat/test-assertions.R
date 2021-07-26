@@ -6,6 +6,10 @@ test_that("assert_positive_integer", {
         expect_error(assert_positive_integer(NA_integer_), class = class)
         expect_error(assert_positive_integer(3.14), class = class)
         expect_error(assert_positive_integer(-1), class = class)
+        
+        # Test behaviour with Inf 
+        expect_error(assert_positive_integer(Inf), class = class)
+        expect_error(assert_positive_integer(Inf, can_be_inf = TRUE), NA)
 })
 
 test_that("assert_function", {

@@ -7,9 +7,17 @@ kgrams_domain_error <- function(name, what) {
         rlang::abort(c(h, x = x), class = "kgrams_domain_error")
 }
 
-assert_positive_integer <- function(x) {
+is_number <- function(x)
+        is.numeric(x) && length(x) == 1 && !is.na(x)
+
+
+assert_positive_integer <- function(x, can_be_inf = FALSE) {
+        
         p <- is.numeric(x) && length(x) == 1 && !is.na(x) &&
-                as.integer(x) == x && x > 0
+                (
+                        (is.infinite(x) && can_be_inf) || 
+                        (!is.infinite(x) && as.integer(x) == x && x > 0)
+                )
         if (p) 
                 return(invisible(NULL))
         kgrams_domain_error(
