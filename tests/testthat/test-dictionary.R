@@ -8,14 +8,14 @@ test_that("new_dictionary() returns the desired structure", {
         expect_identical(attr(res, "cpp_obj"), cpp_obj)
 })
 
-test_that("coercion to and from character works as expected", {
+test_that("Coercion to and from character works as expected", {
         words <- c("a", "b", "c")
         expect_identical(as.character(as_dictionary(words)), words)
 })
 
 test_that("Creating dictionary from character works as expected", {
-        words <- c("a", "b", "c")
-        expect_identical(as.character(dictionary(words)), words)
+        words <- c("a b c")
+        expect_identical(as.character(dictionary(words)), c("a", "b", "c"))
 })
 
 test_that("kgrams_dictionary class has print, str and summary methods", {
