@@ -388,19 +388,16 @@ new_kgram_freqs <- function(N, dict, .preprocess, .tknz_sent)
         assert_positive_integer(N)
         assert_function(.preprocess)
         assert_function(.tknz_sent)
-        
-        if (is.null(dict)) 
-                dict <- dictionary()
-        else 
-                tryCatch(dict <- as_dictionary(dict),
-                         error = function(cnd) {
-                                 h <- "'dict' is not coercible to dictionary."
-                                 rlang::abort(h, class = "kgrams_domain_error")
-                                 }
-                         )
+        tryCatch(
+                dict <- as_dictionary(dict),
+                error = function(cnd) {
+                        kgrams_domain_error(
+                                name = "dict", 
+                                what = "coercible to dict"
+                                )
+                })
         
         cpp_obj <- new(kgramFreqs, N, attr(dict, "cpp_obj"))
-        
         structure(list(), 
                   dict = dict,
                   .preprocess = utils::removeSource(.preprocess),

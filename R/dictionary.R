@@ -175,7 +175,12 @@ dict_insert_task <- function(cpp_obj, .preprocess, size, cov, thresh) {
 
 #' @rdname dictionary
 #' @export       
-as_dictionary <- function(object) UseMethod("as_dictionary", object)
+as_dictionary <- function(object) {
+        if (is.null(object))
+                return(dictionary_missing())
+        UseMethod("as_dictionary", object)
+}
+        
 
 #' @rdname dictionary
 #' @export
