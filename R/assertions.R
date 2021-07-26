@@ -30,7 +30,7 @@ assert_true_or_false <- function(x) {
                 return(invisible(NULL))
         kgrams_domain_error(
                 name = deparse(substitute(x)), 
-                what = "true or false"
+                what = "TRUE or FALSE"
                 )
 }
         
