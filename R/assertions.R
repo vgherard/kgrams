@@ -33,4 +33,20 @@ assert_true_or_false <- function(x) {
                 what = "TRUE or FALSE"
                 )
 }
+
+identical_s3_structure <- function(x, y) {
+        identical(
+                c(class(x), names(attributes(x))),
+                c(class(y), names(attributes(y)))
+        )
+}
+
+assert_kgram_freqs <- function(x) {
+        if ( identical_s3_structure(x, kgram_freqs(1)) )
+                return(invisible(NULL))
+        kgrams_domain_error(
+                name = deparse(substitute(x)), 
+                what = "a 'kgram_freqs' class object"
+        )
+}
         

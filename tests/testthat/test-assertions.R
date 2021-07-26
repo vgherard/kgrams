@@ -22,3 +22,13 @@ test_that("assert_true_or_false", {
         expect_error(assert_true_or_false(c(TRUE, FALSE)), class = class)
         expect_error(assert_true_or_false(NA), class = class)
 })
+
+test_that("assert_kgram_freqs", {
+        class <- "kgrams_domain_error"
+        expect_error(assert_kgram_freqs(kgram_freqs(1)), NA)
+        expect_error(assert_kgram_freqs("kgram_freqs"), class = class)
+        
+        # Should throw if some attribute of 'kgram_freqs is missing
+        x <- kgram_freqs(1); attr(x, "cpp_obj") <- NULL
+        expect_error(assert_kgram_freqs(x), class = class)
+})
