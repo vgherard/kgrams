@@ -118,3 +118,13 @@ test_that("print, str and summary methods return invisibly", {
                         expect_identical(fun(freqs), freqs)
                 })
 })
+
+test_that("new_kgram_freqs throws if 'dict' is not coercible to dictionary", {
+        expect_error(new_kgram_freqs(1, dict = 840, identity, identity),
+                     class = "kgrams_domain_error")
+})
+
+test_that("new_kgram_freqs throws if 'dict' is not coercible to dictionary", {
+        expect_error(new_kgram_freqs(1, dict = 840, identity, identity),
+                     class = "kgrams_domain_error")
+})

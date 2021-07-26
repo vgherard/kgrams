@@ -1,10 +1,21 @@
 test_that("new_dictionary() returns the desired structure", {
-        # Use dummy cpp_obj, for testing purposes
+        expect_s3_class(new_dictionary(), "kgrams_dictionary", exact = TRUE)
+        
+        # Test with dummy cpp_obj
         cpp_obj <- 840L
         res <- new_dictionary(cpp_obj)
-        
         expect_s3_class(res, "kgrams_dictionary", exact = TRUE)
         expect_identical(attr(res, "cpp_obj"), cpp_obj)
+})
+
+test_that("coercion to and from character works as expected", {
+        words <- c("a", "b", "c")
+        expect_identical(as.character(as_dictionary(words)), words)
+})
+
+test_that("Creating dictionary from character works as expected", {
+        words <- c("a", "b", "c")
+        expect_identical(as.character(dictionary(words)), words)
 })
 
 test_that("kgrams_dictionary class has print, str and summary methods", {

@@ -416,8 +416,7 @@ new_kgram_freqs <- function(N, dict, .preprocess, .tknz_sent)
                 })
         
         cpp_obj <- new(kgramFreqs, N, attr(dict, "cpp_obj"))
-        structure(list(), 
-                  dict = dict,
+        structure(list(),
                   .preprocess = utils::removeSource(.preprocess),
                   .tknz_sent = utils::removeSource(.tknz_sent),
                   cpp_obj = cpp_obj, 
