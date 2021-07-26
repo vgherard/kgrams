@@ -340,6 +340,9 @@ process_sentences.connection <- function(
         ...
 )
 {
+        assert_positive_integer(max_lines, can_be_inf = TRUE)
+        assert_positive_integer(batch_size, can_be_inf = TRUE)
+        
         freqs <- process_sentences_init(freqs, in_place)
         # Progress is printed directly from R, so verbose = F here.
         process <- kgram_process_task(
@@ -348,7 +351,7 @@ process_sentences.connection <- function(
         
         if (!isOpen(text))
             open(text, "r")
-        if (batch_size == Inf) 
+        if (is.infinite(batch_size)) 
                 batch_size <- -1L
         left <- max_lines
         if (verbose) progress <- new_progress()
