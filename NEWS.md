@@ -1,3 +1,7 @@
 # kgrams (development version)
 
-* Added a `NEWS.md` file to track changes to the package.
+### Software Improvements
+* Extended testing and improved argument checking
+
+### New features
+* `as_dictionary(NULL)` now returns an empty `dictionary`.
