@@ -49,14 +49,14 @@ Source of text from which k-gram frequencies are to be extracted.}
 a character vector as output. Optional preprocessing transformation
 applied to text before creating the dictionary.}
 
-\item{size}{either \code{NULL} or a positive integer. Predefined size of the
+\item{size}{either \code{NULL} or a length one positive integer. Predefined size of the
 required dictionary (the top \code{size} most frequent words are retained).}
 
-\item{cov}{either \code{NULL} or a number between \code{0} and \code{1}.
+\item{cov}{either \code{NULL} or a length one numeric between \code{0} and \code{1}.
 Predefined text coverage fraction of the dictionary
 (the most frequent words providing the required coverage are retained).}
 
-\item{thresh}{either \code{NULL} or a positive integer.
+\item{thresh}{either \code{NULL} or length one a positive integer.
 Predefined text coverage fraction of the dictionary
 (the most frequent words providing the required coverage are retained).}
 
