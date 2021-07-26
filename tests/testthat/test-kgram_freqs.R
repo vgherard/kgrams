@@ -50,3 +50,55 @@ test_that("kgram_process_task correctly passes preprocessing functions", {
         expect_equal(query(f, "this"), 3)
         expect_equal(query(f, EOS()), 2)
 })
+
+test_that("process_sentences() returns invisibly iff in place", {
+        f <- kgram_freqs(1)
+        expect_invisible(process_sentences("a b c", f, in_place = T))
+        expect_visible(process_sentences("a b c", f, in_place = F))
+})
+
+test_that("process_sentences() processes correctly from character", {
+        freqs <- kgram_freqs(1)
+        txt <- c("a", "a b", "b a b a")
+        process_sentences(txt, freqs)
+        
+        expect_equal(query(freqs, "a"), 4)
+        expect_equal(query(freqs, "b"), 3)
+})
+
+test_that("process_sentences() processes correctly from open connection", {
+        freqs <- kgram_freqs(1)
+        txt <- textConnection(c("a", "a b", "b a b a"))
+        process_sentences(txt, freqs)
+        
+        expect_equal(query(freqs, "a"), 4)
+        expect_equal(query(freqs, "b"), 3)
+})
+
+test_that("process_sentences() processes correctly from file connection", {
+        freqs <- kgram_freqs(1)
+        temp <- tempfile()
+        txt <- writeLines(c("a", "a b", "b a b a"), temp)
+        con <- file(temp)
+        process_sentences(con, freqs)
+        unlink(temp)
+        
+        expect_equal(query(freqs, "a"), 4)
+        expect_equal(query(freqs, "b"), 3)
+})
+
+test_that("kgram_freqs() processes correctly from character", {
+        txt <- c("a", "a b", "b a b a")
+        freqs <- kgram_freqs(txt, 1)
+        
+        expect_equal(query(freqs, "a"), 4)
+        expect_equal(query(freqs, "b"), 3)
+})
+
+test_that("kgram_freqs() processes correctly from connection", {
+        txt <- textConnection(c("a", "a b", "b a b a"))
+        freqs <- kgram_freqs(txt, 1)
+        
+        expect_equal(query(freqs, "a"), 4)
+        expect_equal(query(freqs, "b"), 3)
+})
