@@ -383,9 +383,6 @@ str.kgram_freqs <- function(object, ...) summary(object)
 #-------------------------------- internal ------------------------------------#
 
 # Low level constructor for class 'kgram_freqs'
-#' @srrstats {G2.0} 
-#' *Implement assertions on lengths of inputs.* 
-#' Relevant for the 'N' argument.
 new_kgram_freqs <- function(N, dict, .preprocess, .tknz_sent) 
 {
         if (isFALSE(is.numeric(N) & N > 0)) {
