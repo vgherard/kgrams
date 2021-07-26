@@ -385,11 +385,9 @@ str.kgram_freqs <- function(object, ...) summary(object)
 # Low level constructor for class 'kgram_freqs'
 new_kgram_freqs <- function(N, dict, .preprocess, .tknz_sent) 
 {
-        if (isFALSE(is.numeric(N) & N > 0)) {
-                h <- "Invalid argument"
-                x <- "'N' must be a length one positive integer."
-                rlang::abort(c(h, x = x), class = "domain_error")
-        }
+        assert_positive_integer(N)
+        assert_function(.preprocess)
+        assert_function(.tknz_sent)
         
         if (is.null(dict)) 
                 dict <- dictionary()
@@ -397,13 +395,9 @@ new_kgram_freqs <- function(N, dict, .preprocess, .tknz_sent)
                 tryCatch(dict <- as_dictionary(dict),
                          error = function(cnd) {
                                  h <- "'dict' is not coercible to dictionary."
-                                 rlang::abort(h, class = "domain_error")
+                                 rlang::abort(h, class = "kgrams_domain_error")
                                  }
                          )
-        if (!is.function(.preprocess))
-                rlang::abort("'.preprocess' must be a function.")
-        if (!is.function(.tknz_sent))
-                rlang::abort("'.tknz_sent' must be a function.")
         
         cpp_obj <- new(kgramFreqs, N, attr(dict, "cpp_obj"))
         
