@@ -19,13 +19,13 @@ k-gram model. At present, necessarily a \code{kgram_freqs} object, or a
 
 \item{...}{possible additional parameters required by the smoother.}
 
-\item{smoother}{a character vector. Indicates the smoothing technique to
-be applied to compute k-gram continuation probabilities. A list of
-available smoothers can be obtained with \code{smoothers()}, and
+\item{smoother}{a length one character vector. Indicates the smoothing
+technique to be applied to compute k-gram continuation probabilities. A list
+of available smoothers can be obtained with \code{smoothers()}, and
 further information on a particular smoother through
 \code{info()}.}
 
-\item{N}{an integer. Maximum order of k-grams to use in the language
+\item{N}{a length one integer. Maximum order of k-grams to use in the language
 model. This muss be less than or equal to the order of the underlying
 \code{kgram_freqs} object.}
 }
