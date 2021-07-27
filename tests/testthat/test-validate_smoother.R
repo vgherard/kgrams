@@ -43,3 +43,17 @@ test_that("validate_smoother does not throw errors on default values", {
                 expect_error(do.call(validate_smoother, args), NA)
         }
 })
+
+test_that("validate_smoother throws a warning for missing parameter", {
+        expect_warning(
+                validate_smoother("sbo"),
+                class = "kgrams_smoother_par_missing_warning"
+        )
+})
+
+test_that("validate_smoother throws an error for invalid parameter", {
+        expect_error(
+                validate_smoother("sbo", lambda = -1),
+                class = "kgrams_smoother_par_error"
+        )
+})
