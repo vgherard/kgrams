@@ -48,3 +48,15 @@ test_that("assert_kgram_freqs", {
         x <- kgram_freqs(1); attr(x, "cpp_obj") <- NULL
         expect_error(assert_kgram_freqs(x), class = class)
 })
+
+test_that("assert_smoother", {
+        expect_error(assert_smoother("sbo"), NA)
+        
+        class <- "kgrams_domain_error"
+        expect_error(assert_smoother(1), class = class)
+        expect_error(assert_smoother(c("sbo", "ml")), class = class)
+        expect_error(assert_smoother(NA_character_), class = class)
+        
+        class <- "kgrams_smoother_error"
+        expect_error(assert_smoother("unexisting smoother"), class = class)
+})
