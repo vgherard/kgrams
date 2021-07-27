@@ -1,17 +1,6 @@
-assert_exists_smoother <- function(smoother) {
-        # Check that smoother is valid
-        if (isFALSE(is.character(smoother) & smoother %in% smoothers()))
-                rlang::abort(
-                        class = c("smoother_error", "domain_error"),
-                        message = c("Invalid smoother",
-                                    i = "List of available smoothers:",
-                                    paste(smoothers(), collapse = ", "))
-                )
-}
-
 # check if k-gram probability smoother is correctly specified
 validate_smoother <- function(smoother, ...) {
-        assert_exists_smoother(smoother)
+        assert_smoother(smoother)
         args <- list(...)
         # Retrieve smoother parameters
         parameters <- list_parameters(smoother)

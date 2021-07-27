@@ -63,4 +63,18 @@ assert_kgram_freqs <- function(x) {
                 what = "a 'kgram_freqs' class object"
         )
 }
+
+assert_smoother <- function(x) {
+        name <- deparse(substitute(x))
+        if (!is.character(x) || length(x) != 1 || is.na(x))
+                kgrams_domain_error(name, "a length one character (not NA).")
+        if (!(x %in% smoothers()))
+                rlang::abort(
+                        message = c("Invalid smoother",
+                                    i = "List of available smoothers:",
+                                    paste(smoothers(), collapse = ", ")
+                                    ),
+                        class = c("kgrams_smoother_error")
+                )
+}
         
