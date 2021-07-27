@@ -25,8 +25,8 @@
 #' 
 #' @return \code{smoothers()} returns a character vector, the list of code names
 #' of probability smoothers available in \link[kgrams]{kgrams}. 
-#' \code{info(smoother)} returns \code{NULL} and prints some information on 
-#' the selected smoothing technique.
+#' \code{info(smoother)} returns \code{NULL} (invisibly) and prints some 
+#' information on the selected smoothing technique.
 #' @examples
 #' # List available smoothers
 #' smoothers()
