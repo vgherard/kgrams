@@ -114,7 +114,7 @@ param.kgram_freqs <- function(object, which) {
         }
         
         if ( is.null(attr(object, "cpp_obj")[[which]]) ) {
-                smoother <- class(object)[[2]]
+                smoother <- attr(object, "smoother")
                 h <- paste0("\"", which, 
                             "\" is not a valid parameter for smoother \"",
                             smoother, "\".")
@@ -137,7 +137,7 @@ parameters.kgram_freqs <- function(object)
 
 #' @export
 parameters.language_model <- function(object) {
-        smoother <- class(object)[[2]]
+        smoother <- attr(object, "smoother")
         names <- sapply(list_parameters(smoother), function(x) x$name)
         names <- c("N", "V", names)
         res <- lapply(names, function(name) param(object, name))

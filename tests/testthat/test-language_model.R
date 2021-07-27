@@ -1,5 +1,5 @@
 test_that("new_language_model returns the desired structure", {
-        # Dummy arguments, to ensure matching
+        # Dummy arguments, to test matching expectation
         args <- list(
                 cpp_obj = "obj",
                 cpp_freqs = "freqs",
@@ -14,4 +14,32 @@ test_that("new_language_model returns the desired structure", {
         expect_s3_class(res, class)
         for (name in names(args))
                 expect_identical(attr(res, name), args[[name]])
+})
+
+test_that("language_model.kgram_freqs throws for N larger than the kgram order", 
+{
+        f <- kgram_freqs(3)
+        expect_error(
+                language_model(f, smoother = "ml", N = 4), 
+                class = "kgrams_lm_max_order_error"
+                )
+})
+
+test_that("language_model class has print, str and summary methods", {
+        skip_if(R.version$major < 4,
+                message = "format() method of methods(..) different in R < 4"
+        )
+        funs <- c("print", "str", "summary")
+        methods <- format(methods(class = "language_model"))
+        expect_true(all(funs %in% methods))
+})
+
+test_that("print, str and summary methods return invisibly", {
+        funs <- list(print, str, summary)
+        m <- language_model(kgram_freqs(3))
+        capture_output(
+                for (fun in funs) {
+                        expect_invisible(fun(m))
+                        expect_identical(fun(m), m)
+                })
 })

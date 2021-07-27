@@ -115,7 +115,7 @@ language_model.kgram_freqs <-
         if (N > param(object, "N")) {
                 h <- "Invalid input"
                 x <- "'N' cannot be greater than 'param(object, \"N\")'."
-                rlang::abort(c(h, x = x), class = "kgrams_domain_error")
+                rlang::abort(c(h, x = x), class = "kgrams_lm_max_order_error")
         }
         validate_smoother(smoother, ...)
         
@@ -151,7 +151,7 @@ summary.language_model <- function(object, ...) {
         cat("A k-gram language model.\n\n")
         
         cat("Smoother:\n")
-        cat("* '", class(object)[[2]], "'.\n", sep = "")
+        cat("* '", attr(object, "smoother"), "'.\n", sep = "")
         cat("\n")
         
         cat("Parameters:\n")
