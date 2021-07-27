@@ -15,7 +15,7 @@ test_that("list_parameters has the required structure", {
 test_that("smoother_par_missing throws a warning of the correct class", {
         expect_warning(
                 smoother_par_missing("smoother", "par", "default"),
-                class = "kgrams_smoother_par_missing_warning"
+                class = "kgrams_missing_par_warning"
                 )
 })
 
@@ -30,7 +30,7 @@ test_that("smoother_par_missing throws a warning only once", {
 test_that("smoother_par_error throws an error of the correct class", {
         expect_error(
                 smoother_par_error("smoother", "par", "expected"),
-                class = "kgrams_smoother_par_error"
+                class = "kgrams_invalid_par_error"
         )
 })
 
@@ -47,13 +47,13 @@ test_that("validate_smoother does not throw errors on default values", {
 test_that("validate_smoother throws a warning for missing parameter", {
         expect_warning(
                 validate_smoother("sbo"),
-                class = "kgrams_smoother_par_missing_warning"
+                class = "kgrams_missing_par_warning"
         )
 })
 
 test_that("validate_smoother throws an error for invalid parameter", {
         expect_error(
                 validate_smoother("sbo", lambda = -1),
-                class = "kgrams_smoother_par_error"
+                class = "kgrams_invalid_par_error"
         )
 })

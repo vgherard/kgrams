@@ -18,7 +18,7 @@ validate_smoother <- function(smoother, ...) {
 
 smoother_par_missing <- function(smoother, name, default) {
         rlang::warn(
-                class = "kgrams_smoother_par_missing_warning", 
+                class = "kgrams_missing_par_warning", 
                 message = c(
                         paste0("Missing parameter for smoother '", smoother, "'"
                                ),
@@ -33,7 +33,7 @@ smoother_par_missing <- function(smoother, name, default) {
 
 smoother_par_error <- function(smoother, name, expected) {
         rlang::abort(
-                class = "kgrams_smoother_par_error",
+                class = "kgrams_invalid_par_error",
                 message = c(
                         paste0("Invalid parameter for smoother '", smoother, "'"
                                ),

@@ -318,7 +318,7 @@ perplexity(midsummer, model = kn)
 We can use perplexity to tune our model parameter $D$. We compute perplexity over a grid of values for `D` and plot the results. We do this for the $k$-gram models with $k \in \{2, 3, 4, 5\}$:
 
 ```{r, out.width="50%", fig.cap="Perplexity as a function of the discount parameter of Interpolated Kneser-Ney 2-gram (red), 3-gram (green), 4-gram (blue) and 5-gram (black) models."}
-D_grid <- seq(from = 0.5, to = 1.0, by = 0.01)
+D_grid <- seq(from = 0.5, to = 0.99, by = 0.01)
 FUN <- function(D, N) {
         param(kn, "N") <- N
         param(kn, "D") <- D
