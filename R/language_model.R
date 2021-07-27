@@ -88,7 +88,7 @@ language_model <- function(object, ...)
 #' @export
 language_model.language_model <- function(object, ...) {
         cpp_freqs <- attr(object, "cpp_freqs")
-        smoother <- class(object)[[2]]
+        smoother <- attr(object, "smoother")
         args <- parameters(object)
         N <- args[["N"]]
         cpp_obj <- cpp_smoother_constructor(smoother, cpp_freqs, N, args)
@@ -179,7 +179,8 @@ new_language_model <- function(
                   cpp_freqs = cpp_freqs,
                   .preprocess = .preprocess,
                   .tknz_sent = .tknz_sent,
-                  class = c("language_model", smoother)
+                  smoother = smoother,
+                  class = c("language_model")
         )
 }
 
