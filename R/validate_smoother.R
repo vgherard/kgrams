@@ -9,34 +9,34 @@ validate_smoother <- function(smoother, ...) {
         for (parameter in parameters) {
                 name <- parameter$name
                 default <- parameter$default
-                expected <- parameter$expected
-                is_valid <- parameter$validator
                 if (is.null(args[[name]]))
-                        smoother_domain_missing(smoother, name, default)
-                else if (!is_valid(args[[name]]))
-                        smoother_domain_error(smoother, name, expected)
+                        smoother_par_missing(smoother, name, default)
+                else if (!parameter$validator(args[[name]]))
+                        smoother_par_error(smoother, name, parameter$expected)
         }
 }
 
-smoother_domain_missing <- function(sm, name, default) {
+smoother_par_missing <- function(smoother, name, default) {
         rlang::warn(
-                class = "smoother_domain_missing", 
+                class = "kgrams_smoother_par_missing_warning", 
                 message = c(
-                        paste0("Missing parameter for smoother '", sm, "'"),
+                        paste0("Missing parameter for smoother '", smoother, "'"
+                               ),
                         x = name,
                         i = "Using the following default value:",
                         paste0(name, " = ", default)
                         ),
                 .frequency = "once",
-                .frequency_id = paste0(sm, "_", name) 
+                .frequency_id = paste0(smoother, "_", name) 
                 )
 }
 
-smoother_domain_error <- function(sm, name, expected) {
+smoother_par_error <- function(smoother, name, expected) {
         rlang::abort(
-                class = c("smoother_error", "domain_error"),
+                class = "kgrams_smoother_par_error",
                 message = c(
-                        paste0("Invalid parameter for smoother '", sm, "'"),
+                        paste0("Invalid parameter for smoother '", smoother, "'"
+                               ),
                         x = name,
                         i = "Expected type:",
                         paste0(name, ": ", expected)
@@ -49,7 +49,7 @@ list_parameters <- function(smoother) {
         switch(smoother,
                sbo = list(
                        list(name = "lambda",
-                            expected = "a number between zero and one",
+                            expected = "a number in (0, 1)",
                             default = 0.4,
                             validator = function(x)
                                     isTRUE(is.numeric(x) & 0 < x & x < 1)
@@ -67,7 +67,7 @@ list_parameters <- function(smoother) {
                ml = list(),
                kn = list(
                        list(name = "D",
-                            expected = "a number between zero and one",
+                            expected = "a number in (0, 1)",
                             default = 0.75,
                             validator = function(x)
                                     isTRUE(is.numeric(x) & 0 < x & x < 1)
@@ -75,19 +75,19 @@ list_parameters <- function(smoother) {
                ),
                mkn = list(
                        list(name = "D1",
-                            expected = "a number between zero and one",
+                            expected = "a number  in (0, 1)",
                             default = 0.75,
                             validator = function(x)
                                     isTRUE(is.numeric(x) & 0 < x & x < 1)
                        ),
                        list(name = "D2",
-                            expected = "a number between zero and one",
+                            expected = "a number in (0, 1)",
                             default = 0.75,
                             validator = function(x)
                                     isTRUE(is.numeric(x) & 0 < x & x < 1)
                        ),
                        list(name = "D3",
-                            expected = "a number between zero and one",
+                            expected = "a number in (0, 1)",
                             default = 0.75,
                             validator = function(x)
                                     isTRUE(is.numeric(x) & 0 < x & x < 1)
