@@ -111,18 +111,22 @@ language_model.language_model <- function(object, ...) {
 language_model.kgram_freqs <- 
         function(object, smoother = "ml", N = param(object, "N"), ...) 
 {
-        if (isFALSE(is.numeric(N) & 0 < N & N <= param(object, "N"))) {
-                msgs <- "'N' must be a positive integer less than or equal" %+%
-                        "to 'param(object, \"N\")'."
-                rlang::abort(message = msgs, class = "domain_error")
+        assert_positive_integer(N)
+        if (N > param(object, "N")) {
+                h <- "Invalid input"
+                x <- "'N' cannot be greater than 'param(object, \"N\")'."
+                rlang::abort(c(h, x = x), class = "kgrams_domain_error")
         }
         validate_smoother(smoother, ...)
+        
         args <- list(...)
         for (parameter in list_parameters(smoother)) 
                 if (is.null(args[[parameter$name]]))
                         args[[parameter$name]] <- parameter$default
+        
         cpp_freqs <- attr(object, "cpp_obj")
         cpp_obj <- cpp_smoother_constructor(smoother, cpp_freqs, N, args) 
+        
         new_language_model(
                 cpp_obj, 
                 cpp_freqs, 
@@ -192,11 +196,6 @@ as_language_model.language_model <- function(object)
 
 as_language_model.kgram_freqs <- function(object)
         return(language_model(object, "ml"))
-
-as_language_model.default <- function(object) {
-        msg <- "Input cannot be coerced to 'language_model'."
-        rlang::abort(message = msg, class = "domain_error")
-}
 
 cpp_smoother_constructor <- function(smoother, cpp_freqs, N, args) {
         switch(smoother, 
