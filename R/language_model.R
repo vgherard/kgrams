@@ -39,7 +39,7 @@
 #' @return A \code{language_model} object.
 #' @details
 #' These generics are used to construct objects of class \code{language_model}.
-#' The \code{language_model} method isonly needed to create copies of 
+#' The \code{language_model} method is only needed to create copies of 
 #' \code{language_model} objects (that is to say, new copies which are not 
 #' altered by methods which modify the original object in place, 
 #' see e.g. \link[kgrams]{parameters}). The discussion below focuses on 
