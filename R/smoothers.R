@@ -51,14 +51,7 @@ smoothers <- function() c("ml", "add_k", "abs", "kn", "mkn", "sbo", "wb")
 #' @rdname smoothers
 #' @export
 info <- function(smoother) {
-        if (isFALSE(is.character(smoother) & smoother %in% smoothers())) {
-                msgs <- paste("Unrecognized smoother name:", smoother)
-                msgs <- c(msgs,
-                          i = "You can obtain a list of available" %+%
-                                  "smoothing techniques with `smoothers()`"
-                )
-                rlang::inform(message = msgs, class = "unrecognized_smoother")
-        }
+        assert_smoother(smoother)
         
         if (smoother == "sbo")
                 cat("Stupid Backoff\n",
