@@ -73,9 +73,7 @@
 #' @rdname parameters
 #' @export
 param <- function(object, which) {
-        if (!is.character(which))
-                rlang::abort("'which' must be a length one character vector.",
-                             class = "domain_error")
+        assert_string(which)
         UseMethod("param", object)
 }
 
@@ -95,9 +93,7 @@ param.kgram_freqs <- function(object, which) {
 #' @rdname parameters
 #' @export
 `param<-` <- function(object, which, value) {
-        if (!is.character(which))
-                rlang::abort("'which' must be a length one character vector.",
-                             class = "domain_error")
+        assert_string(which)
         UseMethod("param<-", object)
 }
 
@@ -114,7 +110,7 @@ param.kgram_freqs <- function(object, which) {
         }
         
         if ( is.null(attr(object, "cpp_obj")[[which]]) ) {
-                smoother <- class(object)[[2]]
+                smoother <- attr(object, "smoother")
                 h <- paste0("\"", which, 
                             "\" is not a valid parameter for smoother \"",
                             smoother, "\".")
@@ -137,7 +133,7 @@ parameters.kgram_freqs <- function(object)
 
 #' @export
 parameters.language_model <- function(object) {
-        smoother <- class(object)[[2]]
+        smoother <- attr(object, "smoother")
         names <- sapply(list_parameters(smoother), function(x) x$name)
         names <- c("N", "V", names)
         res <- lapply(names, function(name) param(object, name))

@@ -7,45 +7,49 @@ kgrams_domain_error <- function(name, what) {
         rlang::abort(c(h, x = x), class = "kgrams_domain_error")
 }
 
-assert_positive_integer <- function(x, can_be_inf = FALSE) {
-        
-        p <- is.numeric(x) && length(x) == 1 && !is.na(x) &&
-                (
-                        (is.infinite(x) && can_be_inf) || 
-                        (!is.infinite(x) && as.integer(x) == x && x > 0)
-                )
+assert_number <- function(x, name = deparse(substitute(x)))
+{
+        if (is.numeric(x) && length(x) == 1 && !is.na(x))
+                return(invisible(NULL))
+        kgrams_domain_error(name = name, what = "a length one numeric (not NA)")
+}
+
+assert_string <- function(x, name = deparse(substitute(x))) {
+        if (is.character(x) && length(x) == 1 && !is.na(x))
+                return(invisible(NULL))
+        kgrams_domain_error(name, what = "a length one character (not NA)")
+}
+
+assert_positive_integer <- function(
+        x, can_be_inf = FALSE, name = deparse(substitute(x))
+        ) 
+{
+        assert_number(x, name = name)
+        p <- (is.infinite(x) && can_be_inf) || 
+                (!is.infinite(x) && as.integer(x) == x && x > 0)
         if (p) 
                 return(invisible(NULL))
-        kgrams_domain_error(
-                name = deparse(substitute(x)), 
-                what = "a length one positive integer"
-                )
+        kgrams_domain_error(name = name, what = "a positive integer")
 }
 
-assert_probability <- function(x) {
-        p <- is.numeric(x) && length(x) == 1 && !is.na(x) && 0 <= x && x <= 1
-        if (p)
+assert_probability <- function(x, name = deparse(substitute(x))) 
+{
+        assert_number(x, name = name)
+        if (0 <= x && x <= 1)
                 return(invisible(NULL))
-        kgrams_domain_error(
-                name = deparse(substitute(x)), 
-                what = "a number between 0 and 1"
-        )
+        kgrams_domain_error(name = name, what = "a number between 0 and 1")
 }
 
-assert_function <- function(x) {
+assert_function <- function(x, name = deparse(substitute(x))) {
         if (is.function(x))
                 return(invisible(NULL))
-        kgrams_domain_error(name = deparse(substitute(x)), what = "a function")
+        kgrams_domain_error(name = name, what = "a function")
 }
 
-assert_true_or_false <- function(x) {
-        p <- is.logical(x) && length(x) == 1 && !is.na(x)
-        if (p)
+assert_true_or_false <- function(x, name = deparse(substitute(x))) {
+        if (is.logical(x) && length(x) == 1 && !is.na(x))
                 return(invisible(NULL))
-        kgrams_domain_error(
-                name = deparse(substitute(x)), 
-                what = "TRUE or FALSE"
-                )
+        kgrams_domain_error(name = name, what = "TRUE or FALSE")
 }
 
 identical_s3_structure <- function(x, y) {
@@ -55,12 +59,20 @@ identical_s3_structure <- function(x, y) {
         )
 }
 
-assert_kgram_freqs <- function(x) {
+assert_kgram_freqs <- function(x, name = deparse(substitute(x))) {
         if ( identical_s3_structure(x, kgram_freqs(1)) )
                 return(invisible(NULL))
-        kgrams_domain_error(
-                name = deparse(substitute(x)), 
-                what = "a 'kgram_freqs' class object"
-        )
+        kgrams_domain_error(name = name, what = "a 'kgram_freqs' class object")
 }
-        
+
+assert_smoother <- function(x, name = deparse(substitute(x))) {
+        assert_string(x, name = name)
+        if (!(x %in% smoothers()))
+                rlang::abort(
+                        message = c("Invalid smoother",
+                                    i = "List of available smoothers:",
+                                    paste(smoothers(), collapse = ", ")
+                                    ),
+                        class = c("kgrams_smoother_error")
+                )
+}

@@ -12,6 +12,15 @@ test_that("assert_positive_integer", {
         expect_error(assert_positive_integer(Inf, can_be_inf = TRUE), NA)
 })
 
+test_that("assert_string", {
+        expect_error(assert_string("a string"), NA)
+        
+        class <- "kgrams_domain_error"
+        expect_error(assert_string(1), class = class)
+        expect_error(assert_string(c("a", "b")), class = class)
+        expect_error(assert_string(NA_character_), class = class)
+})
+
 test_that("assert_probability", {
         class <- "kgrams_domain_error"
         expect_error(assert_probability(0.5), NA)
@@ -47,4 +56,16 @@ test_that("assert_kgram_freqs", {
         # Should throw if some attribute of 'kgram_freqs is missing
         x <- kgram_freqs(1); attr(x, "cpp_obj") <- NULL
         expect_error(assert_kgram_freqs(x), class = class)
+})
+
+test_that("assert_smoother", {
+        expect_error(assert_smoother("sbo"), NA)
+        
+        class <- "kgrams_domain_error"
+        expect_error(assert_smoother(1), class = class)
+        expect_error(assert_smoother(c("sbo", "ml")), class = class)
+        expect_error(assert_smoother(NA_character_), class = class)
+        
+        class <- "kgrams_smoother_error"
+        expect_error(assert_smoother("unexisting smoother"), class = class)
 })
