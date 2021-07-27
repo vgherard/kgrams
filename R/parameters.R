@@ -73,9 +73,7 @@
 #' @rdname parameters
 #' @export
 param <- function(object, which) {
-        if (!is.character(which))
-                rlang::abort("'which' must be a length one character vector.",
-                             class = "domain_error")
+        assert_string(which)
         UseMethod("param", object)
 }
 
@@ -95,9 +93,7 @@ param.kgram_freqs <- function(object, which) {
 #' @rdname parameters
 #' @export
 `param<-` <- function(object, which, value) {
-        if (!is.character(which))
-                rlang::abort("'which' must be a length one character vector.",
-                             class = "domain_error")
+        assert_string(which)
         UseMethod("param<-", object)
 }
 
