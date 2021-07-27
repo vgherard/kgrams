@@ -7,8 +7,10 @@ kgrams_domain_error <- function(name, what) {
         rlang::abort(c(h, x = x), class = "kgrams_domain_error")
 }
 
-assert_positive_integer <- function(x, can_be_inf = FALSE) {
-        
+assert_positive_integer <- function(
+        x, can_be_inf = FALSE, name = deparse(substitute(x))
+        ) 
+{
         p <- is.numeric(x) && length(x) == 1 && !is.na(x) &&
                 (
                         (is.infinite(x) && can_be_inf) || 
@@ -16,36 +18,28 @@ assert_positive_integer <- function(x, can_be_inf = FALSE) {
                 )
         if (p) 
                 return(invisible(NULL))
-        kgrams_domain_error(
-                name = deparse(substitute(x)), 
-                what = "a length one positive integer"
-                )
+        kgrams_domain_error(name = name, what = "a length one positive integer")
 }
 
-assert_probability <- function(x) {
+assert_probability <- function(x, name = deparse(substitute(x))) 
+{
         p <- is.numeric(x) && length(x) == 1 && !is.na(x) && 0 <= x && x <= 1
         if (p)
                 return(invisible(NULL))
-        kgrams_domain_error(
-                name = deparse(substitute(x)), 
-                what = "a number between 0 and 1"
-        )
+        kgrams_domain_error(name = name, what = "a number between 0 and 1")
 }
 
-assert_function <- function(x) {
+assert_function <- function(x, name = deparse(substitute(x))) {
         if (is.function(x))
                 return(invisible(NULL))
-        kgrams_domain_error(name = deparse(substitute(x)), what = "a function")
+        kgrams_domain_error(name = name, what = "a function")
 }
 
-assert_true_or_false <- function(x) {
+assert_true_or_false <- function(x, name = deparse(substitute(x))) {
         p <- is.logical(x) && length(x) == 1 && !is.na(x)
         if (p)
                 return(invisible(NULL))
-        kgrams_domain_error(
-                name = deparse(substitute(x)), 
-                what = "TRUE or FALSE"
-                )
+        kgrams_domain_error(name = name, what = "TRUE or FALSE")
 }
 
 identical_s3_structure <- function(x, y) {
@@ -55,17 +49,13 @@ identical_s3_structure <- function(x, y) {
         )
 }
 
-assert_kgram_freqs <- function(x) {
+assert_kgram_freqs <- function(x, name = deparse(substitute(x))) {
         if ( identical_s3_structure(x, kgram_freqs(1)) )
                 return(invisible(NULL))
-        kgrams_domain_error(
-                name = deparse(substitute(x)), 
-                what = "a 'kgram_freqs' class object"
-        )
+        kgrams_domain_error(name = name, what = "a 'kgram_freqs' class object")
 }
 
-assert_smoother <- function(x) {
-        name <- deparse(substitute(x))
+assert_smoother <- function(x, name = deparse(substitute(x))) {
         if (!is.character(x) || length(x) != 1 || is.na(x))
                 kgrams_domain_error(name, "a length one character (not NA).")
         if (!(x %in% smoothers()))
