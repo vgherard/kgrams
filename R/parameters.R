@@ -79,7 +79,7 @@ param <- function(object, which) {
 
 #' @export
 param.language_model <- function(object, which) {
-        validate_parameter(object, which)
+        validate_parameter_language_model(object, which)
         res <- attr(object, "cpp_obj")[[which]]
         return(res)
 }
@@ -87,7 +87,7 @@ param.language_model <- function(object, which) {
 #' @rdname parameters
 #' @export
 param.kgram_freqs <- function(object, which) {
-        validate_parameter(object, which)
+        validate_parameter_kgram_freqs(which)
         res <- attr(object, "cpp_obj")[[which]]
         return(res)
 }
@@ -101,11 +101,13 @@ param.kgram_freqs <- function(object, which) {
 
 #' @export
 `param<-.kgram_freqs` <- function(object, which, value)
-        rlang::abort("Parameters of \"kgram_freqs\" objects cannot be set.")
+        rlang::abort(
+                "Parameters of \"kgram_freqs\" objects cannot be set.",
+                class = "kgrams_read_only_par_error")
 
 #' @export
 `param<-.language_model` <- function(object, which, value) {
-        validate_parameter(object, which, value)
+        validate_parameter_language_model(object, which, value)
         attr(object, "cpp_obj")[[which]] <- value
         return(object)
 }
@@ -131,10 +133,7 @@ parameters.language_model <- function(object) {
 
 #---------------------------------------------------------- Parameter validation
 
-validate_parameter <- function(object, parameter, value) 
-        UseMethod("validate_parameter")
-
-validate_parameter.language_model <- function(object, which, value) {
+validate_parameter_language_model <- function(object, which, value) {
         smoother <- attr(object, "smoother")
         valid_params <- sapply(list_parameters(smoother), function(x) x$name)
         valid_params <- c("N", "V", valid_params)
@@ -168,12 +167,12 @@ validate_parameter.language_model <- function(object, which, value) {
         args <- lapply(l, function(x) x$default)
         names(args) <- sapply(l, function(x) x$name)
         args <- c(list(smoother = smoother), args)
-        args[["which"]] <- value
+        args[[which]] <- value
         
         do.call(validate_smoother, args)
 }
 
-validate_parameter.kgram_freqs <- function(object, which, value) {
+validate_parameter_kgram_freqs <- function(which) {
         if (!(which %in% c("N", "V"))) {
                 h <- "Unknown parameter"
                 x <- paste0("'", which, "' is not a recognized parameter.")
