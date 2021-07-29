@@ -6,7 +6,7 @@ test_that("preprocess returns a character vector", {
 
 
 test_that("character(0) in, character(0) out", {
-        expect_vector(preprocess(character()), character(), 0)
+        expect_identical(preprocess(character()), character())
 })
 
 test_that("NA in, NA out", {
