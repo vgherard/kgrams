@@ -9,6 +9,11 @@ test_that("character(0) in, character(0) out", {
         expect_vector(preprocess(character()), character(), 0)
 })
 
-test_that("Errors on NA input", {
+test_that("NA in, NA out", {
+        expect_identical(preprocess(NA), NA_character_)
         
+        # Test with mixed input
+        input <- c("hello", NA, "world")
+        expect_identical(preprocess(input), input)
 })
+
