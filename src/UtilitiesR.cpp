@@ -8,16 +8,16 @@ using namespace Rcpp;
 //' @rdname preprocess
 //' @export
 // [[Rcpp::export]]
-Rcpp::CharacterVector preprocess(
-                Rcpp::CharacterVector input,
-                std::string erase = "[^.?!:;'[:alnum:][:space:]]",
-                bool lower_case = true
-)
+CharacterVector preprocess(
+        CharacterVector input, 
+        std::string erase = "[^.?!:;'[:alnum:][:space:]]",
+        bool lower_case = true
+        )
 {
         std::regex erase_(erase);
         std::string temp;
         auto itend = input.end();
-        for(auto it = input.begin(); it != itend; ++it){
+        for(auto it = input.begin(); it != itend; ++it) {
                 temp = *it;
                 if (erase != "") temp = std::regex_replace(temp, erase_, "");
                 if (lower_case) for (char& c : temp) c = tolower(c);
