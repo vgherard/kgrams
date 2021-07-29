@@ -18,6 +18,8 @@ CharacterVector preprocess(
         std::string temp;
         auto itend = input.end();
         for(auto it = input.begin(); it != itend; ++it) {
+                if (*it == Rcpp::NA)
+                        stop("'input' cannot contain NA values.");
                 temp = *it;
                 if (erase != "") temp = std::regex_replace(temp, erase_, "");
                 if (lower_case) for (char& c : temp) c = tolower(c);
