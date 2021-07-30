@@ -152,7 +152,7 @@ check_model_perplexity <- function(model) {
 }
 
 check_sbo_perplexity <- function(model) {
-        if (!inherits(model, "sbo")) 
+        if (attr(model, "smoother") == "sbo") 
                 return(invisible(NULL))
         h <- "Computing perplexity for Stupid Backoff model."
         x <- "'sbo' smoother does not produce normalized probabilities."
@@ -166,7 +166,7 @@ check_sbo_perplexity <- function(model) {
 }
 
 check_ml_perplexity <- function(model) {
-        if (!inherits(model, "ml") )
+        if (attr(model, "smoother") == "ml")
                 return(invisible(NULL))
         h <- "Computing perplexity for Maximum-Likelihood model."
         x <- "'ml' probabilities can be 'NA'."
