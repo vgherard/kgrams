@@ -14,6 +14,13 @@ assert_number <- function(x, name = deparse(substitute(x)))
         kgrams_domain_error(name = name, what = "a length one numeric (not NA)")
 }
 
+assert_character_no_NA <- function(x, name = deparse(substitute(x)))
+{
+        if (!is.character(x) || any(is.na(x)))
+                kgrams_domain_error(name, "a character vector without any NAs.")
+}
+
+
 assert_string <- function(x, name = deparse(substitute(x))) {
         if (is.character(x) && length(x) == 1 && !is.na(x))
                 return(invisible(NULL))
