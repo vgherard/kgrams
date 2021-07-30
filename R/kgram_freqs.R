@@ -437,8 +437,28 @@ kgram_process_task <- function(
         ) {
         cpp_obj <- attr(freqs, "cpp_obj")
         function(batch) {
-                batch <- .preprocess(batch)
-                batch <- .tknz_sent(batch)
+                tryCatch(
+                        batch <- .preprocess(batch),
+                        error = function(cnd) {
+                                h <- "Preprocessing error"
+                                x <- "There was an error during text preprocessing."
+                                i <- "Try checking the '.preprocess' argument."
+                                rlang::abort(
+                                        c(h, x = x, i = i),
+                                        class = "kgrams_preproc_error"
+                                        )
+                        })
+                tryCatch(
+                        batch <- .tknz_sent(batch),
+                        error = function(cnd) {
+                                h <- "Sentence tokenization error"
+                                x <- "There was an error during sentence tokenization."
+                                i <- "Try checking the '.tknz_sent' argument."
+                                rlang::abort(
+                                        c(h, x = x, i = i),
+                                        class = "kgrams_tknz_sent_error"
+                                )
+                        })
                 cpp_obj$process_sentences(batch, !open_dict, verbose)
         } # return
 }
