@@ -27,7 +27,7 @@ perplexity(
   model,
   .preprocess = attr(model, ".preprocess"),
   .tknz_sent = attr(model, ".tknz_sent"),
-  batch_size = NULL,
+  batch_size = Inf,
   ...
 )
 }
@@ -35,9 +35,7 @@ perplexity(
 \item{text}{a character vector or connection. Test corpus from which
 language model perplexity is computed.}
 
-\item{model}{either an object of class \code{language_model}, or a
-\code{kgram_freqs} object. The language model from which probabilities
-are computed.}
+\item{model}{an object of class \code{language_model}.}
 
 \item{.preprocess}{a function taking a character vector as input and
 returning a character vector as output. Preprocessing transformation
@@ -49,9 +47,9 @@ applied before computing perplexity.}
 
 \item{...}{further arguments passed to or from other methods.}
 
-\item{batch_size}{a length one positive integer or \code{NULL}.
+\item{batch_size}{a length one positive integer or \code{Inf}.
 Size of text batches when reading text from a \code{connection}.
-If \code{NULL}, all input text is processed in a single batch.}
+If \code{Inf}, all input text is processed in a single batch.}
 }
 \value{
 a number. Perplexity of the language model on the test corpus.

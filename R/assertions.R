@@ -72,6 +72,12 @@ assert_kgram_freqs <- function(x, name = deparse(substitute(x))) {
         kgrams_domain_error(name = name, what = "a 'kgram_freqs' class object")
 }
 
+assert_language_model <- function(x, name = deparse(substitute(x))) {
+        if ( identical_s3_structure(x, language_model(kgram_freqs(1), "ml")) )
+                return(invisible(NULL))
+        kgrams_domain_error(name = name, what = "a 'language_model' object")
+}
+
 assert_smoother <- function(x, name = deparse(substitute(x))) {
         assert_string(x, name = name)
         if (!(x %in% smoothers()))

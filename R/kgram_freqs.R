@@ -350,7 +350,7 @@ process_sentences.connection <- function(
                 )
         
         if (!isOpen(text))
-            open(text, "r")
+                open(text, "r")
         if (is.infinite(batch_size)) 
                 batch_size <- -1L
         left <- max_lines

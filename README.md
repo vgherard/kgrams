@@ -7,13 +7,13 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/kgrams)](https://CRAN.R-project.org/package=kgrams)
-[![CRAN
-downloads](http://cranlogs.r-pkg.org/badges/grand-total/kgrams)](https://CRAN.R-project.org/package=kgrams)
 [![R-CMD-check](https://github.com/vgherard/kgrams/workflows/R-CMD-check/badge.svg)](https://github.com/vgherard/kgrams/actions)
 [![Codecov test
 coverage](https://codecov.io/gh/vgherard/kgrams/branch/main/graph/badge.svg)](https://codecov.io/gh/vgherard/kgrams?branch=main)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/kgrams)](https://CRAN.R-project.org/package=kgrams)
+[![R-universe
+status](https://vgherard.r-universe.dev/badges/kgrams)](https://vgherard.r-universe.dev/)
 <!-- badges: end -->
 
 `kgrams` provides tools for training and evaluating *k*-gram language

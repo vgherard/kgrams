@@ -28,14 +28,8 @@
 #'
 #' @export
 `%|%` <- function(word, context) {
-        if (!is.character(word)) {
-                msg <- "lhs of %|% must be a character vector."
-                rlang::abort(message = msg, class = "infix_domain_error") 
-        }
-        if (!is.character(context) || length(context) != 1) {
-                msg <- "rhs of %|% must be a length one character vector."
-                rlang::abort(message = msg, class = "infix_domain_error") 
-        }
+        assert_character_no_NA(word)
+        assert_string(context)
         structure(list(word = word, context = context), 
                   class = "kgrams_word_context")
 }

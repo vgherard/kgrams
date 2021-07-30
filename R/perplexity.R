@@ -10,18 +10,16 @@
 #'
 #' @param text a character vector or connection. Test corpus from which 
 #' language model perplexity is computed.
-#' @param model either an object of class \code{language_model}, or a 
-#' \code{kgram_freqs} object. The language model from which probabilities 
-#' are computed.
+#' @param model an object of class \code{language_model}.
 #' @param .preprocess a function taking a character vector as input and 
 #' returning a character vector as output. Preprocessing transformation  
 #' applied to input before computing perplexity.
 #' @param .tknz_sent a function taking a character vector as input and 
 #' returning a character vector as output. Optional sentence tokenization step
 #' applied before computing perplexity.
-#' @param batch_size a length one positive integer or \code{NULL}.
+#' @param batch_size a length one positive integer or \code{Inf}.
 #' Size of text batches when reading text from a \code{connection}. 
-#' If \code{NULL}, all input text is processed in a single batch.
+#' If \code{Inf}, all input text is processed in a single batch.
 #' @param ... further arguments passed to or from other methods.
 #' @return a number. Perplexity of the language model on the test corpus.
 #' 
@@ -93,9 +91,9 @@ perplexity <- function(text,
                        ...
                        )
 {
-        # If 'model' is not a language model, try to coerce it to language model
-        model <- as_language_model(model)
-        check_model_perplexity(model)
+        assert_function(.preprocess)
+        assert_function(.tknz_sent)
+        assert_language_model(model)
         UseMethod("perplexity", text)
 }
         
@@ -109,6 +107,7 @@ perplexity.character <- function(
         ...
         ) 
 {
+        assert_character_no_NA(text)
         text <- .preprocess(text)
         text <- .tknz_sent(text)
         lp <- attr(model, "cpp_obj")$log_probability_sentence(text)
@@ -123,16 +122,20 @@ perplexity.connection <- function(
         model,
         .preprocess = attr(model, ".preprocess"),
         .tknz_sent = attr(model, ".tknz_sent"),
-        batch_size = NULL,
+        batch_size = Inf,
         ...
-) 
+        ) 
 {
-        if (is.null(batch_size)) 
+        model <- as_language_model(model)
+        check_model_perplexity(model)
+        assert_positive_integer(batch_size, can_be_inf = TRUE)
+        
+        if (!isOpen(text))
+                open(text, "r")
+        if (is.infinite(batch_size)) 
                 batch_size <- -1L
         
-        sum_log_prob <- n_words <- 0 
-        
-        open(text, "r")
+        sum_log_prob <- n_words <- 0
         while (length(batch <- readLines(text, batch_size))) {
                 batch <- .tknz_sent( .preprocess(batch) )
                 lp <- attr(model, "cpp_obj")$log_probability_sentence(batch)
@@ -151,7 +154,7 @@ check_model_perplexity <- function(model) {
 }
 
 check_sbo_perplexity <- function(model) {
-        if (!inherits(model, "sbo")) 
+        if (attr(model, "smoother") != "sbo") 
                 return(invisible(NULL))
         h <- "Computing perplexity for Stupid Backoff model."
         x <- "'sbo' smoother does not produce normalized probabilities."
@@ -165,7 +168,7 @@ check_sbo_perplexity <- function(model) {
 }
 
 check_ml_perplexity <- function(model) {
-        if (!inherits(model, "ml") )
+        if (attr(model, "smoother") != "ml")
                 return(invisible(NULL))
         h <- "Computing perplexity for Maximum-Likelihood model."
         x <- "'ml' probabilities can be 'NA'."

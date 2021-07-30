@@ -67,6 +67,18 @@ test_that("assert_kgram_freqs", {
         expect_error(assert_kgram_freqs(x), class = class)
 })
 
+test_that("assert_language_model", {
+        class <- "kgrams_domain_error"
+        lm <- language_model(kgram_freqs(1), "ml")
+        expect_error(assert_language_model(lm), NA)
+        expect_error(assert_language_model("lm"), class = class)
+        
+        # Should throw if some attribute of 'kgram_freqs is missing
+        attr(lm, "cpp_obj") <- NULL
+        expect_error(assert_language_model(lm), class = class)
+})
+
+
 test_that("assert_smoother", {
         expect_error(assert_smoother("sbo"), NA)
         
