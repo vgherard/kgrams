@@ -48,6 +48,8 @@ Rcpp::CharacterVector tknz_sent(Rcpp::CharacterVector input,
         size_t tokenized = 0;
         std::string line;
         for (size_t i = 0; i < len; ++i) {
+                if (input[i] == Rcpp::NA)
+                        stop("tknz_sent() cannot handle NA input.");
                 line = input[i];
                 tokenized += tknz_sent(line, tmp[i], _EOS, keep_first);
         }
