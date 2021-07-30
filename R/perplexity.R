@@ -109,6 +109,7 @@ perplexity.character <- function(
         ...
         ) 
 {
+        assert_character_no_NA(text)
         text <- .preprocess(text)
         text <- .tknz_sent(text)
         lp <- attr(model, "cpp_obj")$log_probability_sentence(text)
