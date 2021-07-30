@@ -34,7 +34,9 @@
 #' will return \code{NA}.
 #' 
 #' The subsetting form \code{object[x]} is equivalent to 
-#' \code{query(object, x)}.
+#' \code{query(object, x)}. The query of the empty string \code{""} returns the
+#' total count of words, including the \code{EOS} and \code{UNK} tokens, but not
+#' the \code{BOS} token.
 #' 
 #' See also the examples below.
 #'    
@@ -47,6 +49,7 @@
 #' identical(query(f, UNK()), query(f, "c")) # TRUE
 #' query(f, EOS()) # 1, since text is a single sentence
 #' f[c("b b", "b")] # query with subsetting synthax 
+#' f[""] # 9 (includes the EOS token)
 #' 
 #' # Querying a dictionary
 #' d <- as_dictionary(c("a", "b"))

@@ -434,7 +434,7 @@ process_sentences_init <- function(freqs, in_place) {
 
 kgram_process_task <- function(
         freqs, .preprocess, .tknz_sent, open_dict, verbose
-        ) {
+) {
         cpp_obj <- attr(freqs, "cpp_obj")
         function(batch) {
                 tryCatch(
