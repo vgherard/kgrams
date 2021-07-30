@@ -127,7 +127,24 @@ test_that("new_kgram_freqs throws if 'dict' is not coercible to dictionary", {
                      class = "kgrams_domain_error")
 })
 
-test_that("new_kgram_freqs throws if 'dict' is not coercible to dictionary", {
-        expect_error(new_kgram_freqs(1, dict = 840, identity, identity),
-                     class = "kgrams_domain_error")
+test_that("preprocessing error throws condition of proper class", {
+        expect_error(
+                kgram_freqs(
+                        "This is a string", 
+                        N = 2, 
+                        .preprocess = stop
+                        ),
+                     class = "kgrams_preproc_error"
+                )
+})
+
+test_that("tokenization error throws condition of proper class", {
+        expect_error(
+                kgram_freqs(
+                        "This is a string", 
+                        N = 2, 
+                        .tknz_sent = stop
+                ),
+                class = "kgrams_tknz_sent_error"
+        )
 })
