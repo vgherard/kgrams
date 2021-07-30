@@ -91,9 +91,9 @@ probability <- function(object,
                         model, 
                         .preprocess = attr(model, ".preprocess"),
                         ...
-                        )
+)
         UseMethod("probability", object)
-        
+
 #' @rdname probability
 #' @export
 probability.kgrams_word_context <- function(
@@ -109,7 +109,7 @@ probability.kgrams_word_context <- function(
         object$context <- .preprocess(object$context)
         attr(model, "cpp_obj")$probability(object$word, object$context) # return        
 }
-        
+
 #' @rdname probability
 #' @export
 probability.character <- function(
@@ -119,11 +119,12 @@ probability.character <- function(
         .tknz_sent = attr(model, ".tknz_sent"),
         ...
 ) {
+        assert_character_no_NA(object)
         # If 'model' is not a language model, try to coerce it to language model
         model <- as_language_model(model)
         object <- .preprocess(object)
         object <- .tknz_sent(object)
         attr(model, "cpp_obj")$probability_sentence(object) # return
 }
-        
-        
+
+
