@@ -8,16 +8,18 @@ using namespace Rcpp;
 //' @rdname preprocess
 //' @export
 // [[Rcpp::export]]
-Rcpp::CharacterVector preprocess(
-                Rcpp::CharacterVector input,
-                std::string erase = "[^.?!:;'[:alnum:][:space:]]",
-                bool lower_case = true
-)
+CharacterVector preprocess(
+        CharacterVector input, 
+        std::string erase = "[^.?!:;'[:alnum:][:space:]]",
+        bool lower_case = true
+        )
 {
         std::regex erase_(erase);
         std::string temp;
         auto itend = input.end();
-        for(auto it = input.begin(); it != itend; ++it){
+        for(auto it = input.begin(); it != itend; ++it) {
+                if (*it == Rcpp::NA)
+                        continue;
                 temp = *it;
                 if (erase != "") temp = std::regex_replace(temp, erase_, "");
                 if (lower_case) for (char& c : temp) c = tolower(c);
@@ -46,6 +48,8 @@ Rcpp::CharacterVector tknz_sent(Rcpp::CharacterVector input,
         size_t tokenized = 0;
         std::string line;
         for (size_t i = 0; i < len; ++i) {
+                if (input[i] == Rcpp::NA)
+                        stop("tknz_sent() cannot handle NA input.");
                 line = input[i];
                 tokenized += tknz_sent(line, tmp[i], _EOS, keep_first);
         }
@@ -80,7 +84,7 @@ size_t tknz_sent(std::string & line,
                 line.substr(start, end - start) + " " + line[end] :
                         line.substr(start, end - start)
                 );
-                start = end + m.length();
+                start = line.find_first_not_of(" ", end + m.length());
         }
         
         if (start != std::string::npos)

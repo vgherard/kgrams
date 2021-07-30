@@ -12,12 +12,12 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // preprocess
-Rcpp::CharacterVector preprocess(Rcpp::CharacterVector input, std::string erase, bool lower_case);
+CharacterVector preprocess(CharacterVector input, std::string erase, bool lower_case);
 RcppExport SEXP _kgrams_preprocess(SEXP inputSEXP, SEXP eraseSEXP, SEXP lower_caseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type input(inputSEXP);
+    Rcpp::traits::input_parameter< CharacterVector >::type input(inputSEXP);
     Rcpp::traits::input_parameter< std::string >::type erase(eraseSEXP);
     Rcpp::traits::input_parameter< bool >::type lower_case(lower_caseSEXP);
     rcpp_result_gen = Rcpp::wrap(preprocess(input, erase, lower_case));
