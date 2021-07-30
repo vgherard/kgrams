@@ -105,9 +105,9 @@ probability.kgrams_word_context <- function(
 ) {
         # If 'model' is not a language model, try to coerce it to language model
         model <- as_language_model(model)
-        object$word <- .preprocess(object$word)
-        object$context <- .preprocess(object$context)
-        attr(model, "cpp_obj")$probability(object$word, object$context) # return        
+        word <- .preprocess(object$word)
+        context <- .preprocess(object$context)
+        attr(model, "cpp_obj")$probability(word, context) # return        
 }
 
 #' @rdname probability
@@ -118,7 +118,8 @@ probability.character <- function(
         .preprocess = attr(model, ".preprocess"),
         .tknz_sent = attr(model, ".tknz_sent"),
         ...
-) {
+        ) 
+{
         assert_character_no_NA(object)
         # If 'model' is not a language model, try to coerce it to language model
         model <- as_language_model(model)
