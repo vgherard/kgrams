@@ -173,14 +173,14 @@
 <span class="co">#&gt; * V: 3046</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Number of words in training corpus:</span>
-<span class="co">#&gt; * W: 26174</span>
+<span class="co">#&gt; * W: 26147</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Number of distinct k-grams with positive counts:</span>
 <span class="co">#&gt; * 1-grams:3048</span>
-<span class="co">#&gt; * 2-grams:14389</span>
-<span class="co">#&gt; * 3-grams:21208</span>
-<span class="co">#&gt; * 4-grams:22706</span>
-<span class="co">#&gt; * 5-grams:22975</span></code></pre></div>
+<span class="co">#&gt; * 2-grams:14388</span>
+<span class="co">#&gt; * 3-grams:21207</span>
+<span class="co">#&gt; * 4-grams:22705</span>
+<span class="co">#&gt; * 5-grams:22974</span></code></pre></div>
 <p>The parameter <code>V</code> is the size of the dictionary, which was created behind the scenes by <code><a href="../reference/kgram_freqs.html">kgram_freqs()</a></code>, using all words encountered in the text. In alternative, we could have used a pre-specified dictionary through the argument <code>dict</code>, and specify whether new words (not present in the original dictionary) should be added to it, or be replaced by an Unknown-Word (UNK) token, by the argument <code>open_dict</code>; see <code><a href="../reference/kgram_freqs.html">?kgram_freqs</a></code> for further details. The number of distinct unigrams is greater than the size of the dictionary, because the former also includes the special BOS and EOS tokens.</p>
 <p>Notice that the functions <code>.preprocess()</code> and <code>.tknz_sent()</code> we defined above are passed as arguments of <code><a href="../reference/kgram_freqs.html">kgram_freqs()</a></code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. These are also saved in the final <code>kgram_freqs</code> object, and are by default applied also to inputs at prediction time.</p>
 <p>The following shows how to query <span class="math inline">\(k\)</span>-gram counts from the frequency table created above:<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
@@ -193,10 +193,10 @@
 <span class="co">#&gt; [1] 208   0</span>
 <span class="co"># Total number of words processed</span>
 <span class="fu"><a href="../reference/query.html">query</a></span><span class="op">(</span><span class="va">freqs</span>, <span class="st">""</span><span class="op">)</span> 
-<span class="co">#&gt; [1] 26174</span>
+<span class="co">#&gt; [1] 26147</span>
 <span class="co"># Total number of sentences processed</span>
 <span class="fu"><a href="../reference/query.html">query</a></span><span class="op">(</span><span class="va">freqs</span>, <span class="fu"><a href="../reference/EOS.html">EOS</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> 
-<span class="co">#&gt; [1] 2270</span></code></pre></div>
+<span class="co">#&gt; [1] 2243</span></code></pre></div>
 <p>The most important use of <code>kgram_freqs</code> objects is to create language models, as we illustrate in the next step.</p>
 </div>
 <div id="step-4--build-the-final-language-model" class="section level3">
@@ -233,14 +233,14 @@
 <span class="co">#&gt; * D: 0.75</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Number of words in training corpus:</span>
-<span class="co">#&gt; * W: 26174</span>
+<span class="co">#&gt; * W: 26147</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Number of distinct k-grams with positive counts:</span>
 <span class="co">#&gt; * 1-grams:3048</span>
-<span class="co">#&gt; * 2-grams:14389</span>
-<span class="co">#&gt; * 3-grams:21208</span>
-<span class="co">#&gt; * 4-grams:22706</span>
-<span class="co">#&gt; * 5-grams:22975</span></code></pre></div>
+<span class="co">#&gt; * 2-grams:14388</span>
+<span class="co">#&gt; * 3-grams:21207</span>
+<span class="co">#&gt; * 4-grams:22705</span>
+<span class="co">#&gt; * 5-grams:22974</span></code></pre></div>
 <p>The parameter <code>D</code> can be accessed and modified through the functions <code><a href="../reference/parameters.html">parameters()</a></code> and <code><a href="../reference/parameters.html">param()</a></code>, which have a similar interface to the base R function <code><a href="https://rdrr.io/r/base/attributes.html">attributes()</a></code> and <code><a href="https://rdrr.io/r/base/attr.html">attr()</a></code>:</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/parameters.html">parameters</a></span><span class="op">(</span><span class="va">kn</span><span class="op">)</span>
@@ -288,14 +288,14 @@
               <span class="op">)</span>,
             model <span class="op">=</span> <span class="va">kn</span>
             <span class="op">)</span>
-<span class="co">#&gt; [1] 2.720954e-05 8.628460e-07 9.230391e-19</span></code></pre></div>
+<span class="co">#&gt; [1] 2.753343e-05 8.732186e-07 9.343674e-19</span></code></pre></div>
 <p>Behind the scenes, the same <code>.preprocess()</code> and <code>.tknz_sent()</code> functions used during training are being applied to the input. We can turn off this behaviour by explicitly specifying the <code>.preprocess</code> and <code>.tknz_sent</code> arguments of <code><a href="../reference/probability.html">probability()</a></code>.</p>
 <p>Word continuation probabilities are the conditional probabilities of words following some given context. For instance, the probability that the words <code>"tears"</code> or <code>"pieces"</code> will follow the context <code>"Did he break out into"</code> are computed as follows:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/probability.html">probability</a></span><span class="op">(</span><span class="st">"tears"</span> <span class="op">%|%</span> <span class="st">"Did he break out into"</span>, model <span class="op">=</span> <span class="va">kn</span><span class="op">)</span>
 <span class="co">#&gt; [1] 0.5813743</span>
 <span class="fu"><a href="../reference/probability.html">probability</a></span><span class="op">(</span><span class="st">"pieces"</span> <span class="op">%|%</span> <span class="st">"Did he break out into"</span>, model <span class="op">=</span> <span class="va">kn</span><span class="op">)</span>
-<span class="co">#&gt; [1] 9.992621e-06</span></code></pre></div>
+<span class="co">#&gt; [1] 9.993316e-06</span></code></pre></div>
 <p>The operator <code><a href="../reference/word_context.html">%|%</a></code> takes as input a character vector on its left-hand side, i.e. the list of candidate words, and a length one character vector on its right-hand side, i.e. the given context. If the context has more than <span class="math inline">\(N - 1\)</span> words (where <span class="math inline">\(N\)</span> is the order of the language model, five in our case), only the last <span class="math inline">\(N - 1\)</span> words are used for prediction.</p>
 </div>
 <div id="sampling" class="section level3">
@@ -369,7 +369,7 @@ H = - \dfrac{1}{W}\sum _s\ \ln (\text {Prob}(s))
 <p>We can compute the perplexity of our Kneser-Ney <span class="math inline">\(5\)</span>-gram model <code>kn</code> against this corpus as follows:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/perplexity.html">perplexity</a></span><span class="op">(</span><span class="va">midsummer</span>, model <span class="op">=</span> <span class="va">kn</span><span class="op">)</span>
-<span class="co">#&gt; [1] 376.8554</span></code></pre></div>
+<span class="co">#&gt; [1] 376.5044</span></code></pre></div>
 <p>We can use perplexity to tune our model parameter <span class="math inline">\(D\)</span>. We compute perplexity over a grid of values for <code>D</code> and plot the results. We do this for the <span class="math inline">\(k\)</span>-gram models with <span class="math inline">\(k \in \{2, 3, 4, 5\}\)</span>:</p>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">D_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">0.5</span>, to <span class="op">=</span> <span class="fl">0.99</span>, by <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span>
@@ -398,7 +398,7 @@ Perplexity as a function of the discount parameter of Interpolated Kneser-Ney 2-
        <span class="kw">function</span><span class="op">(</span><span class="va">N</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">P_grid</span><span class="op">[[</span><span class="va">N</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>
        <span class="op">)</span>
 <span class="co">#&gt;   2-gram   3-gram   4-gram   5-gram </span>
-<span class="co">#&gt; 324.8595 320.5757 319.9021 319.9982</span></code></pre></div>
+<span class="co">#&gt; 324.5591 320.2785 319.6052 319.7010</span></code></pre></div>
 <p>which shows that the best performing model is the 4-gram one, while it seems that the 5-gram model is starting to overfit (which is not very surprising, given the ridiculously small size of our training corpus!).</p>
 </div>
 </div>
