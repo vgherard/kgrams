@@ -3,20 +3,14 @@
 \name{query}
 \alias{query}
 \alias{query.kgram_freqs}
-\alias{[.kgram_freqs}
 \alias{query.kgrams_dictionary}
-\alias{[.kgrams_dictionary}
 \title{Query k-gram frequency tables or dictionaries}
 \usage{
 query(object, x)
 
 \method{query}{kgram_freqs}(object, x)
 
-\method{[}{kgram_freqs}(x, i)
-
 \method{query}{kgrams_dictionary}(object, x)
-
-\method{[}{kgrams_dictionary}(x, i)
 }
 \arguments{
 \item{object}{a \code{kgram_freqs} or \code{dictionary} class object.}
@@ -55,7 +49,8 @@ the word \code{"prcsrn"} is outside the dictionary, querying
 \code{paste("i love", UNK())}). Queries from k-grams of order \code{k > N}
 will return \code{NA}.
 
-The subsetting form \code{object[x]} is equivalent to
+A subsetting equivalent of query, with synthax \code{object[x]} is available
+(see the examples).
 \code{query(object, x)}. The query of the empty string \code{""} returns the
 total count of words, including the \code{EOS} and \code{UNK} tokens, but not
 the \code{BOS} token.
@@ -77,7 +72,7 @@ f[""] # 9 (includes the EOS token)
 d <- as_dictionary(c("a", "b"))
 query(d, c("a", "b", "c")) # query some words
 query(d, c(BOS(), EOS(), UNK())) # c(TRUE, TRUE, FALSE)
-d["a"] query with subsetting synthax
+d["a"] # query with subsetting synthax
 
 }
 \author{

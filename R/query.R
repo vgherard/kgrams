@@ -33,7 +33,8 @@
 #' \code{paste("i love", UNK())}). Queries from k-grams of order \code{k > N}
 #' will return \code{NA}.
 #' 
-#' The subsetting form \code{object[x]} is equivalent to 
+#' A subsetting equivalent of query, with synthax \code{object[x]} is available 
+#' (see the examples).
 #' \code{query(object, x)}. The query of the empty string \code{""} returns the
 #' total count of words, including the \code{EOS} and \code{UNK} tokens, but not
 #' the \code{BOS} token.
@@ -55,7 +56,7 @@
 #' d <- as_dictionary(c("a", "b"))
 #' query(d, c("a", "b", "c")) # query some words
 #' query(d, c(BOS(), EOS(), UNK())) # c(TRUE, TRUE, FALSE)
-#' d["a"] query with subsetting synthax
+#' d["a"] # query with subsetting synthax
 #' 
 #' @name query
 
@@ -73,7 +74,6 @@ query.kgram_freqs <- function(object, x) {
         attr(object, "cpp_obj")$query(x)
 }
 
-#' @rdname query
 #' @export
 `[.kgram_freqs` <- function(x, i) query(x, i)
 
@@ -83,6 +83,5 @@ query.kgrams_dictionary <- function(object, x) {
         attr(object, "cpp_obj")$query(x)
 }
 
-#' @rdname query
 #' @export
 `[.kgrams_dictionary` <- function(x, i) query(x, i)
