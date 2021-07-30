@@ -84,7 +84,7 @@ size_t tknz_sent(std::string & line,
                 line.substr(start, end - start) + " " + line[end] :
                         line.substr(start, end - start)
                 );
-                start = end + m.length();
+                start = line.find_first_not_of(" ", end + m.length());
         }
         
         if (start != std::string::npos)
