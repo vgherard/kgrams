@@ -146,7 +146,7 @@
   <span class='va'>model</span>,
   .preprocess <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".preprocess"</span><span class='op'>)</span>,
   .tknz_sent <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/attr.html'>attr</a></span><span class='op'>(</span><span class='va'>model</span>, <span class='st'>".tknz_sent"</span><span class='op'>)</span>,
-  batch_size <span class='op'>=</span> <span class='cn'>NULL</span>,
+  batch_size <span class='op'>=</span> <span class='cn'>Inf</span>,
   <span class='va'>...</span>
 <span class='op'>)</span></pre>
 
@@ -160,9 +160,7 @@ language model perplexity is computed.</p></td>
     </tr>
     <tr>
       <th>model</th>
-      <td><p>either an object of class <code>language_model</code>, or a
-<code>kgram_freqs</code> object. The language model from which probabilities
-are computed.</p></td>
+      <td><p>an object of class <code>language_model</code>.</p></td>
     </tr>
     <tr>
       <th>.preprocess</th>
@@ -182,9 +180,9 @@ applied before computing perplexity.</p></td>
     </tr>
     <tr>
       <th>batch_size</th>
-      <td><p>a length one positive integer or <code>NULL</code>.
+      <td><p>a length one positive integer or <code>Inf</code>.
 Size of text batches when reading text from a <code>connection</code>.
-If <code>NULL</code>, all input text is processed in a single batch.</p></td>
+If <code>Inf</code>, all input text is processed in a single batch.</p></td>
     </tr>
     </table>
 
