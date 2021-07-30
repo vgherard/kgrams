@@ -61,8 +61,11 @@
 
 #' @rdname query
 #' @export
-query <- function(object, x) 
+query <- function(object, x) {
+        assert_character_no_NA(x)
         UseMethod("query", object)
+}
+        
 
 #' @rdname query
 #' @export
@@ -72,8 +75,7 @@ query.kgram_freqs <- function(object, x) {
 
 #' @rdname query
 #' @export
-`[.kgram_freqs` <- query.kgram_freqs
-        
+`[.kgram_freqs` <- function(x, i) query(x, i)
 
 #' @rdname query
 #' @export
@@ -83,4 +85,4 @@ query.kgrams_dictionary <- function(object, x) {
 
 #' @rdname query
 #' @export
-`[.kgrams_dictionary` <- query.kgrams_dictionary
+`[.kgrams_dictionary` <- function(x, i) query(x, i)

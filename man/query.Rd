@@ -12,11 +12,11 @@ query(object, x)
 
 \method{query}{kgram_freqs}(object, x)
 
-\method{[}{kgram_freqs}(object, x)
+\method{[}{kgram_freqs}(x, i)
 
 \method{query}{kgrams_dictionary}(object, x)
 
-\method{[}{kgrams_dictionary}(object, x)
+\method{[}{kgrams_dictionary}(x, i)
 }
 \arguments{
 \item{object}{a \code{kgram_freqs} or \code{dictionary} class object.}
