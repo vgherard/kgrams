@@ -21,6 +21,15 @@ test_that("assert_string", {
         expect_error(assert_string(NA_character_), class = class)
 })
 
+test_that("assert_character_no_NA", {
+        expect_error(assert_character_no_NA(letters), NA)
+        
+        class <- "kgrams_domain_error"
+        expect_error(assert_character_no_NA(1:10), class = class)
+        expect_error(assert_character_no_NA(c("hello", NA)), class = class)
+})
+
+
 test_that("assert_probability", {
         class <- "kgrams_domain_error"
         expect_error(assert_probability(0.5), NA)
