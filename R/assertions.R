@@ -27,6 +27,13 @@ assert_string <- function(x, name = deparse(substitute(x))) {
         kgrams_domain_error(name, what = "a length one character (not NA)")
 }
 
+assert_positive_number <- function(x, name = deparse(substitute(x)))
+{
+        assert_number(x, name = name)
+        if (x <= 0)
+                kgrams_domain_error(name = name, what = "positive")
+}
+
 assert_positive_integer <- function(
         x, can_be_inf = FALSE, name = deparse(substitute(x))
         ) 
