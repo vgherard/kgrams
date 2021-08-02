@@ -78,7 +78,7 @@ test_that("process_sentences() processes correctly from open connection", {
 test_that("process_sentences() processes correctly from file connection", {
         freqs <- kgram_freqs(1)
         temp <- tempfile()
-        txt <- writeLines(c("a", "a b", "b a b a"), temp)
+        writeLines(c("a", "a b", "b a b a"), temp)
         con <- file(temp)
         process_sentences(con, freqs)
         unlink(temp)
