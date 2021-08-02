@@ -80,8 +80,12 @@
 <a href="#kgrams" class="anchor"></a>kgrams</h1></div>
 <!-- badges: start -->
 
-<p><code>kgrams</code> provides tools for training and evaluating <em>k</em>-gram language models, including several probability smoothing methods, perplexity computations, random text generation and more. It is based on an C++ backend (which can be used itself as a standalone library for <em>k</em>-gram based NLP) which makes <code>kgrams</code> fast, coupled with an accessible R API which aims at streamlining the process of model building, and can be suitable for small- and medium-sized NLP experiments, baseline model building, and for pedagogical purposes.</p>
-<p><strong>UPDATE</strong> Check out my hands-on <a href="https://datascienceplus.com/an-introduction-to-k-gram-language-models-in-r/">tutorial post on <em>k</em>-gram language models</a> using R at <a href="https://datascienceplus.com/">DataScience+</a>!</p>
+<p><a href="https://vgherard.github.io/kgrams/"><code>kgrams</code></a> provides tools for training and evaluating <em>k</em>-gram language models, including several probability smoothing methods, perplexity computations, random text generation and more. It is based on an C++ back-end which makes <code>kgrams</code> fast, coupled with an accessible R API which aims at streamlining the process of model building, and can be suitable for small- and medium-sized NLP experiments, baseline model building, and for pedagogical purposes.</p>
+<div id="for-beginners" class="section level2">
+<h2 class="hasAnchor">
+<a href="#for-beginners" class="anchor"></a>For beginners</h2>
+<p>If you have no idea about what <em>k</em>-gram models are <em>and</em> didn’t get here by accident, you can check out my hands-on <a href="https://datascienceplus.com/an-introduction-to-k-gram-language-models-in-r/">tutorial post on <em>k</em>-gram language models</a> using R at <a href="https://datascienceplus.com/">DataScience+</a>.</p>
+</div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
@@ -95,16 +99,15 @@
 <div id="development-version" class="section level4">
 <h4 class="hasAnchor">
 <a href="#development-version" class="anchor"></a>Development version</h4>
-<p>You can install the development version from <a href="https://github.com/vgherard/kgrams">GitHub</a> with:</p>
+<p>You can install the development version from <a href="https://vgherard.r-universe.dev/">my R-universe</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"vgherard/kgrams"</span><span class="op">)</span></code></pre></div>
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"kgrams"</span>, repos <span class="op">=</span> <span class="st">"https://vgherard.r-universe.dev/"</span><span class="op">)</span></code></pre></div>
 </div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<p>This example shows how to train a modified Kneser-Ney 4-gram model on Shakespeare’s “Much Ado About Nothing” using <code>kgrams</code>.</p>
+<p>This example shows how to train a modified Kneser-Ney 4-gram model on Shakespeare’s play “Much Ado About Nothing” using <code>kgrams</code>.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://vgherard.github.io/kgrams/">kgrams</a></span><span class="op">)</span>
 <span class="co"># Get k-gram frequency counts from text, for k = 1:4</span>
@@ -145,12 +148,6 @@
 <a href="#getting-help" class="anchor"></a>Getting Help</h2>
 <p>For further help, you can consult the reference page of the <code>kgrams</code> <a href="https://vgherard.github.io/kgrams/">website</a> or <a href="https://github.com/vgherard/kgrams/issues">open an issue</a> on the GitHub repository of <code>kgrams</code>. A vignette is available on the website, illustrating the process of building language models in-depth.</p>
 </div>
-<div id="development" class="section level2">
-<h2 class="hasAnchor">
-<a href="#development" class="anchor"></a>Development</h2>
-<p>This project is in an early developmental stage, thorough tests of the algorithms and unit tests still need to be implemented, many computations leave some room for optimization, the API may change, <em>etc.</em>. If you feel like contributing to <code>kgrams</code>, here’s is some useful information.</p>
-<p>Development of <code>kgrams</code> takes place on its <a href="https://github.com/vgherard/kgrams/">GitHub repository</a>. If you find a bug, please let me know by <a href="https://github.com/vgherard/kgrams/issues">opening an issue</a>, and if you have any ideas or proposals for improvement, please feel welcome to <a href="https://github.com/vgherard/kgrams/pulls">send a pull request</a>, or simply an e-mail at <a href="mailto:vgherard@sissa.it" class="email">vgherard@sissa.it</a>.</p>
-</div>
 </div>
   </div>
 
@@ -189,6 +186,7 @@
 <li><a href="https://codecov.io/gh/vgherard/kgrams?branch=main"><img src="https://codecov.io/gh/vgherard/kgrams/branch/main/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://CRAN.R-project.org/package=kgrams"><img src="https://www.r-pkg.org/badges/version/kgrams" alt="CRAN status"></a></li>
 <li><a href="https://vgherard.r-universe.dev/"><img src="https://vgherard.r-universe.dev/badges/kgrams" alt="R-universe status"></a></li>
+<li><a href="https://vgherard.github.io/kgrams/"><img src="https://img.shields.io/badge/Website-here-blue" alt="Website"></a></li>
 </ul>
 </div>
 </div>
