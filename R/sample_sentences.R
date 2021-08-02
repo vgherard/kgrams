@@ -58,7 +58,8 @@
 #' @export
 sample_sentences <- function(model, n, max_length, t = 1.0) 
 {
-        model <- as_language_model(model)
-        cpp_obj <- attr(model, "cpp_obj")
-        cpp_obj$sample(n, max_length, t)
+        assert_language_model(model)
+        assert_positive_integer(n)
+        assert_positive_number(t)
+        attr(model, "cpp_obj")$sample(n, max_length, t)
 }
