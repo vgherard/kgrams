@@ -188,15 +188,6 @@ new_language_model <- function(
         )
 }
 
-as_language_model <- function(object) 
-        UseMethod("as_language_model", object)
-
-as_language_model.language_model <- function(object) 
-        return(object)
-
-as_language_model.kgram_freqs <- function(object)
-        return(language_model(object, "ml"))
-
 cpp_smoother_constructor <- function(smoother, cpp_freqs, N, args) {
         switch(smoother, 
                sbo = new(SBOSmoother, cpp_freqs, N, args[["lambda"]]),
