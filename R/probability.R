@@ -10,9 +10,7 @@
 #' a word-context conditional expression created with the 
 #' conditional operator `%|%` (see \link[kgrams]{word_context}).
 #' for word continuation probabilities.
-#' @param model either an object of class \code{language_model}, or a 
-#' \code{kgram_freqs} object. The language model from which probabilities 
-#' are computed.
+#' @param model an object of class \code{language_model}.
 #' @param .preprocess a function taking a character vector as input and 
 #' returning a character vector as output. Preprocessing transformation  
 #' applied to input before computing probabilities
@@ -87,24 +85,22 @@
 
 #' @rdname probability
 #' @export
-probability <- function(object, 
-                        model, 
-                        .preprocess = attr(model, ".preprocess"),
-                        ...
-)
+probability <- function(
+        object, model, .preprocess = attr(model, ".preprocess"), ... 
+        ) 
+{
+        assert_language_model(model)
+        assert_function(.preprocess)
         UseMethod("probability", object)
+}
+        
 
 #' @rdname probability
 #' @export
 probability.kgrams_word_context <- function(
-        object, 
-        model,
-        .preprocess = attr(model, ".preprocess"),
-        ...
-        
-) {
-        # If 'model' is not a language model, try to coerce it to language model
-        model <- as_language_model(model)
+        object, model, .preprocess = attr(model, ".preprocess"), ...
+        ) 
+{
         word <- .preprocess(object$word)
         context <- .preprocess(object$context)
         attr(model, "cpp_obj")$probability(word, context) # return        
@@ -120,9 +116,8 @@ probability.character <- function(
         ...
         ) 
 {
+        assert_function(.tknz_sent)
         assert_character_no_NA(object)
-        # If 'model' is not a language model, try to coerce it to language model
-        model <- as_language_model(model)
         object <- .preprocess(object)
         object <- .tknz_sent(object)
         attr(model, "cpp_obj")$probability_sentence(object) # return

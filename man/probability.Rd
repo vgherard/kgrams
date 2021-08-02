@@ -24,9 +24,7 @@ a word-context conditional expression created with the
 conditional operator \verb{\%|\%} (see \link[kgrams]{word_context}).
 for word continuation probabilities.}
 
-\item{model}{either an object of class \code{language_model}, or a
-\code{kgram_freqs} object. The language model from which probabilities
-are computed.}
+\item{model}{an object of class \code{language_model}.}
 
 \item{.preprocess}{a function taking a character vector as input and
 returning a character vector as output. Preprocessing transformation

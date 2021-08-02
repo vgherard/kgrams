@@ -5,9 +5,7 @@
 #' @author Valerio Gherardi
 #' @md
 #'
-#' @param model either an object of class \code{language_model}, or a 
-#' \code{kgram_freqs} object. The language model from which probabilities 
-#' are computed.
+#' @param model an object of class \code{language_model}.
 #' @param n an integer. Number of sentences to sample.
 #' @param max_length an integer. Maximum length of sampled sentences. 
 #' @param t a positive number. Sampling temperature (optional); see Details.

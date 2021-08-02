@@ -7,9 +7,7 @@
 sample_sentences(model, n, max_length, t = 1)
 }
 \arguments{
-\item{model}{either an object of class \code{language_model}, or a
-\code{kgram_freqs} object. The language model from which probabilities
-are computed.}
+\item{model}{an object of class \code{language_model}.}
 
 \item{n}{an integer. Number of sentences to sample.}
 
