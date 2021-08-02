@@ -121,11 +121,12 @@
 <h1 class="page-header" data-toc-text="development version">
 <a href="#kgrams-development-version" class="anchor"></a>kgrams (development version)<small> Unreleased </small>
 </h1>
-<div id="software-improvements" class="section level3">
+<div id="overall-software-improvements" class="section level3">
 <h3 class="hasAnchor">
-<a href="#software-improvements" class="anchor"></a>Software Improvements</h3>
+<a href="#overall-software-improvements" class="anchor"></a>Overall Software Improvements</h3>
 <ul>
-<li>Extended testing and improved argument checking</li>
+<li>The package’s test suite has been greatly extended.</li>
+<li>Improved error/warning conditions for wrong arguments.</li>
 </ul>
 </div>
 <div id="api-changes" class="section level3">
@@ -133,8 +134,9 @@
 <a href="#api-changes" class="anchor"></a>API Changes</h3>
 <ul>
 <li>
-<code>verbose</code> arguments now default to <code>FALSE</code>
-</li>
+<code>verbose</code> arguments now default to <code>FALSE</code>.</li>
+<li>
+<code><a href="../reference/probability.html">probability()</a></code>, <code><a href="../reference/perplexity.html">perplexity()</a></code> and <code><a href="../reference/sample_sentences.html">sample_sentences()</a></code> are restricted to accept only <code>language_model</code> class objects as their <code>model</code> argument.</li>
 </ul>
 </div>
 <div id="new-features" class="section level3">
@@ -149,9 +151,9 @@
 <h3 class="hasAnchor">
 <a href="#bug-fixes" class="anchor"></a>Bug Fixes</h3>
 <ul>
-<li>Fixed bug which caused .preprocess and .tknz_sent arguments to be impossible to replace with <code><a href="../reference/kgram_freqs.html">process_sentences()</a></code>.</li>
+<li>Fixed bug causing <code>.preprocess</code> and <code>.tknz_sent</code> arguments to be ignored in <code><a href="../reference/kgram_freqs.html">process_sentences()</a></code>.</li>
 <li>Fixed previously wrong defaults for <code>max_lines</code> and <code>batch_size</code> arguments in <code><a href="../reference/kgram_freqs.html">kgram_freqs.connection()</a></code>.</li>
-<li>Fixed broken print method for <code>dictionary</code>.</li>
+<li>Added print method for class <code>dictionary</code>.</li>
 <li>Fixed bug causing invalid results in <code><a href="../reference/dictionary.html">dictionary()</a></code> with batch processing and non-trivial size constraints on vocabulary size.</li>
 </ul>
 </div>
