@@ -1,3 +1,17 @@
+test_that("assert_number", {
+        class <- "kgrams_domain_error"
+        expect_error(assert_number(0), NA)
+        expect_error(assert_number("0"), class = class)
+        expect_error(assert_number(1:10), class = class)
+        expect_error(assert_number(NA_real_), class = class)
+})
+
+test_that("assert_positive_number", {
+        class <- "kgrams_domain_error"
+        expect_error(assert_positive_number(1), NA)
+        expect_error(assert_positive_number(-1), class = class)
+})
+
 test_that("assert_positive_integer", {
         class <- "kgrams_domain_error"
         expect_error(assert_positive_integer(1), NA)
