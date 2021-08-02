@@ -24,9 +24,7 @@ a word-context conditional expression created with the
 conditional operator \verb{\%|\%} (see \link[kgrams]{word_context}).
 for word continuation probabilities.}
 
-\item{model}{either an object of class \code{language_model}, or a
-\code{kgram_freqs} object. The language model from which probabilities
-are computed.}
+\item{model}{an object of class \code{language_model}.}
 
 \item{.preprocess}{a function taking a character vector as input and
 returning a character vector as output. Preprocessing transformation
@@ -85,23 +83,6 @@ e.g. the input is a length one unprocessed character vector.
 # Usage of probability()
 
 f <- kgram_freqs("a b b a b a b", 2)
-
-
-
-### Compute probabilities directly from 'f'. These are ML probabilities
-
-###### Sentence probabilities
-( p <- probability("a b b a b", f) )
-identical(p, probability(BOS() \%+\% "a b b a b" \%+\% EOS(), f)) # TRUE
-
-###### Continuation probabilities
-( p <- probability("a" \%|\% "b", f) ) # Continuation probabilities
-identical(p, probability("a" \%|\% "a b a b b a b", f)) # TRUE
-probability(c("a", "b", EOS(), UNK()) \%|\% BOS(), f) # c(1, 0, 0, 0)
-probability("a" \%|\% UNK(), f) # NA, as context has count zero
-
-
-### Compute probabilities from a language model
 
 m <- language_model(f, "add_k", k = 1)
 probability(c("a", "b", EOS(), UNK()) \%|\% BOS(), m) # c(0.4, 0.2, 0.2, 0.2)

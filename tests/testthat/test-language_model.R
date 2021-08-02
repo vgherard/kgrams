@@ -16,7 +16,7 @@ test_that("new_language_model returns the desired structure", {
                 expect_identical(attr(res, name), args[[name]])
 })
 
-test_that("language_model.kgram_freqs throws for N larger than the kgram order", 
+test_that("language_model.kgram_freqs throws for N larger than the kgram order",
 {
         f <- kgram_freqs(3)
         expect_error(
@@ -24,6 +24,21 @@ test_that("language_model.kgram_freqs throws for N larger than the kgram order",
                 class = "kgrams_lm_max_order_error"
                 )
 })
+
+test_that("language_model.language_model works like a copy constructor", {
+        m <- language_model(kgram_freqs(2), "ml")
+        m1 <- language_model(m)
+        expect_false(identical(m, m1))
+        
+        attr(m1, "cpp_obj") <- attr(m, "cpp_obj") 
+        expect_identical(m, m1)
+})
+
+test_that("language_model() uses defaults if model parameters are not specified", {
+        suppressWarnings(m <- language_model(kgram_freqs(2), "add_k"))
+        expect_equal(param(m, "k"), 1)
+})
+
 
 test_that("language_model class has print, str and summary methods", {
         skip_if(R.version$major < 4,

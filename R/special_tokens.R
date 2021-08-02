@@ -14,8 +14,10 @@
 #' @examples
 #' f <- kgram_freqs("a b b a b", 2)
 #' query(f, c(BOS(), EOS(), UNK()))
-#' probability(c("a", "b") %|% BOS(), f)
-#' probability("a b b a" %+% EOS(), f)
+#' 
+#' m <- language_model(f, "add_k", k = 1)
+#' probability(c("a", "b") %|% BOS(), m)
+#' probability("a b b a" %+% EOS(), m)
 #' 
 #' # The actual values of BOS(), EOS() and UNK() are irrelevant
 #' c(BOS(), EOS(), UNK())
