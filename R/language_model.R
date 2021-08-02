@@ -201,7 +201,6 @@ cpp_smoother_constructor <- function(smoother, cpp_freqs, N, args) {
         switch(smoother, 
                sbo = new(SBOSmoother, cpp_freqs, N, args[["lambda"]]),
                add_k = new(AddkSmoother, cpp_freqs, N, args[["k"]]),
-               laplace = new(AddkSmoother, cpp_freqs, N, 1.0),
                ml = new(MLSmoother, cpp_freqs, N),
                kn = new(KNSmoother, cpp_freqs, N, args[["D"]]),
                mkn = new(mKNSmoother, cpp_freqs, N, 
