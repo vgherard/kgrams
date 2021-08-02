@@ -94,6 +94,7 @@ perplexity <- function(text,
         assert_function(.preprocess)
         assert_function(.tknz_sent)
         assert_language_model(model)
+        check_model_perplexity(model)
         UseMethod("perplexity", text)
 }
         
@@ -126,8 +127,6 @@ perplexity.connection <- function(
         ...
         ) 
 {
-        model <- as_language_model(model)
-        check_model_perplexity(model)
         assert_positive_integer(batch_size, can_be_inf = TRUE)
         
         if (!isOpen(text))
