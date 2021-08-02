@@ -3,7 +3,7 @@ pkgdown: 1.6.1
 pkgdown_sha: ~
 articles:
   kgrams: kgrams.html
-last_built: 2021-08-02T10:57Z
+last_built: 2021-08-02T11:54Z
 urls:
   reference: https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference
   article: https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/articles
