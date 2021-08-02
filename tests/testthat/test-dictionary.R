@@ -50,6 +50,13 @@ test_that("dictionary.kgram_freqs throws if more than one of size, thresh, cov",
         expect_error(dictionary(f, size = 10, thresh = 1, cov = 0.7), class = class)
 })
 
+test_that("dictionary.connection works in simple test case", {
+        con <- textConnection(c("a b b b a b a"))
+        dict <- dictionary(con)
+        res <- sort(as.character(dict))
+        expect_identical(res, c("a", "b"))
+})
+
 test_that("kgrams_dictionary class has print, str and summary methods", {
         skip_if(R.version$major < 4,
                 message = "format() method of methods(..) different in R < 4"
@@ -67,4 +74,9 @@ test_that("print, str and summary methods return invisibly", {
                 expect_invisible(fun(dict))
                 expect_identical(fun(dict), dict)
         })
+})
+
+test_that("length.kgrams_dictionary works in simple case", {
+        dict <- dictionary(letters)
+        expect_identical(length(dict), length(letters))
 })
