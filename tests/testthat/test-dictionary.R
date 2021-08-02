@@ -40,6 +40,16 @@ test_that("Creating a dictionary with fixed thresh works in simple example", {
         expect_identical(res, c("a", "b"))
 })
 
+test_that("dictionary.kgram_freqs throws if more than one of size, thresh, cov", {
+        f <- kgram_freqs(c("a a a b b c"), 1)
+        
+        class <- "kgrams_domain_error"
+        expect_error(dictionary(f, size = 10, thresh = 2), class = class)
+        expect_error(dictionary(f, size = 10, cov = 0.7), class = class)
+        expect_error(dictionary(f, thresh = 10, cov = 0.7), class = class)
+        expect_error(dictionary(f, size = 10, thresh = 1, cov = 0.7), class = class)
+})
+
 test_that("kgrams_dictionary class has print, str and summary methods", {
         skip_if(R.version$major < 4,
                 message = "format() method of methods(..) different in R < 4"
