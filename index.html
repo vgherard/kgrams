@@ -124,7 +124,7 @@
             <span class="op">)</span>
 <span class="co">#&gt; [1] 2.466856e-04 1.184963e-20</span>
 <span class="co"># Compute word continuation probabilities</span>
-<span class="fu"><a href="reference/probability.html">probability</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"tears"</span>, <span class="st">"pieces"</span><span class="op">)</span> <span class="op">%|%</span> <span class="st">"did he break out into"</span>, model <span class="op">=</span> <span class="va">mkn</span><span class="op">)</span>
+<span class="fu"><a href="reference/probability.html">probability</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"tears"</span>, <span class="st">"pieces"</span><span class="op">)</span> <span class="op"><a href="reference/word_context.html">%|%</a></span> <span class="st">"did he break out into"</span>, model <span class="op">=</span> <span class="va">mkn</span><span class="op">)</span>
 <span class="co">#&gt; [1] 9.389238e-01 3.834498e-07</span></code></pre></div>
 <p>Here are some sentences sampled from the language model’s distribution at temperatures <code>t = c(1, 0.1, 10)</code>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">

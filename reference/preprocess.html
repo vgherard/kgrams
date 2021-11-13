@@ -154,8 +154,8 @@ lower case.</p></td>
 
     <p>The expressions <code>preprocess(x, erase = pattern, lower_case = TRUE)</code> and
 <code>preprocess(x, erase = pattern, lower_case = FALSE)</code> are roughly
-equivalent to <code><a href='https://rdrr.io/r/base/chartr.html'>tolower(gsub(pattern, "", x))</a></code> and
-<code><a href='https://rdrr.io/r/base/grep.html'>gsub(pattern, "", x)</a></code>, respectively, provided that the regular
+equivalent to <code>tolower(gsub(pattern, "", x))</code> and
+<code>gsub(pattern, "", x)</code>, respectively, provided that the regular
 expression 'pattern' is correctly recognized by R.</p>
 <p>Internally, <code>preprocess()</code> converts the string 'pattern' is converted
 into a C++ <code>std::regex</code> class by the default constructor
@@ -165,8 +165,9 @@ into a C++ <code>std::regex</code> class by the default constructor
     <p>Valerio Gherardi</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'>preprocess</span><span class='op'>(</span><span class='st'>"#This Is An Example@-@!#"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] "this is an example!"</div></pre>
+    <pre class="examples"><span class='r-in'><span class='fu'>preprocess</span><span class='op'>(</span><span class='st'>"#This Is An Example@-@!#"</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] "this is an example!"</span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

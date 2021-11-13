@@ -212,15 +212,17 @@ e.g. the input is a length one unprocessed character vector.</p>
     <p>Valerio Gherardi</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Usage of probability()</span>
-
-<span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='st'>"a b b a b a b"</span>, <span class='fl'>2</span><span class='op'>)</span>
-
-<span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"add_k"</span>, k <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span>
-<span class='fu'>probability</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='fu'><a href='EOS.html'>EOS</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'><a href='EOS.html'>UNK</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%|%</span> <span class='fu'><a href='EOS.html'>BOS</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>m</span><span class='op'>)</span> <span class='co'># c(0.4, 0.2, 0.2, 0.2)</span>
-</div><div class='output co'>#&gt; [1] 0.4 0.2 0.2 0.2</div><div class='input'><span class='fu'>probability</span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'>%|%</span> <span class='fu'><a href='EOS.html'>UNK</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>m</span><span class='op'>)</span> <span class='co'># not NA</span>
-</div><div class='output co'>#&gt; [1] 0.25</div><div class='input'>
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Usage of probability()</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>f</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='st'>"a b b a b a b"</span>, <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>m</span> <span class='op'>&lt;-</span> <span class='fu'><a href='language_model.html'>language_model</a></span><span class='op'>(</span><span class='va'>f</span>, <span class='st'>"add_k"</span>, k <span class='op'>=</span> <span class='fl'>1</span><span class='op'>)</span></span>
+<span class='r-in'><span class='fu'>probability</span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='fu'><a href='EOS.html'>EOS</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='fu'><a href='EOS.html'>UNK</a></span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'><a href='word_context.html'>%|%</a></span> <span class='fu'><a href='EOS.html'>BOS</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>m</span><span class='op'>)</span> <span class='co'># c(0.4, 0.2, 0.2, 0.2)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.4 0.2 0.2 0.2</span>
+<span class='r-in'><span class='fu'>probability</span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'><a href='word_context.html'>%|%</a></span> <span class='fu'><a href='EOS.html'>UNK</a></span><span class='op'>(</span><span class='op'>)</span>, <span class='va'>m</span><span class='op'>)</span> <span class='co'># not NA</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.25</span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

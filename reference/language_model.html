@@ -207,7 +207,7 @@ prediction accuracies.</p>
 <p>Smoothers have often tuning parameters, which need to be specified by
 (exact) name through the <code>...</code> arguments; otherwise,
 <code>language_model()</code> will use default values and, once per session, throw
-a warning. <code><a href='smoothers.html'>info(smoother)</a></code> lists all parameters needed by a
+a warning. <code>info(smoother)</code> lists all parameters needed by a
 specific smoother, together with their allowed parameter space.</p>
 <p>The run-time of <code>language_model()</code> may vary substantially for different
 smoothing methods, depending on whether or not a method requires the
@@ -219,32 +219,35 @@ smoother).</p>
     <p>Valerio Gherardi</p>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='co'># Create an interpolated Kneser-Ney 2-gram language model</span>
-
-<span class='va'>freqs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='st'>"a a b a a b a b a b a b"</span>, <span class='fl'>2</span><span class='op'>)</span>
-<span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>language_model</span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span>
-<span class='va'>model</span>
-</div><div class='output co'>#&gt; A k-gram language model.</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; A k-gram language model.
-#&gt; 
-#&gt; Smoother:
-#&gt; * 'kn'.
-#&gt; 
-#&gt; Parameters:
-#&gt; * N: 2
-#&gt; * V: 2
-#&gt; * D: 0.5
-#&gt; 
-#&gt; Number of words in training corpus:
-#&gt; * W: 13
-#&gt; 
-#&gt; Number of distinct k-grams with positive counts:
-#&gt; * 1-grams:4
-#&gt; * 2-grams:5</div><div class='input'><span class='fu'><a href='probability.html'>probability</a></span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'>%|%</span> <span class='st'>"b"</span>, <span class='va'>model</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; [1] 0.815</div><div class='input'>
-<span class='co'># For more examples, see ?probability, ?sample_sentences and ?perplexity.</span>
-
-</div></pre>
+    <pre class="examples"><span class='r-in'><span class='co'># Create an interpolated Kneser-Ney 2-gram language model</span></span>
+<span class='r-in'></span>
+<span class='r-in'><span class='va'>freqs</span> <span class='op'>&lt;-</span> <span class='fu'><a href='kgram_freqs.html'>kgram_freqs</a></span><span class='op'>(</span><span class='st'>"a a b a a b a b a b a b"</span>, <span class='fl'>2</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>model</span> <span class='op'>&lt;-</span> <span class='fu'>language_model</span><span class='op'>(</span><span class='va'>freqs</span>, <span class='st'>"kn"</span>, D <span class='op'>=</span> <span class='fl'>0.5</span><span class='op'>)</span></span>
+<span class='r-in'><span class='va'>model</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A k-gram language model.</span>
+<span class='r-in'><span class='fu'><a href='https://rdrr.io/r/base/summary.html'>summary</a></span><span class='op'>(</span><span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> A k-gram language model.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Smoother:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * 'kn'.</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Parameters:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * N: 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * V: 2</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * D: 0.5</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of words in training corpus:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * W: 13</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> </span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> Number of distinct k-grams with positive counts:</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * 1-grams:4</span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> * 2-grams:5</span>
+<span class='r-in'><span class='fu'><a href='probability.html'>probability</a></span><span class='op'>(</span><span class='st'>"a"</span> <span class='op'><a href='word_context.html'>%|%</a></span> <span class='st'>"b"</span>, <span class='va'>model</span><span class='op'>)</span></span>
+<span class='r-out co'><span class='r-pr'>#&gt;</span> [1] 0.815</span>
+<span class='r-in'></span>
+<span class='r-in'><span class='co'># For more examples, see ?probability, ?sample_sentences and ?perplexity.</span></span>
+<span class='r-in'></span>
+</pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
