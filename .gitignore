@@ -29,3 +29,4 @@ vignettes/*.pdf
 ignore
 inst/doc
 docs
+.DS_Store
