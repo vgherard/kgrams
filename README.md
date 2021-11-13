@@ -41,7 +41,7 @@ using R at [DataScience+](https://datascienceplus.com/).
 #### Released version
 
 You can install the latest release of `kgrams` from
-[CRAN](https://cran.r-project.org/web/packages/kgrams/index.html) with:
+[CRAN](https://CRAN.R-project.org/package=kgrams) with:
 
 ``` r
 install.packages("kgrams")

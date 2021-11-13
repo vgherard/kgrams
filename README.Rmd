@@ -39,7 +39,7 @@ accident, you can check out my hands-on [tutorial post on $k$-gram language mode
 
 #### Released version
 
-You can install the latest release of `kgrams` from [CRAN](https://cran.r-project.org/web/packages/kgrams/index.html) with:
+You can install the latest release of `kgrams` from [CRAN](https://CRAN.R-project.org/package=kgrams) with:
 
 ``` r
 install.packages("kgrams")
