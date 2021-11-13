@@ -1,8 +1,9 @@
-# kgrams (development version)
+# kgrams 0.1.2
 
 ### Overall Software Improvements
 * The package's test suite has been greatly extended.
 * Improved error/warning conditions for wrong arguments.
+* Re-enabled compiler diagnostics as per CRAN policy (#19)
 
 ### API Changes
 * `verbose` arguments now default to `FALSE`.
@@ -18,3 +19,6 @@ accept only `language_model` class objects as their `model` argument.
 * Added print method for class `dictionary`.
 * Fixed bug causing invalid results in `dictionary()` with batch processing and
 non-trivial size constraints on vocabulary size.
+
+### Other
+* Maintainer's email updated
