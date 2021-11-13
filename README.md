@@ -16,6 +16,7 @@ status](https://www.r-pkg.org/badges/version/kgrams)](https://CRAN.R-project.org
 [![R-universe
 status](https://vgherard.r-universe.dev/badges/kgrams)](https://vgherard.r-universe.dev/)
 [![Website](https://img.shields.io/badge/Website-here-blue)](https://vgherard.github.io/kgrams/)
+[![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=%7Bkgrams%7D:%20Classical%20k-gram%20Language%20Models&url=https://github.com/vgherard/kgrams&via=ValerioGherardi&hashtags=rstats,MachineLearning,NaturalLanguageProcessing)
 <!-- badges: end -->
 
 [`kgrams`](https://vgherard.github.io/kgrams/) provides tools for
