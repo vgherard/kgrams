@@ -18,8 +18,6 @@
 #' @author Valerio Gherardi
 #' @md
 #' 
-#' @srrstats {G2.0a} 
-#' *Provide explicit secondary documentation of any expectations on lengths of inputs*
 #' 
 #' @param object any type allowed by the available methods. The type defines the 
 #' behaviour of \code{kgram_freqs()} as a default constructor, a copy 

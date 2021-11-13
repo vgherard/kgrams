@@ -1,5 +1,4 @@
-#' @srrstats {G2.0} 
-#' *Implement assertions on lengths of inputs*
+
 
 kgrams_domain_error <- function(name, what) {
         h <- "Invalid argument"

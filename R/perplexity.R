@@ -5,8 +5,6 @@
 #' @author Valerio Gherardi
 #' @md
 #'
-#' @srrstats {G2.0a} 
-#' *Provide explicit secondary documentation of any expectations on lengths of inputs*
 #'
 #' @param text a character vector or connection. Test corpus from which 
 #' language model perplexity is computed.
@@ -72,10 +70,6 @@
 #'         }
 #' sapply(c("N = 4" = 4, "N = 6" = 6, "N = 8" = 8), FUN)
 #' }
-#' 
-#' @srrstats {G1.0} 
-#' *Statistical Software should list at least one primary reference from published academic literature.*
-#' This documentation page provides references for the definition of the perplexity metric.
 #' 
 #' @references 
 #' \insertAllCited{}

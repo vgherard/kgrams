@@ -20,8 +20,6 @@
 #' @author Valerio Gherardi
 #' @md
 #' 
-#' @srrstats {G2.0a} 
-#' *Provide explicit secondary documentation of any expectations on lengths of inputs*
 #'
 #' @param object an object which stores the information required to build the
 #' k-gram model. At present, necessarily a \code{kgram_freqs} object, or a 
@@ -101,11 +99,6 @@ language_model.language_model <- function(object, ...) {
         )
 }
 
-#' @srrstats {G2.0} 
-#' *Implement assertions on lengths of inputs*
-#' Implemented by 'isFALSE()' for the 'N' argument, and by the helper 
-#' 'validate_smoother()' for the 'smoother' argument.
-#' 
 #' @rdname language_model
 #' @export
 language_model.kgram_freqs <- 

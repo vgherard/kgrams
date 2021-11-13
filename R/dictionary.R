@@ -25,7 +25,6 @@ str.kgrams_dictionary <- function(object, ...) summary(object)
 #'
 #' @author Valerio Gherardi
 #' @md
-#' @srrstats {G2.0a} *Provide explicit secondary documentation of any expectations on lengths of inputs*
 #'
 #' @param object object from which to extract a dictionary, or to be coerced to 
 #' dictionary.

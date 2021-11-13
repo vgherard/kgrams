@@ -6,9 +6,7 @@
 \alias{kgrams-package}
 \title{kgrams: Classical k-gram Language Models}
 \description{
-Tools for training and evaluating k-gram language models in R, 
-        supporting several probability smoothing techniques, 
-        perplexity computations, random text generation and more.
+Tools for training and evaluating k-gram language models in R, supporting several probability smoothing techniques, perplexity computations, random text generation and more.
 }
 \seealso{
 Useful links:
@@ -20,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Valerio Gherardi \email{vgherard@sissa.it} (\href{https://orcid.org/0000-0002-8215-3013}{ORCID})
+\strong{Maintainer}: Valerio Gherardi \email{vgherard840@gmail.com} (\href{https://orcid.org/0000-0002-8215-3013}{ORCID})
 
 }
 \keyword{internal}
