@@ -10,7 +10,7 @@ state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![R-CMD-check](https://github.com/vgherard/kgrams/workflows/R-CMD-check/badge.svg)](https://github.com/vgherard/kgrams/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/vgherard/kgrams/branch/main/graph/badge.svg)](https://codecov.io/gh/vgherard/kgrams?branch=main)
+coverage](https://codecov.io/gh/vgherard/kgrams/branch/main/graph/badge.svg)](https://app.codecov.io/gh/vgherard/kgrams?branch=main)
 [![CRAN
 status](https://www.r-pkg.org/badges/version/kgrams)](https://CRAN.R-project.org/package=kgrams)
 [![R-universe
