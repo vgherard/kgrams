@@ -1,4 +1,17 @@
 ## kgrams v0.1.2
+### Comments for resubmission (v2).** 
+
+```
+URL: https://codecov.io/gh/vgherard/kgrams?branch=main (moved to https://app.codecov.io/gh/vgherard/kgrams?branch=main)
+     From: README.md
+     Status: 301
+     Message: Moved Permanently
+```
+
+Fixed (version number not bumped).
+
+### Comments
+
 This is a minor patch addressing the following reported issue:
 
 ```
