@@ -11,7 +11,7 @@ for generating this file is available
 \href{https://github.com/vgherard/kgrams/blob/main/data-raw/shakespeare.R}{here}
 }
 \source{
-\url{http://shakespeare.mit.edu/much_ado/}
+\url{https://www.folger.edu/}
 }
 \usage{
 much_ado

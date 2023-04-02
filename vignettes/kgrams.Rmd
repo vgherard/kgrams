@@ -68,12 +68,8 @@ from an URL, or from the standard input.
 The out-of-memory solution can be useful for training over large corpora without
 the need of storing the entire text into the RAM.
 
-In this vignette, for illustration, we will train a language model on an online text source. We will use William Shakespeare's "Much Ado About Nothing" (text of the entire play) as training corpus, which is freely available on [shakespeare.mit.edu](http://shakespeare.mit.edu):
+In this vignette, for illustration, we will use the example dataset `kgrams::much_ado` (William Shakespeare's "Much Ado About Nothing").
 
-```{r}
-# Create an URL connection to Shakespeare's "Much Ado About Nothing" 
-txt_con <- url("http://shakespeare.mit.edu/much_ado/full.html")
-```
 
 ### Step 2: preprocessing and tokenizing sentences 
 
@@ -111,13 +107,11 @@ sentence tokenization. We will use the following functions, which leverage on th
 We can now obtain $k$-gram frequency counts from Shakespeare with a single command, using the function `kgram_freqs()`. The following stores $k$-gram counts for $k$-grams of order less than or equal to $N = 5$:
 
 ```{r}
-freqs <- kgram_freqs(txt_con, # Read Shakespeare's text from connection
+freqs <- kgram_freqs(much_ado, # Read Shakespeare's text from connection
                      N = 5, # Store k-gram counts for k <= 5
                      .preprocess = .preprocess,  # preprocess text
                      .tknz_sent = .tknz_sent, # tokenize sentences
-                     verbose = FALSE, # If TRUE, prints current progress info 
-                     max_lines = Inf, # Read until the end-of-file
-                     batch_size = 100 # Read text in batches of 100 lines
+                     verbose = FALSE
                      )
 freqs
 ```

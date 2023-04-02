@@ -1,3 +1,7 @@
+# kgrams 0.1.3
+
+* Remove dependency from external online sources in vignette.
+
 # kgrams 0.1.2
 
 ### Overall Software Improvements

@@ -12,7 +12,7 @@
 #' @examples 
 #' much_ado[840]
 #' 
-#' @source \url{http://shakespeare.mit.edu/much_ado/}
+#' @source \url{https://www.folger.edu/}
 "much_ado"
 
 #' A Midsummer Night's Dream
@@ -29,5 +29,5 @@
 #' @examples 
 #' midsummer[840]
 #' 
-#' @source \url{http://shakespeare.mit.edu/midsummer/}
+#' @source \url{https://www.folger.edu/}
 "midsummer"
