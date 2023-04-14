@@ -1,4 +1,4 @@
-## kgrams v0.1.3
+## kgrams v0.1.4
 
 `kgrams` v0.1.2 got archived because the former vignette used an online data 
 source which became unavailable. This online source has been replaced by local 
