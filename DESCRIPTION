@@ -1,6 +1,6 @@
 Package: kgrams
 Title: Classical k-gram Language Models
-Version: 0.1.3
+Version: 0.1.4
 Authors@R: 
     person(given = "Valerio",
            family = "Gherardi",
@@ -16,13 +16,12 @@ Encoding: UTF-8
 LazyData: true
 Roxygen: list(markdown = TRUE, roclets = c ("namespace", "rd"))
 RoxygenNote: 7.2.1
-SystemRequirements: C++11
 LinkingTo: 
     Rcpp, RcppProgress
 Imports: 
     Rcpp, rlang, methods, utils,  RcppProgress (>= 0.1), Rdpack
 Depends: 
-    R (>= 3.5)
+    R (>= 4.0)
 Suggests: 
     testthat (>= 3.0.0),
     covr,
