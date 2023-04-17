@@ -245,38 +245,13 @@ query(f1, c("a", "b")) # c(3, 4): the new 'f1' stores the updated counts
 # Build a k-gram frequency table from a file connection
 
 \dontrun{
-f <- kgram_freqs(file("myfile.txt"), 3)
+f <- kgram_freqs(file("my_text_file.txt"), 3)
 }
 
 
 # Build a k-gram frequency table from an URL connection
 \dontrun{
-### Shakespeare's "Much Ado About Nothing" (entire play)
-con <- url("http://shakespeare.mit.edu/much_ado/full.html")
-
-# Apply some basic preprocessing
-.preprocess <- function(x) {
-        # Remove character names and locations (boldfaced in original html)
-        x <- gsub("<b>[A-z]+</b>", "", x)
-        # Remove other html tags
-        x <- gsub("<[^>]+>||<[^>]+$||^[^>]+>$", "", x)
-        # Apply standard preprocessing including lower-case
-        x <- kgrams::preprocess(x)
-        return(x)
-}
-
-.tknz_sent <- function(x) {
-        # Tokenize sentences keeping Shakespeare's punctuation
-        x <- kgrams::tknz_sent(x, keep_first = TRUE)
-        # Remove empty sentences
-        x <- x[x != ""]
-        return(x)
-}
-
-f <- kgram_freqs(con, 3, .preprocess, .tknz_sent, batch_size = 1000)
-summary(f)
-
-query(f, c("leonato", "thy", "smartphones")) # c(145, 52, 0)
+f <- kgram_freqs(url("http://my.website/my_text_file.txt"), 3)
 }
 }
 \seealso{

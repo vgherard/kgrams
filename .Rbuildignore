@@ -20,3 +20,4 @@ Doxyfile
 ^CRAN-RELEASE$
 ^LICENSE$
 ^\.scribblr$
+^CRAN-SUBMISSION$

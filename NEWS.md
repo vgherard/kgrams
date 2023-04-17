@@ -1,3 +1,9 @@
+# kgrams 0.1.5
+
+* Removed "Tools for..." at the beginning of package DESCRIPTION, as per CRAN's 
+request.
+* Simplified examples in `?kgram_freqs`.
+
 # kgrams 0.1.4
 
 * Updated `R` requirements `3.5 -> 4.0`.

@@ -6,7 +6,7 @@
 \alias{kgrams-package}
 \title{kgrams: Classical k-gram Language Models}
 \description{
-Tools for training and evaluating k-gram language models in R, supporting several probability smoothing techniques, perplexity computations, random text generation and more.
+Training and evaluating k-gram language models in R, supporting several probability smoothing techniques, perplexity computations, random text generation and more.
 }
 \seealso{
 Useful links:
