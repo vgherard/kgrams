@@ -32,19 +32,30 @@
 #' @name tknz_sent
 #' @export
 tknz_sent <- function(input, EOS = "[.?!:;]+", keep_first = FALSE) {
-        if (.Platform$OS.type != "windows") 
-                return(tknz_sent_cpp(input, EOS, keep_first))
         
+        if (.Platform$OS.type == "windows") 
+                return( tknz_sent_win(input, EOS, keep_first) )
+        
+        return( tknz_sent_cpp(input, EOS, keep_first) )
+
+}
+
+
+# Fallback implementation for windows (C++ implementation does not work) due
+# to https://github.com/RcppCore/Rcpp/issues/810
+tknz_sent_win <- function(input, EOS, keep_first) {
         assert_string(EOS)
-        assert_true_or_false(keep_first)    
+        assert_true_or_false(keep_first)
         
-        sent_bare <- strsplit(input, EOS) |>
-                lapply(\(x) if (length(x) == 0) "" else x)
+        if (EOS == "") 
+                return(input)
         
-        if (!keep_first)
-                return( unlist(sent_bare) |> trimws(which = "left") )
+        sent_bare <- strsplit(input, EOS)
         
-        
+        if (!keep_first) {
+                return(tknz_sent_postproc(sent_bare))
+        }
+
         puncts <- regmatches(input, gregexpr(EOS, input))
         
         sent_puncts <- lapply(seq_along(sent_bare), function(i) {
@@ -54,11 +65,17 @@ tknz_sent <- function(input, EOS = "[.?!:;]+", keep_first = FALSE) {
                 if( length(endings) == n_sents )
                         return(paste(sent_bare[[i]], endings))
                 
-                c(sent_bare[[i]][n_sents],
-                  paste(sent_bare[[i]][-n_sents], endings)
+                c(paste(sent_bare[[i]][-n_sents], endings),
+                  sent_bare[[i]][n_sents]
                 )
         }) 
         
-        return( unlist(sent_puncts) |> trimws(which = "left") )
-        
+        return( tknz_sent_postproc(sent_puncts) )        
+}
+
+tknz_sent_postproc <- function(s) {
+        s |> 
+                unlist() |>
+                trimws(which = "left") |>
+                (\(x) x[x != ""] )()
 }
