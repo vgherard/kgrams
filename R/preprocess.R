@@ -35,6 +35,9 @@ preprocess <- function(input,
         if (.Platform$OS.type != "windows") 
                 return(preprocess_cpp(input, erase, lower_case))
         
+        assert_string(erase)
+        assert_true_or_false(lower_case)        
+        
         res <- gsub(erase, "", input)
         
         if (lower_case)

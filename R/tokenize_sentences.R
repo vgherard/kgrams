@@ -35,6 +35,9 @@ tknz_sent <- function(input, EOS = "[.?!:;]+", keep_first = FALSE) {
         if (.Platform$OS.type != "windows") 
                 return(tknz_sent_cpp(input, EOS, keep_first))
         
+        assert_string(EOS)
+        assert_true_or_false(keep_first)    
+        
         sent_bare <- strsplit(input, EOS) |>
                 lapply(\(x) if (length(x) == 0) "" else x)
         
