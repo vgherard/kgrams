@@ -1,5 +1,10 @@
 # kgrams (development version)
 
+* Fixed bug leading to ridiculously slow runtimes of `preprocess()` and 
+`tknz_sent()` on Windows OS. Only for Windows, these function have been replaced 
+by an equivalent R implementation.
+
+
 # kgrams 0.1.5
 
 * Removed "Tools for..." at the beginning of package DESCRIPTION, as per CRAN's 
