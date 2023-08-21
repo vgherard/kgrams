@@ -1,3 +1,5 @@
+# kgrams (development version)
+
 # kgrams 0.1.5
 
 * Removed "Tools for..." at the beginning of package DESCRIPTION, as per CRAN's 
