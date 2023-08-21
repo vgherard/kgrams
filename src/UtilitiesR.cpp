@@ -71,7 +71,10 @@ size_t tknz_sent(std::string & line,
         auto itstart = std::sregex_iterator(line.begin(), line.end(), _EOS);
         auto itend = std::sregex_iterator();
         
-        size_t start = 0, end;
+        size_t start = line.find_first_not_of(" "), end;
+        if (start == std::string::npos)
+                return 0;
+        
         std::string tmp;
         for (std::sregex_iterator it = itstart; it != itend; ++it) {
                 std::smatch m = *it;
