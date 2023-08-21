@@ -14,7 +14,7 @@ test_that("NA input results in an error", {
 })
 
 test_that("empty string in, empty string out", {
-        expect_identical(tknz_sent(""), "")
+        expect_identical(tknz_sent(""), character())
 })
 
 test_that("default args split at subsequent punctuation characters", {
