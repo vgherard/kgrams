@@ -30,6 +30,32 @@
 #' @examples
 #' tknz_sent("Hi there! I'm using `sbo`.")
 #' @name tknz_sent
-NULL
-
-# Defined in UtilitiesR.cpp
+#' @export
+tknz_sent <- function(input, EOS = "[.?!:;]+", keep_first = FALSE) {
+        if (.Platform$OS.type != "windows") 
+                return(tknz_sent_cpp(input, EOS, keep_first))
+        
+        sent_bare <- strsplit(input, EOS) |>
+                lapply(\(x) if (length(x) == 0) "" else x)
+        
+        if (!keep_first)
+                return( unlist(sent_bare) |> trimws(which = "left") )
+        
+        
+        puncts <- regmatches(input, gregexpr(EOS, input))
+        
+        sent_puncts <- lapply(seq_along(sent_bare), function(i) {
+                n_sents <- length(sent_bare[[i]])
+                endings <- substr(puncts[[i]], 1, 1)
+                
+                if( length(endings) == n_sents )
+                        return(paste(sent_bare[[i]], endings))
+                
+                c(sent_bare[[i]][n_sents],
+                  paste(sent_bare[[i]][-n_sents], endings)
+                )
+        }) 
+        
+        return( unlist(sent_puncts) |> trimws(which = "left") )
+        
+}

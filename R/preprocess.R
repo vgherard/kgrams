@@ -27,6 +27,18 @@
 #' @examples
 #' preprocess("#This Is An Example@@-@@!#")
 #' @name preprocess
-NULL
-
-# Defined in UtilitiesR.cpp
+#' @export
+preprocess <- function(input, 
+                       erase = "[^.?!:;'[:alnum:][:space:]]", 
+                       lower_case = TRUE
+) {
+        if (.Platform$OS.type != "windows") 
+                return(preprocess_cpp(input, erase, lower_case))
+        
+        res <- gsub(erase, "", input)
+        
+        if (lower_case)
+                return(tolower(res))
+        
+        return(res)
+}

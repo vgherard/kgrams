@@ -11,29 +11,29 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
-// preprocess
-CharacterVector preprocess(CharacterVector input, std::string erase, bool lower_case);
-RcppExport SEXP _kgrams_preprocess(SEXP inputSEXP, SEXP eraseSEXP, SEXP lower_caseSEXP) {
+// preprocess_cpp
+CharacterVector preprocess_cpp(CharacterVector input, std::string erase, bool lower_case);
+RcppExport SEXP _kgrams_preprocess_cpp(SEXP inputSEXP, SEXP eraseSEXP, SEXP lower_caseSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CharacterVector >::type input(inputSEXP);
     Rcpp::traits::input_parameter< std::string >::type erase(eraseSEXP);
     Rcpp::traits::input_parameter< bool >::type lower_case(lower_caseSEXP);
-    rcpp_result_gen = Rcpp::wrap(preprocess(input, erase, lower_case));
+    rcpp_result_gen = Rcpp::wrap(preprocess_cpp(input, erase, lower_case));
     return rcpp_result_gen;
 END_RCPP
 }
-// tknz_sent
-Rcpp::CharacterVector tknz_sent(Rcpp::CharacterVector input, std::string EOS, bool keep_first);
-RcppExport SEXP _kgrams_tknz_sent(SEXP inputSEXP, SEXP EOSSEXP, SEXP keep_firstSEXP) {
+// tknz_sent_cpp
+Rcpp::CharacterVector tknz_sent_cpp(Rcpp::CharacterVector input, std::string EOS, bool keep_first);
+RcppExport SEXP _kgrams_tknz_sent_cpp(SEXP inputSEXP, SEXP EOSSEXP, SEXP keep_firstSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type input(inputSEXP);
     Rcpp::traits::input_parameter< std::string >::type EOS(EOSSEXP);
     Rcpp::traits::input_parameter< bool >::type keep_first(keep_firstSEXP);
-    rcpp_result_gen = Rcpp::wrap(tknz_sent(input, EOS, keep_first));
+    rcpp_result_gen = Rcpp::wrap(tknz_sent_cpp(input, EOS, keep_first));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -73,8 +73,8 @@ RcppExport SEXP _rcpp_module_boot_Smoothing();
 RcppExport SEXP _rcpp_module_boot_kgramFreqs();
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_kgrams_preprocess", (DL_FUNC) &_kgrams_preprocess, 3},
-    {"_kgrams_tknz_sent", (DL_FUNC) &_kgrams_tknz_sent, 3},
+    {"_kgrams_preprocess_cpp", (DL_FUNC) &_kgrams_preprocess_cpp, 3},
+    {"_kgrams_tknz_sent_cpp", (DL_FUNC) &_kgrams_tknz_sent_cpp, 3},
     {"_kgrams_EOS", (DL_FUNC) &_kgrams_EOS, 0},
     {"_kgrams_BOS", (DL_FUNC) &_kgrams_BOS, 0},
     {"_kgrams_UNK", (DL_FUNC) &_kgrams_UNK, 0},
