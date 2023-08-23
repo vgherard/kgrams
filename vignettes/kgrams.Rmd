@@ -324,6 +324,6 @@ which shows that the best performing model is the 4-gram one, while it seems tha
 ## Conclusions
 
 In this vignette I have shown how to implement and explore $k$-gram language models in R using `kgrams`. For further help, you can consult the reference page of the `kgrams` [website](https://vgherard.github.io/kgrams/). Development of `kgrams` takes place on its [GitHub repository](https://github.com/vgherard/kgrams/). If you find a bug,
-please let me know by opening an issue on GitHub, and if you have any ideas or proposals for improvement, please feel welcome to send a pull request, or simply an e-mail at <vgherard@sissa.it>.
+please let me know by opening an issue on GitHub, and if you have any ideas or proposals for improvement, please feel welcome to send a pull request, or simply an e-mail at <vgherard840@gmail.com>.
 
 ## References
