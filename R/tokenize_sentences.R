@@ -34,10 +34,11 @@
 tknz_sent <- function(input, EOS = "[.?!:;]+", keep_first = FALSE) {
         
         if (.Platform$OS.type == "windows") 
-                return( tknz_sent_win(input, EOS, keep_first) )
+                res <- tknz_sent_win(input, EOS, keep_first)
+        else
+                res <- tknz_sent_cpp(input, EOS, keep_first)
         
-        return( tknz_sent_cpp(input, EOS, keep_first) )
-
+        tknz_sent_postproc(res)
 }
 
 
@@ -53,7 +54,7 @@ tknz_sent_win <- function(input, EOS, keep_first) {
         sent_bare <- strsplit(input, EOS)
         
         if (!keep_first) {
-                return(tknz_sent_postproc(sent_bare))
+                return( unlist(sent_bare) )
         }
 
         puncts <- regmatches(input, gregexpr(EOS, input))
@@ -70,12 +71,10 @@ tknz_sent_win <- function(input, EOS, keep_first) {
                 )
         }) 
         
-        return( tknz_sent_postproc(sent_puncts) )        
+        return( unlist(sent_puncts) )        
 }
 
 tknz_sent_postproc <- function(s) {
-        s |> 
-                unlist() |>
-                trimws(which = "left") |>
-                (\(x) x[x != ""] )()
+        s <- trimws(s, which = "both")
+        s[s != ""]
 }
