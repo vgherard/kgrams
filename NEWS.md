@@ -8,10 +8,6 @@ impredictable behaviour on Windows, see #30). This fix also included minor
 changes in the `tknz_sent()` output, in some corner cases (e.g. `tknz_sent("")` 
 now returns `character(0)`, wheareas it used to return `""`).
 
-Fixed bug leading to ridiculously slow runtimes of `preprocess()` and 
-`tknz_sent()` on Windows OS. Only for Windows, these function have been replaced 
-by an equivalent R implementation.
-
 
 # kgrams 0.1.5
 
