@@ -12,23 +12,34 @@
 #' @return a character vector, each entry of which corresponds to a single
 #' sentence.
 #' @details
-#' \code{tknz_sent()} splits text into sentences using a list of 
-#' single character delimiters, specified by the parameter \code{EOS}. 
+#' \code{tknz_sent()} splits text into sentences, where sentence delimiters are
+#' specified by a regular expression through the \code{EOS} argument. 
 #' Specifically, when an EOS token is found, the next sentence begins at the
 #' first position in the input string not containing any of the EOS tokens 
 #' \emph{or white space} (so that entries like \code{"Hi there!!!"} or 
 #' \code{"Hello . . ."} are both recognized as a single sentence).
 #' 
 #' If \code{keep_first} is \code{FALSE}, the delimiters are stripped off from 
-#' the returned sequences, which means that all delimiters are treated 
-#' symmetrically.
+#' the returned sequences. Otherwise, the first character of the substrings 
+#' matching the \code{EOS} regular expressions are appended to the corresponding 
+#' sentences, preceded by a white space.
 #' 
 #' In the absence of any \code{EOS} delimiter, \code{tknz_sent()} 
 #' returns the input as is, since parts of text corresponding to different 
 #' entries of the input vector \code{x} are understood as parts of separate 
 #' sentences.
+#' 
+#' **Note.** This function, as well as \link[kgrams]{preprocess}, are included 
+#' in the library for illustrative purposes only, and are not optimized for 
+#' performance. Furthermore (for performance reasons) the function has a 
+#' separate implementation for Windows and UNIX OS types, respectively, so that 
+#' results obtained in the two cases may differ slightly. 
+#' In contexts that require full reproducibility, users are encouraged to define 
+#' their own preprocessing and tokenization custom functions - or to work with
+#' externally processed data.
+#' 
 #' @examples
-#' tknz_sent("Hi there! I'm using `sbo`.")
+#' tknz_sent("Hi there! I'm using kgrams.")
 #' @name tknz_sent
 #' @export
 tknz_sent <- function(input, EOS = "[.?!:;]+", keep_first = FALSE) {
