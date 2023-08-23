@@ -1,5 +1,9 @@
 # kgrams (development version)
 
+### Improvements
+
+* Minor documentation improvements.
+
 ### Breaking changes
 
 * `tknz_sent()` and `preprocess()` now have a different implementation on 
