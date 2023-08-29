@@ -1,8 +1,5 @@
 # kgrams (development version)
 
-### Improvements
-
-* Minor documentation improvements.
 
 ### Breaking changes
 
@@ -11,6 +8,17 @@ Windows and UNIX OSs, respectively (since the previous C++ implementation has
 impredictable behaviour on Windows, see #30). This fix also included minor 
 changes in the `tknz_sent()` output, in some corner cases (e.g. `tknz_sent("")` 
 now returns `character(0)`, wheareas it used to return `""`).
+
+### New features
+
+* `perplexity()` gets a new argument `exp` that allows to return the 
+cross-entropy per word, rather than perplexity (its exponential).
+* `perplexity.character()` gets a new argument `detailed` that allows to return, alongside with the total perplexity of the input document, also the 
+cross-entropies and word lengths of individual sentences. Closes #28.
+
+### Improvements
+
+* Minor documentation improvements.
 
 
 # kgrams 0.1.5

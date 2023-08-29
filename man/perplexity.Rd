@@ -11,6 +11,7 @@ perplexity(
   model,
   .preprocess = attr(model, ".preprocess"),
   .tknz_sent = attr(model, ".tknz_sent"),
+  exp = TRUE,
   ...
 )
 
@@ -19,6 +20,8 @@ perplexity(
   model,
   .preprocess = attr(model, ".preprocess"),
   .tknz_sent = attr(model, ".tknz_sent"),
+  exp = TRUE,
+  detailed = FALSE,
   ...
 )
 
@@ -27,6 +30,7 @@ perplexity(
   model,
   .preprocess = attr(model, ".preprocess"),
   .tknz_sent = attr(model, ".tknz_sent"),
+  exp = TRUE,
   batch_size = Inf,
   ...
 )
@@ -45,7 +49,15 @@ applied to input before computing perplexity.}
 returning a character vector as output. Optional sentence tokenization step
 applied before computing perplexity.}
 
+\item{exp}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, returns the actual
+perplexity - exponential of cross-entropy per token - otherwise returns its
+natural logarithm.}
+
 \item{...}{further arguments passed to or from other methods.}
+
+\item{detailed}{\code{TRUE} or \code{FALSE}. If \code{TRUE}, the output has
+a \code{"details"} attribute, which is a data-frame containing the
+cross-entropy of each individual sentence tokenized from \code{text}.}
 
 \item{batch_size}{a length one positive integer or \code{Inf}.
 Size of text batches when reading text from a \code{connection}.
