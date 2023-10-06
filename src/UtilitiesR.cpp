@@ -5,10 +5,8 @@
 
 using namespace Rcpp;
 
-//' @rdname preprocess
-//' @export
 // [[Rcpp::export]]
-CharacterVector preprocess(
+CharacterVector preprocess_cpp(
         CharacterVector input, 
         std::string erase = "[^.?!:;'[:alnum:][:space:]]",
         bool lower_case = true
@@ -32,12 +30,10 @@ size_t tknz_sent(
                 std::string &, std::vector<std::string> &, const std::regex &, bool
 );
 
-//' @rdname tknz_sent
-//' @export
 // [[Rcpp::export]]
-Rcpp::CharacterVector tknz_sent(Rcpp::CharacterVector input,
-                                         std::string EOS = "[.?!:;]+",
-                                         bool keep_first = false)
+Rcpp::CharacterVector tknz_sent_cpp(Rcpp::CharacterVector input,
+                                    std::string EOS = "[.?!:;]+",
+                                    bool keep_first = false)
 {
         if (EOS == "") 
                 return input;
@@ -67,14 +63,18 @@ Rcpp::CharacterVector tknz_sent(Rcpp::CharacterVector input,
 }
 
 size_t tknz_sent(std::string & line, 
-                          std::vector<std::string> & line_res,
-                          const std::regex& _EOS, 
-                          bool keep_first)
+                 std::vector<std::string> & line_res,
+                 const std::regex& _EOS,
+                 bool keep_first
+                 )
 {
         auto itstart = std::sregex_iterator(line.begin(), line.end(), _EOS);
         auto itend = std::sregex_iterator();
         
-        size_t start = 0, end;
+        size_t start = line.find_first_not_of(" "), end;
+        if (start == std::string::npos)
+                return 0;
+        
         std::string tmp;
         for (std::sregex_iterator it = itstart; it != itend; ++it) {
                 std::smatch m = *it;

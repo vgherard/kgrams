@@ -60,9 +60,8 @@ Interpolated Kneser-Ney, Stupid Backoff and others
 \code{language_models()} have methods for computing word continuation and
 sentence probabilities (see \link[kgrams]{probability}),
 random text generation (see \link[kgrams]{sample_sentences})
-and other type of language modeling tasks such as
-(\strong{not yet implemented}) computing perplexities and word
-prediction accuracies.
+and other type of language modeling tasks such as computing perplexities and
+word prediction accuracies.
 
 Smoothers have often tuning parameters, which need to be specified by
 (exact) name through the \code{...} arguments; otherwise,

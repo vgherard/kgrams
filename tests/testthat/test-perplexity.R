@@ -55,3 +55,45 @@ test_that("results are correct for simple test case", {
         expect_equal(perplexity(text, model), expected_perp)
 })
 
+test_that("'exp' argument works correctly", {
+        model <- language_model(kgram_freqs("a a a b a b b", 2), "add_k", k = 1)
+        
+        text <- c("a a b a b c b a")
+        
+        expect_equal(
+                perplexity(text, model), 
+                exp(perplexity(text, model, exp = FALSE))
+                )
+})
+
+test_that("'detailed' argument adds a data-frame to output", {
+        model <- language_model(kgram_freqs("a a a b a b b", 2), "add_k", k = 1)
+        
+        text <- c("a b b a b")
+        
+        res <- perplexity(text, model, detailed = TRUE)
+        
+        df <- attr(res, "details")
+        
+        expect_s3_class(df, class(data.frame()), exact = TRUE)
+})
+
+test_that("'details' data-frame is correctly filled", {
+        model <- language_model(kgram_freqs("a a a b a b b", 2), "add_k", k = 1)
+        
+        text <- c(
+                "a a b a b c b a",
+                "b c b b b a b a",
+                "b a b a a a"
+        )
+        
+        res <- perplexity(text, model, detailed = TRUE)
+        
+        df <- attr(res, "details")
+        
+        expect_identical(nrow(df), length(text))
+        expect_equal(
+                as.numeric(sum(df$cross_entropy) / sum(df$n_words)), 
+                as.numeric(log(res))
+                )
+})

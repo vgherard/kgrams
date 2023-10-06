@@ -21,12 +21,33 @@
 #' \code{gsub(pattern, "", x)}, respectively, provided that the regular 
 #' expression 'pattern' is correctly recognized by R.
 #' 
-#' Internally, \code{preprocess()} converts the string 'pattern' is converted 
-#' into a C++ \code{std::regex} class by the default constructor 
-#' \code{std::regex::regex(std::string)}.
+#' **Note.** This function, as well as \link[kgrams]{tknz_sent}, are included 
+#' in the library for illustrative purposes only, and are not optimized for 
+#' performance. Furthermore (for performance reasons) the function has a 
+#' separate implementation for Windows and UNIX OS types, respectively, so that 
+#' results obtained in the two cases may differ slightly. 
+#' In contexts that require full reproducibility, users are encouraged to define 
+#' their own preprocessing and tokenization custom functions - or to work with
+#' externally processed data.
+#' 
 #' @examples
 #' preprocess("#This Is An Example@@-@@!#")
 #' @name preprocess
-NULL
-
-# Defined in UtilitiesR.cpp
+#' @export
+preprocess <- function(input, 
+                       erase = "[^.?!:;'[:alnum:][:space:]]", 
+                       lower_case = TRUE
+) {
+        if (.Platform$OS.type != "windows") 
+                return(preprocess_cpp(input, erase, lower_case))
+        
+        assert_string(erase)
+        assert_true_or_false(lower_case)        
+        
+        res <- gsub(erase, "", input)
+        
+        if (lower_case)
+                return(tolower(res))
+        
+        return(res)
+}

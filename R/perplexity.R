@@ -15,6 +15,12 @@
 #' @param .tknz_sent a function taking a character vector as input and 
 #' returning a character vector as output. Optional sentence tokenization step
 #' applied before computing perplexity.
+#' @param exp \code{TRUE} or \code{FALSE}. If \code{TRUE}, returns the actual
+#' perplexity - exponential of cross-entropy per token - otherwise returns its 
+#' natural logarithm.
+#' @param detailed \code{TRUE} or \code{FALSE}. If \code{TRUE}, the output has
+#' a \code{"details"} attribute, which is a data-frame containing the 
+#' cross-entropy of each individual sentence tokenized from \code{text}.
 #' @param batch_size a length one positive integer or \code{Inf}.
 #' Size of text batches when reading text from a \code{connection}. 
 #' If \code{Inf}, all input text is processed in a single batch.
@@ -82,6 +88,7 @@ perplexity <- function(text,
                        model,
                        .preprocess = attr(model, ".preprocess"),
                        .tknz_sent = attr(model, ".tknz_sent"),
+                       exp = TRUE,
                        ...
                        )
 {
@@ -99,15 +106,32 @@ perplexity.character <- function(
         model,
         .preprocess = attr(model, ".preprocess"),
         .tknz_sent = attr(model, ".tknz_sent"),
+        exp = TRUE,
+        detailed = FALSE,
         ...
         ) 
 {
         assert_character_no_NA(text)
+        assert_true_or_false(detailed)
+        
         text <- .preprocess(text)
         text <- .tknz_sent(text)
         lp <- attr(model, "cpp_obj")$log_probability_sentence(text)
-        cross_entropy <- -sum(lp$log_prob) / sum(lp$n_words) 
-        return(exp(cross_entropy))
+        cross_entropy_normalized <- -sum(lp$log_prob) / sum(lp$n_words) 
+        
+        res <- ifelse(exp, 
+                      exp(cross_entropy_normalized), 
+                      cross_entropy_normalized)
+        
+        if (detailed) {
+                attr(res, "details") <- 
+                        data.frame(sentence = text,
+                                   cross_entropy = -lp$log_prob,
+                                   n_words = lp$n_words
+                                   )
+                }
+        
+        return(res)
 }
 
 #' @rdname perplexity
@@ -117,6 +141,7 @@ perplexity.connection <- function(
         model,
         .preprocess = attr(model, ".preprocess"),
         .tknz_sent = attr(model, ".tknz_sent"),
+        exp = TRUE,
         batch_size = Inf,
         ...
         ) 

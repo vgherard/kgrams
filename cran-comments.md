@@ -1,10 +1,10 @@
-## kgrams v0.1.5
+## kgrams v0.2.0
 
-`kgrams` v0.1.2 got archived because the former vignette used an online data 
-source which became unavailable. This online source has been replaced by local 
-example data installed with the package.
+Minor version update, with marginal feature improvements and documentation 
+updates. The package has been checked through the Win-builder and Mac-builder,
+as well as with the RHub service.
 
-R CMD CHECK produces a Note:
+R CMD CHECK consistently produce a NOTE:
 
 * Namespace in Imports field not imported from: 'RcppProgress'
     All declared Imports should be used.
@@ -12,11 +12,23 @@ R CMD CHECK produces a Note:
 This note is spurious, as the imported package is used. It is only called from
 C++ source code, which may be the reason behind this false positive.
 
+RHub checks produced some additional notes, that I have not been able to 
+reproduce, and I don't believe to represent serious issues:
+
+* checking for non-standard things in the check directory ... NOTE
+Found the following files/directories:
+  ''NULL''
+* checking for detritus in the temp directory ... NOTE
+Found the following files/directories:
+  'lastMiKTeXException'
+
 ---
 
-### Follow-up to CRAN review
+### Additional remarks for CRAN reviewers
 
-#### Comment 1
+#### Remark 1
+
+Checks will likely raise the following NOTE:
 
  The Title field should be in title case. Current version is:
  'Classical k-gram Language Models'
@@ -26,13 +38,11 @@ C++ source code, which may be the reason behind this false positive.
 "k-gram" is a mathematical term, as such it should be considered as a 
 single word. In particular, "gram" does not need to be capitalized.
 
-#### Comment 2
 
-Please omit the redundant "Tools for" at the beginning of your description.
 
-Done.
+#### Remark 2
 
-#### Comment 3
+In the review of a previous version of this package, I was suggested:
 
 If there are references describing the methods in your package, please add these in the description field of your DESCRIPTION file in the form
 authors (year) <doi:...>
@@ -49,13 +59,17 @@ Documenting them in the DESCRIPTION would require citing tens of articles (some
 of them published in the beginning of XX-th century), which I think is beside 
 the point.
 
-#### Comment 4
+
+
+#### Remark 3
+
+In the review of a previous version of this package, I was suggested:
 
 \dontrun{} should only be used if the example really cannot be executed (e.g. because of missing additional software, missing API keys, ...) by the user. That's why wrapping examples in \dontrun{} adds the comment ("# Not run:") as a warning for the user.
 Does not seem necessary.
 Please unwrap the examples if they are executable in < 5 sec, or replace \dontrun{} with \donttest{}.
 
-The only two examples that are left wrapped in the \dontrun{} command
+The only two examples that are currently wrapped in the \dontrun{} command
 cannot be run with 100% confidence - because they reference a dummy 
 "my_text_file.txt" local or online resource, which does not exist. I believe
 this is the most transparent way to document (abstractly) the relevant features
