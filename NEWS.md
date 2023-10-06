@@ -1,4 +1,4 @@
-# kgrams (development version)
+# kgrams 0.2.0
 
 
 ### Breaking changes
