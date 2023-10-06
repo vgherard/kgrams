@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">kgrams</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -66,11 +66,12 @@
 
       
 
-      </header><script src="kgrams_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
+      </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
       <h1 data-toc-skip>Classical <span class="math inline">\(k\)</span>-gram Language Models in R</h1>
-                        <h4 data-toc-skip class="author">Valerio Gherardi</h4>
+                        <h4 data-toc-skip class="author">Valerio
+Gherardi</h4>
             
       
       <small class="dont-index">Source: <a href="https://github.com/vgherard/kgrams/blob/HEAD/vignettes/kgrams.Rmd" class="external-link"><code>vignettes/kgrams.Rmd</code></a></small>
@@ -85,41 +86,103 @@
 <div class="section level2">
 <h2 id="introduction">Introduction<a class="anchor" aria-label="anchor" href="#introduction"></a>
 </h2>
-<p><code>kgrams</code> provides R users with a set of tools for training, tuning and exploring <span class="math inline">\(k\)</span>-gram language models<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. It gives support for a number of common Natural Language Processing (NLP) tasks: from the basic ones, such as extracting (<em>tokenizing</em>) <span class="math inline">\(k\)</span>-grams from a text and predicting sentence or continuation probabilities, to more advanced ones such as computing language model perplexities<a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> and sampling sentences according the language model’s probability distribution. Furthermore, it supports many classical <span class="math inline">\(k\)</span>-gram smoothing methods, including the well-known modified Kneser-Ney algorithm, first described in <span class="citation">(Chen and Goodman 1999)</span>, and widely considered the best performing smoothing technique for <span class="math inline">\(k\)</span>-gram models.</p>
-<p><span class="math inline">\(k\)</span>-gram language models are notoriously demanding from the space point of view, and many of the toolkits available for <span class="math inline">\(k\)</span>-gram based NLP employ various techniques and data structures to achieve the data compression required by the large scales of industry (and, sometimes, academic) applications (see <span class="citation">(Pibiri and Venturini 2019)</span> for a recent review). On the other hand, at such large scales, <em>neural</em> language models are often the most economic and best performing choice, and this is likely to become more and more so in the future. In developing <code>kgrams</code>, I made no special attempt at data compression, and <span class="math inline">\(k\)</span>-grams and count estimates are stored in plain C++ STL hash-tables, which can grow rapidly large as the size of corpora and dictionaries increases.</p>
-<p>On the other hand, most focus is put on providing a <em>fast</em>, time efficient implementation, with intuitive interfaces for text processing and for model evaluation, and a reasonably large choice of pre-implemented smoothing algorithms, making <code>kgrams</code> suitable for small- and medium-scale language model experiments, for rapidly building baseline models, and for pedagogical purposes.</p>
-<p>In my point of view, the interest in <span class="math inline">\(k\)</span>-gram language models is mainly pedagogical, as they provide very simple algorithms (together with all their limitations) for learning a natural language’s sentence probability distribution. Nonetheless, and for the same reasons, <span class="math inline">\(k\)</span>-gram models can also provide a useful, quick baseline for model building with more complex algorithms. An R implementation of classical <span class="math inline">\(k\)</span>-gram smoothing techniques is lacking at the time of writing, and the goal of <code>kgrams</code> is to fill this gap.</p>
-<p>In the following Sections, I illustrate the prototypical workflow for <a href="#kgram_model">building a <span class="math inline">\(k\)</span>-gram language model</a> with <code>kgrams</code>, show how to compute <a href="#probability">probabilities</a> and <a href="#perplexity">perplexities</a>, and (for the sake of fun!) <a href="#sampling">generate random text</a> at different temperatures.</p>
+<p><code>kgrams</code> provides R users with a set of tools for
+training, tuning and exploring <span class="math inline">\(k\)</span>-gram language models<a href="#fn1" class="footnote-ref" id="fnref1"><sup>1</sup></a>. It gives support for
+a number of common Natural Language Processing (NLP) tasks: from the
+basic ones, such as extracting (<em>tokenizing</em>) <span class="math inline">\(k\)</span>-grams from a text and predicting
+sentence or continuation probabilities, to more advanced ones such as
+computing language model perplexities <a href="#fn2" class="footnote-ref" id="fnref2"><sup>2</sup></a> and sampling sentences
+according the language model’s probability distribution. Furthermore, it
+supports many classical <span class="math inline">\(k\)</span>-gram
+smoothing methods, including the well-known modified Kneser-Ney
+algorithm, first described in <span class="citation">(Chen and Goodman
+1999)</span>, and widely considered the best performing smoothing
+technique for <span class="math inline">\(k\)</span>-gram models.</p>
+<p><span class="math inline">\(k\)</span>-gram language models are
+notoriously demanding from the space point of view, and many of the
+toolkits available for <span class="math inline">\(k\)</span>-gram based
+NLP employ various techniques and data structures to achieve the data
+compression required by the large scales of industry (and, sometimes,
+academic) applications (see <span class="citation">(Pibiri and Venturini
+2019)</span> for a recent review). On the other hand, at such large
+scales, <em>neural</em> language models are often the most economic and
+best performing choice, and this is likely to become more and more so in
+the future. In developing <code>kgrams</code>, I made no special attempt
+at data compression, and <span class="math inline">\(k\)</span>-grams
+and count estimates are stored in plain C++ STL hash-tables, which can
+grow rapidly large as the size of corpora and dictionaries
+increases.</p>
+<p>On the other hand, most focus is put on providing a <em>fast</em>,
+time efficient implementation, with intuitive interfaces for text
+processing and for model evaluation, and a reasonably large choice of
+pre-implemented smoothing algorithms, making <code>kgrams</code>
+suitable for small- and medium-scale language model experiments, for
+rapidly building baseline models, and for pedagogical purposes.</p>
+<p>In my point of view, the interest in <span class="math inline">\(k\)</span>-gram language models is mainly
+pedagogical, as they provide very simple algorithms (together with all
+their limitations) for learning a natural language’s sentence
+probability distribution. Nonetheless, and for the same reasons, <span class="math inline">\(k\)</span>-gram models can also provide a useful,
+quick baseline for model building with more complex algorithms. An R
+implementation of classical <span class="math inline">\(k\)</span>-gram
+smoothing techniques is lacking at the time of writing, and the goal of
+<code>kgrams</code> is to fill this gap.</p>
+<p>In the following Sections, I illustrate the prototypical workflow for
+<a href="#kgram_model">building a <span class="math inline">\(k\)</span>-gram language model</a> with
+<code>kgrams</code>, show how to compute <a href="#probability">probabilities</a> and <a href="#perplexity">perplexities</a>, and (for the sake of fun!) <a href="#sampling">generate random text</a> at different temperatures.</p>
 </div>
 <div class="section level2">
-<h2 id="kgram_model">Building a <span class="math inline">\(k\)</span>-gram language model<a class="anchor" aria-label="anchor" href="#kgram_model"></a>
+<h2 id="kgram_model">Building a <span class="math inline">\(k\)</span>-gram language
+model<a class="anchor" aria-label="anchor" href="#kgram_model"></a>
 </h2>
-<p>This section illustrates the typical workflow for building a <span class="math inline">\(k\)</span>-gram language model with <code>kgrams</code>. In summary, this involves the following main steps:</p>
+<p>This section illustrates the typical workflow for building a <span class="math inline">\(k\)</span>-gram language model with
+<code>kgrams</code>. In summary, this involves the following main
+steps:</p>
 <ol style="list-style-type: decimal">
 <li>Load the training corpus, i.e. the text from which <span class="math inline">\(k\)</span>-gram frequencies are estimated.</li>
 <li>Preprocess the corpus and tokenize sentences.</li>
-<li>Store <span class="math inline">\(k\)</span>-gram frequency counts from the preprocessed training corpus.</li>
-<li>Build the final language model, by initializing its parameters and computing auxiliary counts possibly required by the smoothing technique employed.</li>
+<li>Store <span class="math inline">\(k\)</span>-gram frequency counts
+from the preprocessed training corpus.</li>
+<li>Build the final language model, by initializing its parameters and
+computing auxiliary counts possibly required by the smoothing technique
+employed.</li>
 </ol>
 <p>We illustrate all these steps in the following.</p>
 <div class="section level3">
 <h3 id="step-1-loading-the-training-corpus">Step 1: Loading the training corpus<a class="anchor" aria-label="anchor" href="#step-1-loading-the-training-corpus"></a>
 </h3>
-<p><code>kgrams</code> offers two options for reading the text corpora used in its computations, which are basically in-memory and out-of-memory solutions:</p>
+<p><code>kgrams</code> offers two options for reading the text corpora
+used in its computations, which are basically in-memory and
+out-of-memory solutions:</p>
 <ul>
 <li>
-<em>in-memory</em>. The corpus is simply loaded in the R session as a <code>character</code> vector.</li>
+<em>in-memory</em>. The corpus is simply loaded in the R session as
+a <code>character</code> vector.</li>
 <li>
-<em>out-of-memory</em>. The text is read in batches of fixed size from a <code>connection</code>. This solution includes, for instance, reading text from a file, from an URL, or from the standard input.</li>
+<em>out-of-memory</em>. The text is read in batches of fixed size
+from a <code>connection</code>. This solution includes, for instance,
+reading text from a file, from an URL, or from the standard input.</li>
 </ul>
-<p>The out-of-memory solution can be useful for training over large corpora without the need of storing the entire text into the RAM.</p>
-<p>In this vignette, for illustration, we will use the example dataset <code><a href="../reference/much_ado.html">kgrams::much_ado</a></code> (William Shakespeare’s “Much Ado About Nothing”).</p>
+<p>The out-of-memory solution can be useful for training over large
+corpora without the need of storing the entire text into the RAM.</p>
+<p>In this vignette, for illustration, we will use the example dataset
+<code><a href="../reference/much_ado.html">kgrams::much_ado</a></code> (William Shakespeare’s “Much Ado About
+Nothing”).</p>
 </div>
 <div class="section level3">
 <h3 id="step-2-preprocessing-and-tokenizing-sentences">Step 2: preprocessing and tokenizing sentences<a class="anchor" aria-label="anchor" href="#step-2-preprocessing-and-tokenizing-sentences"></a>
 </h3>
-<p>One can (and usually should) apply some transformations to the raw training corpus before feeding it as input to the <span class="math inline">\(k\)</span>-gram counting algorithm. In particular, the algorithm considers as a <em>sentence</em> each entry of its pre-processed input, and pads each sentence with Begin-Of-Sentence (BOS) and End-Of-Sentence (EOS) tokens. It considers as a <em>word</em> any substring of a sentence delimited by (one or more) space characters.</p>
-<p>For the moment, we only need to define the functions used for preprocessing and sentence tokenization. We will use the following functions, which leverage on the basic utilities <code><a href="../reference/preprocess.html">kgrams::preprocess()</a></code> and <code><a href="../reference/tknz_sent.html">kgrams::tknz_sent()</a></code>, and perform some additional steps, since we will be reading raw HTML lines from the URL connection created above.</p>
+<p>One can (and usually should) apply some transformations to the raw
+training corpus before feeding it as input to the <span class="math inline">\(k\)</span>-gram counting algorithm. In particular,
+the algorithm considers as a <em>sentence</em> each entry of its
+pre-processed input, and pads each sentence with Begin-Of-Sentence (BOS)
+and End-Of-Sentence (EOS) tokens. It considers as a <em>word</em> any
+substring of a sentence delimited by (one or more) space characters.</p>
+<p>For the moment, we only need to define the functions used for
+preprocessing and sentence tokenization. We will use the following
+functions, which leverage on the basic utilities
+<code><a href="../reference/preprocess.html">kgrams::preprocess()</a></code> and <code><a href="../reference/tknz_sent.html">kgrams::tknz_sent()</a></code>,
+and perform some additional steps, since we will be reading raw HTML
+lines from the URL connection created above.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">.preprocess</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span>
 <span>        <span class="co"># Remove speaker name and locations (boldfaced in original html)</span></span>
@@ -142,9 +205,13 @@
 <span><span class="op">}</span></span></code></pre></div>
 </div>
 <div class="section level3">
-<h3 id="step-3-get-k-gram-frequency-counts">Step 3: get <span class="math inline">\(k\)</span>-gram frequency counts<a class="anchor" aria-label="anchor" href="#step-3-get-k-gram-frequency-counts"></a>
+<h3 id="step-3-get-k-gram-frequency-counts">Step 3: get <span class="math inline">\(k\)</span>-gram frequency
+counts<a class="anchor" aria-label="anchor" href="#step-3-get-k-gram-frequency-counts"></a>
 </h3>
-<p>We can now obtain <span class="math inline">\(k\)</span>-gram frequency counts from Shakespeare with a single command, using the function <code><a href="../reference/kgram_freqs.html">kgram_freqs()</a></code>. The following stores <span class="math inline">\(k\)</span>-gram counts for <span class="math inline">\(k\)</span>-grams of order less than or equal to <span class="math inline">\(N = 5\)</span>:</p>
+<p>We can now obtain <span class="math inline">\(k\)</span>-gram
+frequency counts from Shakespeare with a single command, using the
+function <code><a href="../reference/kgram_freqs.html">kgram_freqs()</a></code>. The following stores <span class="math inline">\(k\)</span>-gram counts for <span class="math inline">\(k\)</span>-grams of order less than or equal to
+<span class="math inline">\(N = 5\)</span>:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">freqs</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/kgram_freqs.html">kgram_freqs</a></span><span class="op">(</span><span class="va">much_ado</span>, <span class="co"># Read Shakespeare's text from connection</span></span>
 <span>                     N <span class="op">=</span> <span class="fl">5</span>, <span class="co"># Store k-gram counts for k &lt;= 5</span></span>
@@ -154,7 +221,10 @@
 <span>                     <span class="op">)</span></span>
 <span><span class="va">freqs</span></span>
 <span><span class="co">#&gt; A k-gram frequency table.</span></span></code></pre></div>
-<p>The object <code>freqs</code> is an object of class <code>kgram_freqs</code>, i.e. a <span class="math inline">\(k\)</span>-gram frequency table. We can obtain a first informative summary of what this object contains by calling <code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>:</p>
+<p>The object <code>freqs</code> is an object of class
+<code>kgram_freqs</code>, i.e. a <span class="math inline">\(k\)</span>-gram frequency table. We can obtain a
+first informative summary of what this object contains by calling
+<code><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary()</a></code>:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">freqs</span><span class="op">)</span></span>
 <span><span class="co">#&gt; A k-gram frequency table.</span></span>
@@ -172,9 +242,23 @@
 <span><span class="co">#&gt; * 3-grams:21201</span></span>
 <span><span class="co">#&gt; * 4-grams:22705</span></span>
 <span><span class="co">#&gt; * 5-grams:22974</span></span></code></pre></div>
-<p>The parameter <code>V</code> is the size of the dictionary, which was created behind the scenes by <code><a href="../reference/kgram_freqs.html">kgram_freqs()</a></code>, using all words encountered in the text. In alternative, we could have used a pre-specified dictionary through the argument <code>dict</code>, and specify whether new words (not present in the original dictionary) should be added to it, or be replaced by an Unknown-Word (UNK) token, by the argument <code>open_dict</code>; see <code><a href="../reference/kgram_freqs.html">?kgram_freqs</a></code> for further details. The number of distinct unigrams is greater than the size of the dictionary, because the former also includes the special BOS and EOS tokens.</p>
-<p>Notice that the functions <code>.preprocess()</code> and <code>.tknz_sent()</code> we defined above are passed as arguments of <code><a href="../reference/kgram_freqs.html">kgram_freqs()</a></code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. These are also saved in the final <code>kgram_freqs</code> object, and are by default applied also to inputs at prediction time.</p>
-<p>The following shows how to query <span class="math inline">\(k\)</span>-gram counts from the frequency table created above:<a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a></p>
+<p>The parameter <code>V</code> is the size of the dictionary, which was
+created behind the scenes by <code><a href="../reference/kgram_freqs.html">kgram_freqs()</a></code>, using all words
+encountered in the text. In alternative, we could have used a
+pre-specified dictionary through the argument <code>dict</code>, and
+specify whether new words (not present in the original dictionary)
+should be added to it, or be replaced by an Unknown-Word (UNK) token, by
+the argument <code>open_dict</code>; see <code><a href="../reference/kgram_freqs.html">?kgram_freqs</a></code> for
+further details. The number of distinct unigrams is greater than the
+size of the dictionary, because the former also includes the special BOS
+and EOS tokens.</p>
+<p>Notice that the functions <code>.preprocess()</code> and
+<code>.tknz_sent()</code> we defined above are passed as arguments of
+<code><a href="../reference/kgram_freqs.html">kgram_freqs()</a></code><a href="#fn3" class="footnote-ref" id="fnref3"><sup>3</sup></a>. These are also saved in the final
+<code>kgram_freqs</code> object, and are by default applied also to
+inputs at prediction time.</p>
+<p>The following shows how to query <span class="math inline">\(k\)</span>-gram counts from the frequency table
+created above <a href="#fn4" class="footnote-ref" id="fnref4"><sup>4</sup></a>:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Query some simple unigrams and bigrams</span></span>
 <span><span class="fu"><a href="../reference/query.html">query</a></span><span class="op">(</span><span class="va">freqs</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"leonato"</span>, <span class="st">"enter leonato"</span>, <span class="st">"thy"</span>, <span class="st">"smartphones"</span><span class="op">)</span><span class="op">)</span></span>
@@ -188,29 +272,43 @@
 <span><span class="co"># Total number of sentences processed</span></span>
 <span><span class="fu"><a href="../reference/query.html">query</a></span><span class="op">(</span><span class="va">freqs</span>, <span class="fu"><a href="../reference/special_tokens.html">EOS</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> </span>
 <span><span class="co">#&gt; [1] 2219</span></span></code></pre></div>
-<p>The most important use of <code>kgram_freqs</code> objects is to create language models, as we illustrate in the next step.</p>
+<p>The most important use of <code>kgram_freqs</code> objects is to
+create language models, as we illustrate in the next step.</p>
 </div>
 <div class="section level3">
 <h3 id="step-4--build-the-final-language-model">Step 4. Build the final language model<a class="anchor" aria-label="anchor" href="#step-4--build-the-final-language-model"></a>
 </h3>
-<p><code>kgrams</code> provides support for creating language models using several classical smoothing techniques. The list of smoothers currently supported by <code>kgrams</code> can be retrieved through:</p>
+<p><code>kgrams</code> provides support for creating language models
+using several classical smoothing techniques. The list of smoothers
+currently supported by <code>kgrams</code> can be retrieved through:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/smoothers.html">smoothers</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "ml"    "add_k" "abs"   "kn"    "mkn"   "sbo"   "wb"</span></span></code></pre></div>
-<p>The documentation page <code><a href="../reference/smoothers.html">?smoothers</a></code> provides a list of original references for the various smoothers. We will use <a href="https://en.wikipedia.org/wiki/Kneser%E2%80%93Ney_smoothing" class="external-link">Interpolated Kneser-Ney</a> smoothing <span class="citation">(Kneser and Ney 1995; see also Chen and Goodman 1999)</span>, which goes under the code <code>"kn"</code>. We can get some usage help for this method through the command:</p>
+<p>The documentation page <code><a href="../reference/smoothers.html">?smoothers</a></code> provides a list of
+original references for the various smoothers. We will use <a href="https://en.wikipedia.org/wiki/Kneser%E2%80%93Ney_smoothing" class="external-link">Interpolated
+Kneser-Ney</a> smoothing <span class="citation">(Kneser and Ney 1995;
+see also Chen and Goodman 1999)</span>, which goes under the code
+<code>"kn"</code>. We can get some usage help for this method through
+the command:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/smoothers.html">info</a></span><span class="op">(</span><span class="st">"kn"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Interpolated Kneser-Ney</span></span>
 <span><span class="co">#&gt;  * code: 'kn'</span></span>
 <span><span class="co">#&gt;  * parameters: D</span></span>
 <span><span class="co">#&gt;  * constraints: 0 &lt;= D &lt;= 1</span></span></code></pre></div>
-<p>As shown above, Kneser-Ney has one parameter <span class="math inline">\(D\)</span>, which is the discount applied to bare <span class="math inline">\(k\)</span>-gram frequency counts or continuation counts. We will initialize the model with <span class="math inline">\(D = 0.75\)</span>, and later tune this parameter through a test corpus.</p>
-<p>To train a language model with the <span class="math inline">\(k\)</span>-gram counts stored in <code>freqs</code>, use:</p>
+<p>As shown above, Kneser-Ney has one parameter <span class="math inline">\(D\)</span>, which is the discount applied to bare
+<span class="math inline">\(k\)</span>-gram frequency counts or
+continuation counts. We will initialize the model with <span class="math inline">\(D = 0.75\)</span>, and later tune this parameter
+through a test corpus.</p>
+<p>To train a language model with the <span class="math inline">\(k\)</span>-gram counts stored in
+<code>freqs</code>, use:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">kn</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/language_model.html">language_model</a></span><span class="op">(</span><span class="va">freqs</span>, <span class="st">"kn"</span>, D <span class="op">=</span> <span class="fl">0.75</span><span class="op">)</span></span>
 <span><span class="va">kn</span></span>
 <span><span class="co">#&gt; A k-gram language model.</span></span></code></pre></div>
-<p>This will create a <code>language_model</code> object, which can be used to obtain word continuation and sentence probabilities. Let us first get a summary of our final model:</p>
+<p>This will create a <code>language_model</code> object, which can be
+used to obtain word continuation and sentence probabilities. Let us
+first get a summary of our final model:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">kn</span><span class="op">)</span></span>
 <span><span class="co">#&gt; A k-gram language model.</span></span>
@@ -232,7 +330,10 @@
 <span><span class="co">#&gt; * 3-grams:21201</span></span>
 <span><span class="co">#&gt; * 4-grams:22705</span></span>
 <span><span class="co">#&gt; * 5-grams:22974</span></span></code></pre></div>
-<p>The parameter <code>D</code> can be accessed and modified through the functions <code><a href="../reference/parameters.html">parameters()</a></code> and <code><a href="../reference/parameters.html">param()</a></code>, which have a similar interface to the base R function <code><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes()</a></code> and <code><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr()</a></code>:</p>
+<p>The parameter <code>D</code> can be accessed and modified through the
+functions <code><a href="../reference/parameters.html">parameters()</a></code> and <code><a href="../reference/parameters.html">param()</a></code>, which have
+a similar interface to the base R function <code><a href="https://rdrr.io/r/base/attributes.html" class="external-link">attributes()</a></code> and
+<code><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr()</a></code>:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/parameters.html">parameters</a></span><span class="op">(</span><span class="va">kn</span><span class="op">)</span></span>
 <span><span class="co">#&gt; $N</span></span>
@@ -249,29 +350,42 @@
 <span><span class="fu"><a href="../reference/parameters.html">param</a></span><span class="op">(</span><span class="va">kn</span>, <span class="st">"D"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.6</span></span>
 <span><span class="fu"><a href="../reference/parameters.html">param</a></span><span class="op">(</span><span class="va">kn</span>, <span class="st">"D"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">0.75</span></span></code></pre></div>
-<p>We can also modify the order of the <span class="math inline">\(k\)</span>-gram model, by choosing any number less than or equal to <span class="math inline">\(N = 5\)</span> (since we stored up to <span class="math inline">\(5\)</span>-gram counts):</p>
+<p>We can also modify the order of the <span class="math inline">\(k\)</span>-gram model, by choosing any number less
+than or equal to <span class="math inline">\(N = 5\)</span> (since we
+stored up to <span class="math inline">\(5\)</span>-gram counts):</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/parameters.html">param</a></span><span class="op">(</span><span class="va">kn</span>, <span class="st">"N"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">4</span> <span class="co"># 'kn' uses only 1:4-grams</span></span>
 <span><span class="fu"><a href="../reference/parameters.html">param</a></span><span class="op">(</span><span class="va">kn</span>, <span class="st">"N"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 4</span></span>
 <span><span class="fu"><a href="../reference/parameters.html">param</a></span><span class="op">(</span><span class="va">kn</span>, <span class="st">"N"</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">5</span> <span class="co"># 'kn' uses also 5-grams</span></span></code></pre></div>
-<p>In the next section we show how to use this language model for basic tasks such as predicting word and sentence probabilities, and for more complex tasks such as computing perplexities and generating random text.</p>
+<p>In the next section we show how to use this language model for basic
+tasks such as predicting word and sentence probabilities, and for more
+complex tasks such as computing perplexities and generating random
+text.</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="using-language_model-objects">Using <code>language_model</code> objects<a class="anchor" aria-label="anchor" href="#using-language_model-objects"></a>
 </h2>
-<p>So far we have created a <code>language_model</code> object using Interpolated Kneser-Ney as smoothing method. In this section we show how to:</p>
+<p>So far we have created a <code>language_model</code> object using
+Interpolated Kneser-Ney as smoothing method. In this section we show how
+to:</p>
 <ul>
 <li>Obtain word continuation and sentence probabilities.</li>
-<li>Generate random text by sampling from the language model probability distribution.</li>
+<li>Generate random text by sampling from the language model probability
+distribution.</li>
 <li>Compute the language model’s perplexity on a test corpus.</li>
 </ul>
 <div class="section level3">
 <h3 id="probability">Word continuation and sentence probabilities<a class="anchor" aria-label="anchor" href="#probability"></a>
 </h3>
-<p>We can obtain both sentence probabilities and word continuation probabilities through the function <code><a href="../reference/probability.html">probability()</a></code>. This is generic on the first argument, which can be a <code>character</code> for sentence probabilities, or a <code>word_context</code> expression for continuation probabilities.</p>
-<p>Sentence probabilities can be obtained as follows (the first two are sentences from the training corpus):</p>
+<p>We can obtain both sentence probabilities and word continuation
+probabilities through the function <code><a href="../reference/probability.html">probability()</a></code>. This is
+generic on the first argument, which can be a <code>character</code> for
+sentence probabilities, or a <code>word_context</code> expression for
+continuation probabilities.</p>
+<p>Sentence probabilities can be obtained as follows (the first two are
+sentences from the training corpus):</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/probability.html">probability</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"Did he break out into tears?"</span>,</span>
 <span>              <span class="st">"I see, lady, the gentleman is not in your books."</span>,</span>
@@ -280,19 +394,34 @@
 <span>            model <span class="op">=</span> <span class="va">kn</span></span>
 <span>            <span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 2.781389e-05 8.821088e-07 9.482178e-19</span></span></code></pre></div>
-<p>Behind the scenes, the same <code>.preprocess()</code> and <code>.tknz_sent()</code> functions used during training are being applied to the input. We can turn off this behaviour by explicitly specifying the <code>.preprocess</code> and <code>.tknz_sent</code> arguments of <code><a href="../reference/probability.html">probability()</a></code>.</p>
-<p>Word continuation probabilities are the conditional probabilities of words following some given context. For instance, the probability that the words <code>"tears"</code> or <code>"pieces"</code> will follow the context <code>"Did he break out into"</code> are computed as follows:</p>
+<p>Behind the scenes, the same <code>.preprocess()</code> and
+<code>.tknz_sent()</code> functions used during training are being
+applied to the input. We can turn off this behaviour by explicitly
+specifying the <code>.preprocess</code> and <code>.tknz_sent</code>
+arguments of <code><a href="../reference/probability.html">probability()</a></code>.</p>
+<p>Word continuation probabilities are the conditional probabilities of
+words following some given context. For instance, the probability that
+the words <code>"tears"</code> or <code>"pieces"</code> will follow the
+context <code>"Did he break out into"</code> are computed as
+follows:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/probability.html">probability</a></span><span class="op">(</span><span class="st">"tears"</span> <span class="op"><a href="../reference/word_context.html">%|%</a></span> <span class="st">"Did he break out into"</span>, model <span class="op">=</span> <span class="va">kn</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 0.5813744</span></span>
 <span><span class="fu"><a href="../reference/probability.html">probability</a></span><span class="op">(</span><span class="st">"pieces"</span> <span class="op"><a href="../reference/word_context.html">%|%</a></span> <span class="st">"Did he break out into"</span>, model <span class="op">=</span> <span class="va">kn</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 1.000375e-05</span></span></code></pre></div>
-<p>The operator <code>%|%</code> takes as input a character vector on its left-hand side, i.e. the list of candidate words, and a length one character vector on its right-hand side, i.e. the given context. If the context has more than <span class="math inline">\(N - 1\)</span> words (where <span class="math inline">\(N\)</span> is the order of the language model, five in our case), only the last <span class="math inline">\(N - 1\)</span> words are used for prediction.</p>
+<p>The operator <code>%|%</code> takes as input a character vector on
+its left-hand side, i.e. the list of candidate words, and a length one
+character vector on its right-hand side, i.e. the given context. If the
+context has more than <span class="math inline">\(N - 1\)</span> words
+(where <span class="math inline">\(N\)</span> is the order of the
+language model, five in our case), only the last <span class="math inline">\(N - 1\)</span> words are used for prediction.</p>
 </div>
 <div class="section level3">
 <h3 id="sampling">Generating random text<a class="anchor" aria-label="anchor" href="#sampling"></a>
 </h3>
-<p>We can sample sentences from the probability distribution defined by our language model using <code><a href="../reference/sample_sentences.html">sample_sentences()</a></code>. For instance:</p>
+<p>We can sample sentences from the probability distribution defined by
+our language model using <code><a href="../reference/sample_sentences.html">sample_sentences()</a></code>. For
+instance:</p>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">840</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/sample_sentences.html">sample_sentences</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">kn</span>, </span>
@@ -309,10 +438,23 @@
 <span><span class="co">#&gt;  [8] "exeunt all ladies only spots of grey all the wealth [...] (truncated output)" </span></span>
 <span><span class="co">#&gt;  [9] "heighho ! &lt;EOS&gt;"                                                              </span></span>
 <span><span class="co">#&gt; [10] "exit margaret ursula friar . &lt;EOS&gt;"</span></span></code></pre></div>
-<p>The sampling is performed word by word, and the output is truncated if no <code>EOS</code> token is found after sampling <code>max_length</code> words.</p>
-<p>We can also sample with a temperature different from one. The temperature transformation of a probability distribution <span class="math inline">\(p(i)\)</span> is defined by:</p>
-<p><span class="math display">\[p_t(i) = \dfrac{\exp(\log{p(i)} / t)} {Z(t)},\]</span> where <span class="math inline">\(Z(t)\)</span> is the partition function, defined in such a way that <span class="math inline">\(\sum _i p_t(i) \equiv 1\)</span>. Intuitively, higher and lower temperatures make the original probability distribution smoother and rougher, respectively. By making a physical analogy, we can think of less probable words as states with higher energies, and the effect of higher (lower) temperatures is to make more (less) likely to excite these high energy states.</p>
-<p>We can test the effects of temperature on our Shakespeare-inspired language model, by changing the parameter <code>t</code> of <code><a href="../reference/sample_sentences.html">sample_sentences()</a></code> (notice that the default <code>t = 1</code> corresponds to the original distribution):</p>
+<p>The sampling is performed word by word, and the output is truncated
+if no <code>EOS</code> token is found after sampling
+<code>max_length</code> words.</p>
+<p>We can also sample with a temperature different from one. The
+temperature transformation of a probability distribution <span class="math inline">\(p(i)\)</span> is defined by:</p>
+<p><span class="math display">\[p_t(i) = \dfrac{\exp(\log{p(i)} / t)}
+{Z(t)},\]</span> where <span class="math inline">\(Z(t)\)</span> is the
+partition function, defined in such a way that <span class="math inline">\(\sum _i p_t(i) \equiv 1\)</span>. Intuitively,
+higher and lower temperatures make the original probability distribution
+smoother and rougher, respectively. By making a physical analogy, we can
+think of less probable words as states with higher energies, and the
+effect of higher (lower) temperatures is to make more (less) likely to
+excite these high energy states.</p>
+<p>We can test the effects of temperature on our Shakespeare-inspired
+language model, by changing the parameter <code>t</code> of
+<code><a href="../reference/sample_sentences.html">sample_sentences()</a></code> (notice that the default
+<code>t = 1</code> corresponds to the original distribution):</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/sample_sentences.html">sample_sentences</a></span><span class="op">(</span>model <span class="op">=</span> <span class="va">kn</span>, </span>
 <span>                 n <span class="op">=</span> <span class="fl">10</span>,</span>
@@ -344,24 +486,49 @@
 <span><span class="co">#&gt;  [8] "senseless beat time denies 'hundred ten forth hire' reenter toothache [...] (truncated output)"             </span></span>
 <span><span class="co">#&gt;  [9] "laughed civil kill'd mean hero's yea foundation deformed appetite hour [...] (truncated output)"            </span></span>
 <span><span class="co">#&gt; [10] "studied figure nine leonato enough ever herself confess authority sanctuary [...] (truncated output)"</span></span></code></pre></div>
-<p>As explained above, sampling with low temperature gives much more weight to probable sentences, and indeed the output is very repetitive. On the contrary, high temperature makes sentence probabilities more uniform, and in fact our output above looks quite random.</p>
+<p>As explained above, sampling with low temperature gives much more
+weight to probable sentences, and indeed the output is very repetitive.
+On the contrary, high temperature makes sentence probabilities more
+uniform, and in fact our output above looks quite random.</p>
 </div>
 <div class="section level3">
 <h3 id="perplexity">Compute language model’s perplexities<a class="anchor" aria-label="anchor" href="#perplexity"></a>
 </h3>
-<p><a href="https://en.wikipedia.org/wiki/Perplexity" class="external-link">Perplexity</a> is a standard evaluation metric for the overall performance of a language model. It is given by <span class="math inline">\(P = e^H\)</span>, where <span class="math inline">\(H\)</span> is the cross-entropy of the language model sentence probability distribution against a test corpus empirical distribution:</p>
+<p><a href="https://en.wikipedia.org/wiki/Perplexity" class="external-link">Perplexity</a> is
+a standard evaluation metric for the overall performance of a language
+model. It is given by <span class="math inline">\(P = e^H\)</span>,
+where <span class="math inline">\(H\)</span> is the cross-entropy of the
+language model sentence probability distribution against a test corpus
+empirical distribution:</p>
 <p><span class="math display">\[
-H = - \dfrac{1}{W}\sum _s\ \ln (\text {Prob}(s)) 
-\]</span> Here <span class="math inline">\(W\)</span> is total number of words in the test corpus (following Ref. <span class="citation">(Chen and Goodman 1999)</span>, we include counts of the EOS token, but not the BOS token, in <span class="math inline">\(W\)</span>), and the sum extends over all sentences in the test corpus. Perplexity does not give direct information on the performance of a language model in a specific end-to-end task, but is often found to correlate with the latter, which provides a practical justification for the use of this metric. Notice that better models are associated with lower perplexities, and that <span class="math inline">\(H\)</span> is proportional to the negative log-likelihood of the corpus under the language model assumption.</p>
-<p>Perplexities can be computed in <code>kgrams</code> using the function <code><a href="../reference/perplexity.html">perplexity()</a></code>, which can read text both from a <code>character</code> vector and from a <code>connection</code>. We will take our test corpus again from Shakespeare’s opus, specifically the play “A Midsummer Night’s Dream”, which is example data from <code>kgrams</code> namespace:</p>
+H = - \dfrac{1}{W}\sum _s\ \ln (\text {Prob}(s))
+\]</span> Here <span class="math inline">\(W\)</span> is total number of
+words in the test corpus (following Ref. <span class="citation">(Chen
+and Goodman 1999)</span>, we include counts of the EOS token, but not
+the BOS token, in <span class="math inline">\(W\)</span>), and the sum
+extends over all sentences in the test corpus. Perplexity does not give
+direct information on the performance of a language model in a specific
+end-to-end task, but is often found to correlate with the latter, which
+provides a practical justification for the use of this metric. Notice
+that better models are associated with lower perplexities, and that
+<span class="math inline">\(H\)</span> is proportional to the negative
+log-likelihood of the corpus under the language model assumption.</p>
+<p>Perplexities can be computed in <code>kgrams</code> using the
+function <code><a href="../reference/perplexity.html">perplexity()</a></code>, which can read text both from a
+<code>character</code> vector and from a <code>connection</code>. We
+will take our test corpus again from Shakespeare’s opus, specifically
+the play “A Midsummer Night’s Dream”, which is example data from
+<code>kgrams</code> namespace:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">midsummer</span><span class="op">[</span><span class="fl">840</span><span class="op">]</span></span>
 <span><span class="co">#&gt; [1] " when truth kills truth o devilishholy fray !"</span></span></code></pre></div>
-<p>We can compute the perplexity of our Kneser-Ney <span class="math inline">\(5\)</span>-gram model <code>kn</code> against this corpus as follows:</p>
+<p>We can compute the perplexity of our Kneser-Ney <span class="math inline">\(5\)</span>-gram model <code>kn</code> against this
+corpus as follows:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/perplexity.html">perplexity</a></span><span class="op">(</span><span class="va">midsummer</span>, model <span class="op">=</span> <span class="va">kn</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] 376.3205</span></span></code></pre></div>
-<p>We can use perplexity to tune our model parameter <span class="math inline">\(D\)</span>. We compute perplexity over a grid of values for <code>D</code> and plot the results. We do this for the <span class="math inline">\(k\)</span>-gram models with <span class="math inline">\(k \in \{2, 3, 4, 5\}\)</span>:</p>
+<p>We can use perplexity to tune our model parameter <span class="math inline">\(D\)</span>. We compute perplexity over a grid of
+values for <code>D</code> and plot the results. We do this for the <span class="math inline">\(k\)</span>-gram models with <span class="math inline">\(k \in \{2, 3, 4, 5\}\)</span>:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">D_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span>from <span class="op">=</span> <span class="fl">0.5</span>, to <span class="op">=</span> <span class="fl">0.99</span>, by <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span></span>
 <span><span class="va">FUN</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">D</span>, <span class="va">N</span><span class="op">)</span> <span class="op">{</span></span>
@@ -378,48 +545,82 @@ H = - \dfrac{1}{W}\sum _s\ \ln (\text {Prob}(s))
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/lines.html" class="external-link">lines</a></span><span class="op">(</span><span class="va">D_grid</span>, <span class="va">P_grid</span><span class="op">[[</span><span class="fl">4</span><span class="op">]</span><span class="op">]</span>, col <span class="op">=</span> <span class="st">"black"</span><span class="op">)</span></span></code></pre></div>
 <div class="figure">
 <img src="kgrams_files/figure-html/unnamed-chunk-18-1.png" alt="Perplexity as a function of the discount parameter of Interpolated Kneser-Ney 2-gram (red), 3-gram (green), 4-gram (blue) and 5-gram (black) models." width="50%"><p class="caption">
-Perplexity as a function of the discount parameter of Interpolated Kneser-Ney 2-gram (red), 3-gram (green), 4-gram (blue) and 5-gram (black) models.
+Perplexity as a function of the discount parameter of Interpolated
+Kneser-Ney 2-gram (red), 3-gram (green), 4-gram (blue) and 5-gram
+(black) models.
 </p>
 </div>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/par.html" class="external-link">par</a></span><span class="op">(</span><span class="va">oldpar</span><span class="op">)</span></span></code></pre></div>
-<p>We see that the optimal choices for <code>D</code> are close to its maximum allowed value <code>D = 1</code>, for which the performance of the 2-gram model is slightly worse than the higher order models, and that the 5-gram model performs generally worse than the 3-gram and 4-gram models. Indeed, the optimized perplexities for the various <span class="math inline">\(k\)</span>-gram orders are given by:</p>
+<p>We see that the optimal choices for <code>D</code> are close to its
+maximum allowed value <code>D = 1</code>, for which the performance of
+the 2-gram model is slightly worse than the higher order models, and
+that the 5-gram model performs generally worse than the 3-gram and
+4-gram models. Indeed, the optimized perplexities for the various <span class="math inline">\(k\)</span>-gram orders are given by:</p>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"2-gram"</span> <span class="op">=</span> <span class="fl">1</span>, <span class="st">"3-gram"</span> <span class="op">=</span> <span class="fl">2</span>, <span class="st">"4-gram"</span> <span class="op">=</span> <span class="fl">3</span>, <span class="st">"5-gram"</span> <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span>
 <span>       <span class="kw">function</span><span class="op">(</span><span class="va">N</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">min</a></span><span class="op">(</span><span class="va">P_grid</span><span class="op">[[</span><span class="va">N</span><span class="op">]</span><span class="op">]</span><span class="op">)</span></span>
 <span>       <span class="op">)</span></span>
 <span><span class="co">#&gt;   2-gram   3-gram   4-gram   5-gram </span></span>
 <span><span class="co">#&gt; 324.3317 320.0537 319.4006 319.4984</span></span></code></pre></div>
-<p>which shows that the best performing model is the 4-gram one, while it seems that the 5-gram model is starting to overfit (which is not very surprising, given the ridiculously small size of our training corpus!).</p>
+<p>which shows that the best performing model is the 4-gram one, while
+it seems that the 5-gram model is starting to overfit (which is not very
+surprising, given the ridiculously small size of our training
+corpus!).</p>
 </div>
 </div>
 <div class="section level2">
 <h2 id="conclusions">Conclusions<a class="anchor" aria-label="anchor" href="#conclusions"></a>
 </h2>
-<p>In this vignette I have shown how to implement and explore <span class="math inline">\(k\)</span>-gram language models in R using <code>kgrams</code>. For further help, you can consult the reference page of the <code>kgrams</code> <a href="https://vgherard.github.io/kgrams/" class="external-link">website</a>. Development of <code>kgrams</code> takes place on its <a href="https://github.com/vgherard/kgrams/" class="external-link">GitHub repository</a>. If you find a bug, please let me know by opening an issue on GitHub, and if you have any ideas or proposals for improvement, please feel welcome to send a pull request, or simply an e-mail at <a href="mailto:vgherard@sissa.it" class="email">vgherard@sissa.it</a>.</p>
+<p>In this vignette I have shown how to implement and explore <span class="math inline">\(k\)</span>-gram language models in R using
+<code>kgrams</code>. For further help, you can consult the reference
+page of the <code>kgrams</code> <a href="https://vgherard.github.io/kgrams/" class="external-link">website</a>. Development of
+<code>kgrams</code> takes place on its <a href="https://github.com/vgherard/kgrams/" class="external-link">GitHub repository</a>. If you
+find a bug, please let me know by opening an issue on GitHub, and if you
+have any ideas or proposals for improvement, please feel welcome to send
+a pull request, or simply an e-mail at <a href="mailto:vgherard840@gmail.com" class="email">vgherard840@gmail.com</a>.</p>
 </div>
 <div class="section level2 unnumbered">
-<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+<h2 class="unnumbered" id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
-<div id="refs" class="references">
-<div id="ref-chen1999empirical">
-<p>Chen, Stanley F, and Joshua Goodman. 1999. “An Empirical Study of Smoothing Techniques for Language Modeling.” <em>Computer Speech &amp; Language</em> 13 (4): 359–94.</p>
+<div id="refs" class="references csl-bib-body hanging-indent">
+<div id="ref-chen1999empirical" class="csl-entry">
+Chen, Stanley F, and Joshua Goodman. 1999. <span>“An Empirical Study of
+Smoothing Techniques for Language Modeling.”</span> <em>Computer Speech
+&amp; Language</em> 13 (4): 359–94.
 </div>
-<div id="ref-Kneser1995ImprovedBF">
-<p>Kneser, Reinhard, and H. Ney. 1995. “Improved Backing-Off for M-Gram Language Modeling.” <em>1995 International Conference on Acoustics, Speech, and Signal Processing</em> 1: 181–84 vol.1.</p>
+<div id="ref-Kneser1995ImprovedBF" class="csl-entry">
+Kneser, Reinhard, and H. Ney. 1995. <span>“Improved Backing-Off for
+m-Gram Language Modeling.”</span> <em>1995 International Conference on
+Acoustics, Speech, and Signal Processing</em> 1: 181–184 vol.1.
 </div>
-<div id="ref-Pibiri_2019">
-<p>Pibiri, Giulio Ermanno, and Rossano Venturini. 2019. “Handling Massive N -Gram Datasets Efficiently.” <em>ACM Transactions on Information Systems</em> 37 (2): 1–41. <a href="https://doi.org/10.1145/3302913" class="external-link">https://doi.org/10.1145/3302913</a>.</p>
+<div id="ref-Pibiri_2019" class="csl-entry">
+Pibiri, Giulio Ermanno, and Rossano Venturini. 2019. <span>“Handling
+Massive n -Gram Datasets Efficiently.”</span> <em>ACM Transactions on
+Information Systems</em> 37 (2): 1–41. <a href="https://doi.org/10.1145/3302913" class="external-link">https://doi.org/10.1145/3302913</a>.
 </div>
 </div>
 </div>
-<div class="footnotes">
+<div class="footnotes footnotes-end-of-document">
 <hr>
 <ol>
-<li id="fn1"><p>Here and below, when we talk about “language models”, we always refer to <em>word-level</em> language models. In particular, a <span class="math inline">\(k\)</span>-gram is a <span class="math inline">\(k\)</span>-tuple of words.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
-<li id="fn2"><p><a href="https://en.wikipedia.org/wiki/Perplexity" class="external-link">Perplexity</a> is a standard evaluation metric for language models, based on the model’s sentence probability distribution cross-entropy with the empirical distribution of a test corpus. It is described in some more detail in this <a href="#perplexity">Subsection</a>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
-<li id="fn3"><p>Strictly speaking, a single argument <code>.preprocess</code> would suffice, as the processed input is (symbolically) <code>.tknz_sent(.preprocess(input))</code>. Having two separate arguments for preprocessing and sentence tokenization has a couple of advantages, as explained in <code><a href="../reference/kgram_freqs.html">?kgram_freqs</a></code>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
-<li id="fn4"><p>The string concatenation operator <code>%+%</code> is equivalent to <code>paste(lhs, rhs)</code>. Also, the helpers <code><a href="../reference/special_tokens.html">BOS()</a></code>, <code><a href="../reference/special_tokens.html">EOS()</a></code> and <code><a href="../reference/special_tokens.html">UNK()</a></code> return the BOS, EOS and UNK tokens, respectively.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
+<li id="fn1"><p>Here and below, when we talk about “language models”, we
+always refer to <em>word-level</em> language models. In particular, a
+<span class="math inline">\(k\)</span>-gram is a <span class="math inline">\(k\)</span>-tuple of words.<a href="#fnref1" class="footnote-back">↩︎</a></p></li>
+<li id="fn2"><p><a href="https://en.wikipedia.org/wiki/Perplexity" class="external-link">Perplexity</a> is a
+standard evaluation metric for language models, based on the model’s
+sentence probability distribution cross-entropy with the empirical
+distribution of a test corpus. It is described in some more detail in
+this <a href="#perplexity">Subsection</a>.<a href="#fnref2" class="footnote-back">↩︎</a></p></li>
+<li id="fn3"><p>Strictly speaking, a single argument
+<code>.preprocess</code> would suffice, as the processed input is
+(symbolically) <code>.tknz_sent(.preprocess(input))</code>. Having two
+separate arguments for preprocessing and sentence tokenization has a
+couple of advantages, as explained in <code><a href="../reference/kgram_freqs.html">?kgram_freqs</a></code>.<a href="#fnref3" class="footnote-back">↩︎</a></p></li>
+<li id="fn4"><p>The string concatenation operator <code>%+%</code> is
+equivalent to <code>paste(lhs, rhs)</code>. Also, the helpers
+<code><a href="../reference/special_tokens.html">BOS()</a></code>, <code><a href="../reference/special_tokens.html">EOS()</a></code> and <code><a href="../reference/special_tokens.html">UNK()</a></code> return the
+BOS, EOS and UNK tokens, respectively.<a href="#fnref4" class="footnote-back">↩︎</a></p></li>
 </ol>
 </div>
   </div>

@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">kgrams</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -51,7 +51,26 @@
     </div>
 
     <div class="section level2">
-<h2 class="page-header" data-toc-text="0.1.5" id="kgrams-015">kgrams 0.1.5<a class="anchor" aria-label="anchor" href="#kgrams-015"></a></h2>
+<h2 class="page-header" data-toc-text="0.2.0" id="kgrams-020">kgrams 0.2.0<a class="anchor" aria-label="anchor" href="#kgrams-020"></a></h2>
+<div class="section level4">
+<h4 id="breaking-changes-0-2-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-2-0"></a></h4>
+<ul><li>
+<code><a href="../reference/tknz_sent.html">tknz_sent()</a></code> and <code><a href="../reference/preprocess.html">preprocess()</a></code> now have a different implementation on Windows and UNIX OSs, respectively (since the previous C++ implementation has impredictable behaviour on Windows, see <a href="https://github.com/vgherard/kgrams/issues/30" class="external-link">#30</a>). This fix also included minor changes in the <code><a href="../reference/tknz_sent.html">tknz_sent()</a></code> output, in some corner cases (e.g. <code>tknz_sent("")</code> now returns <code>character(0)</code>, wheareas it used to return <code>""</code>).</li>
+</ul></div>
+<div class="section level4">
+<h4 id="new-features-0-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h4>
+<ul><li>
+<code><a href="../reference/perplexity.html">perplexity()</a></code> gets a new argument <code>exp</code> that allows to return the cross-entropy per word, rather than perplexity (its exponential).</li>
+<li>
+<code><a href="../reference/perplexity.html">perplexity.character()</a></code> gets a new argument <code>detailed</code> that allows to return, alongside with the total perplexity of the input document, also the cross-entropies and word lengths of individual sentences. Closes <a href="https://github.com/vgherard/kgrams/issues/28" class="external-link">#28</a>.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="improvements-0-2-0">Improvements<a class="anchor" aria-label="anchor" href="#improvements-0-2-0"></a></h4>
+<ul><li>Minor documentation improvements.</li>
+</ul></div>
+</div>
+    <div class="section level2">
+<h2 class="page-header" data-toc-text="0.1.5" id="kgrams-015">kgrams 0.1.5<small>2023-04-18</small><a class="anchor" aria-label="anchor" href="#kgrams-015"></a></h2>
 <ul><li>Removed “Tools for…” at the beginning of package DESCRIPTION, as per CRAN’s request.</li>
 <li>Simplified examples in <code><a href="../reference/kgram_freqs.html">?kgram_freqs</a></code>.</li>
 </ul></div>
@@ -62,7 +81,8 @@
 </ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.3" id="kgrams-013">kgrams 0.1.3<a class="anchor" aria-label="anchor" href="#kgrams-013"></a></h2>
-<ul><li>Remove dependency from external online sources in vignette.</li></ul></div>
+<ul><li>Remove dependency from external online sources in vignette.</li>
+</ul></div>
     <div class="section level2">
 <h2 class="page-header" data-toc-text="0.1.2" id="kgrams-012">kgrams 0.1.2<small>2021-11-16</small><a class="anchor" aria-label="anchor" href="#kgrams-012"></a></h2>
 <div class="section level4">
@@ -81,7 +101,8 @@
 <div class="section level4">
 <h4 id="new-features-0-1-2">New features<a class="anchor" aria-label="anchor" href="#new-features-0-1-2"></a></h4>
 <ul><li>
-<code>as_dictionary(NULL)</code> now returns an empty <code>dictionary</code>.</li></ul></div>
+<code>as_dictionary(NULL)</code> now returns an empty <code>dictionary</code>.</li>
+</ul></div>
 <div class="section level4">
 <h4 id="bug-fixes-0-1-2">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-1-2"></a></h4>
 <ul><li>Fixed bug causing <code>.preprocess</code> and <code>.tknz_sent</code> arguments to be ignored in <code><a href="../reference/kgram_freqs.html">process_sentences()</a></code>.</li>
@@ -91,7 +112,8 @@
 </ul></div>
 <div class="section level4">
 <h4 id="other-0-1-2">Other<a class="anchor" aria-label="anchor" href="#other-0-1-2"></a></h4>
-<ul><li>Maintainer’s email updated</li></ul></div>
+<ul><li>Maintainer’s email updated</li>
+</ul></div>
 </div>
   </div>
 

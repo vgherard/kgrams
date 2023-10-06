@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">kgrams</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -47,7 +47,7 @@
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Text preprocessing</h1>
-    <small class="dont-index">Source: <a href="https://github.com/vgherard/kgrams/blob/HEAD/R/RcppExports.R" class="external-link"><code>R/RcppExports.R</code></a>, <a href="https://github.com/vgherard/kgrams/blob/HEAD/R/preprocess.R" class="external-link"><code>R/preprocess.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/vgherard/kgrams/blob/HEAD/R/preprocess.R" class="external-link"><code>R/preprocess.R</code></a></small>
     <div class="hidden name"><code>preprocess.Rd</code></div>
     </div>
 
@@ -91,9 +91,14 @@ lower case.</p></dd>
 equivalent to <code>tolower(gsub(pattern, "", x))</code> and
 <code>gsub(pattern, "", x)</code>, respectively, provided that the regular
 expression 'pattern' is correctly recognized by R.</p>
-<p>Internally, <code>preprocess()</code> converts the string 'pattern' is converted
-into a C++ <code>std::regex</code> class by the default constructor
-<code>std::regex::regex(std::string)</code>.</p>
+<p><strong>Note.</strong> This function, as well as <a href="tknz_sent.html">tknz_sent</a>, are included
+in the library for illustrative purposes only, and are not optimized for
+performance. Furthermore (for performance reasons) the function has a
+separate implementation for Windows and UNIX OS types, respectively, so that
+results obtained in the two cases may differ slightly.
+In contexts that require full reproducibility, users are encouraged to define
+their own preprocessing and tokenization custom functions - or to work with
+externally processed data.</p>
     </div>
     <div id="author">
     <h2>Author</h2>

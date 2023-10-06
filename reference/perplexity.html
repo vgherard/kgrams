@@ -17,7 +17,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">kgrams</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.1.5</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.2.0</span>
       </span>
     </div>
 
@@ -61,6 +61,7 @@
 <span>  <span class="va">model</span>,</span>
 <span>  .preprocess <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">".preprocess"</span><span class="op">)</span>,</span>
 <span>  .tknz_sent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">".tknz_sent"</span><span class="op">)</span>,</span>
+<span>  exp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -70,6 +71,8 @@
 <span>  <span class="va">model</span>,</span>
 <span>  .preprocess <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">".preprocess"</span><span class="op">)</span>,</span>
 <span>  .tknz_sent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">".tknz_sent"</span><span class="op">)</span>,</span>
+<span>  exp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  detailed <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span>
 <span></span>
@@ -79,6 +82,7 @@
 <span>  <span class="va">model</span>,</span>
 <span>  .preprocess <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">".preprocess"</span><span class="op">)</span>,</span>
 <span>  .tknz_sent <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/attr.html" class="external-link">attr</a></span><span class="op">(</span><span class="va">model</span>, <span class="st">".tknz_sent"</span><span class="op">)</span>,</span>
+<span>  exp <span class="op">=</span> <span class="cn">TRUE</span>,</span>
 <span>  batch_size <span class="op">=</span> <span class="cn">Inf</span>,</span>
 <span>  <span class="va">...</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -107,8 +111,20 @@ returning a character vector as output. Optional sentence tokenization step
 applied before computing perplexity.</p></dd>
 
 
+<dt>exp</dt>
+<dd><p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, returns the actual
+perplexity - exponential of cross-entropy per token - otherwise returns its
+natural logarithm.</p></dd>
+
+
 <dt>...</dt>
 <dd><p>further arguments passed to or from other methods.</p></dd>
+
+
+<dt>detailed</dt>
+<dd><p><code>TRUE</code> or <code>FALSE</code>. If <code>TRUE</code>, the output has
+a <code>"details"</code> attribute, which is a data-frame containing the
+cross-entropy of each individual sentence tokenized from <code>text</code>.</p></dd>
 
 
 <dt>batch_size</dt>
@@ -189,7 +205,7 @@ In <em>Proceedings of the 2007 Joint Conference on Empirical Methods in Natural 
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">sapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"N = 4"</span> <span class="op">=</span> <span class="fl">4</span>, <span class="st">"N = 6"</span> <span class="op">=</span> <span class="fl">6</span>, <span class="st">"N = 8"</span> <span class="op">=</span> <span class="fl">8</span><span class="op">)</span>, <span class="va">FUN</span><span class="op">)</span></span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>           N = 4      N = 6      N = 8</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> train   3.82549   2.604762   2.243899</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> test  368.37167 384.975387 403.220231</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> test  368.28754 384.877205 403.106693</span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
