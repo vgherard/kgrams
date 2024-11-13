@@ -1,78 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/404.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/articles/kgrams.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/authors.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/index.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/news/index.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/dictionary.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/grapes-plus-grapes.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/kgram_freqs.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/kgrams-package.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/language_model.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/midsummer.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/much_ado.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/parameters.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/perplexity.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/preprocess.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/probability.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/query.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/sample_sentences.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/smoothers.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/special_tokens.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/tknz_sent.html</loc>
-  </url>
-  <url>
-    <loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/word_context.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/404.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/LICENSE-text.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/articles/index.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/articles/kgrams.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/authors.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/index.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/news/index.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/dictionary.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/grapes-plus-grapes.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/index.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/kgram_freqs.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/kgrams-package.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/language_model.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/midsummer.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/much_ado.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/parameters.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/perplexity.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/preprocess.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/probability.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/query.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/sample_sentences.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/smoothers.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/special_tokens.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/tknz_sent.html</loc></url>
+<url><loc>https://vgherard.github.io/kgrams/, https://github.com/vgherard/kgrams/reference/word_context.html</loc></url>
 </urlset>
+
