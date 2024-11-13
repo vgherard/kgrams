@@ -1,7 +1,9 @@
-## kgrams v0.2.0
+## kgrams v0.2.1
 
-Minor version update, with marginal feature improvements and documentation 
-updates. The package has been checked through the Win-builder and Mac-builder,
+This is a patch release fixing the failure in CRAN tests following the recent 
+updates to the waldo package - cf. #32.
+
+The package has been checked through the Win-builder and Mac-builder,
 as well as with the RHub service.
 
 R CMD CHECK consistently produce a NOTE:
